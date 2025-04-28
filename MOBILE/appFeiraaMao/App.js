@@ -5,7 +5,6 @@ import { useFonts } from 'expo-font';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
 import Home from "./src/Telas/Home";
 import Perfil from "./src/Telas/Perfil";
 import Cadastro from "./src/Telas/Cadastro";
@@ -62,6 +61,7 @@ export default function App() {
 
   const [fontsLoaded] = useFonts({
     'MontserratAlternates-Regular': require('./assets/fonts/MontserratAlternates-Regular.ttf'),
+    'Urbanist-Regular': require('./assets/fonts/Urbanist-Regular.ttf'),
   });
 
   if (!fontsLoaded) {
@@ -91,6 +91,11 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+        <Stack.Screen
+          name="Cadastro"
+          component={Cadastro}
           options={{ headerShown: false }}
         ></Stack.Screen>
         <Stack.Screen name="Home" component={Home}></Stack.Screen>

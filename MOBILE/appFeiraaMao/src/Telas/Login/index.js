@@ -46,20 +46,15 @@ export default function Login({ navigation }) {
             },
           ]}
         >
-          <Text style={styles.Titulo}>Bem-vindo de volta!</Text>
-          <Text style={styles.subTitulo}>Faça seu Login ou cadastre-se</Text>
+          <View>
+            <Text style={styles.Titulo}>Bem-vindo de volta!</Text>
+            <Text style={styles.subTitulo}>Faça seu login ou cadastre-se</Text>
+          </View>
           <View style={styles.areaForm}>
-            <TextInput
-              style={styles.input}
-              placeholder="Usuário"
-              onChangeText={setNome}
-            ></TextInput>
-            <TextInput
-              style={styles.input}
-              placeholder="Senha"
-              onChangeText={setSenha}
-            ></TextInput>
-
+            <Text style={styles.textForm}>Digite o seu email</Text>
+            <TextInput style={styles.input} onChangeText={setNome}></TextInput>
+            <Text style={styles.textForm}>Digite sua senha</Text>
+            <TextInput style={styles.input} onChangeText={setSenha}></TextInput>
             <View style={styles.viewBotao}>
               <TouchableOpacity
                 style={styles.botao}
@@ -68,6 +63,9 @@ export default function Login({ navigation }) {
                 <Text style={styles.textoBotao}>Entrar</Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity  onPress={() => navigation.navigate("Cadastro")}>
+              <Text style={styles.textForm}>Não possui conta? </Text>
+            </TouchableOpacity>
           </View>
         </Animated.View>
       </KeyboardAvoidingView>
@@ -84,26 +82,34 @@ const styles = StyleSheet.create({
 
   Titulo: {
     fontSize: 46,
-    fontFamily: 'MontserratAlternates-Regular',
-    color: '#f5f5f5',
-    textAlign: 'right'
+    fontFamily: "MontserratAlternates-Regular",
+    color: "#f5f5f5",
+    textAlign: "right",
+    marginTop: 40,
   },
 
   subTitulo: {
-    fontSize: 18,
-    fontFamily: 'MontserratAlternates-Regular',
-    color: '#f5f5f5',
-    textAlign: 'right'
+    fontSize: 24,
+    fontFamily: "Urbanist-Regular",
+    color: "#f5f5f5",
+    textAlign: "right",
   },
 
   areaForm: {
     backgroundColor: "#425010",
     width: 309,
-    height: 430,
+    height: 450,
     borderRadius: 19,
     alignItems: "center",
     marginTop: 40,
-    
+  },
+
+  textForm: {
+    fontSize: 17,
+    fontFamily: "MontserratAlternates-Regular",
+    color: "#f5f5f5",
+    textAlign: "right",
+    marginTop: 55,
   },
 
   formulario: {
@@ -116,13 +122,13 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    backgroundColor: "#FFF",
-    marginBottom: 1,
-    color: "#222",
-    fontSize: 17,
+    backgroundColor: "#F7F0CE",
     borderRadius: 7,
     padding: 10,
-    width: "90%",
+    width: "85%",
+    height: "7%",
+    justifyContent: "center",
+    opacity: 0.7,
   },
 
   viewBotao: {
@@ -131,15 +137,15 @@ const styles = StyleSheet.create({
   },
 
   botao: {
-    backgroundColor: "#1a7487",
-    height: 45,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#F7F0CE",
     borderRadius: 7,
     padding: 10,
+    alignItems: "center",
+    marginTop: 65,
+    opacity: 0.7,
   },
   textoBotao: {
-    color: "#FFF",
+    color: "#425010",
     fontSize: 18,
   },
 
