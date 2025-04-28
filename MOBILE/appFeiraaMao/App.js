@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useFonts } from 'expo-font';
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,6 +13,8 @@ import Login from "./src/Telas/Login";
 import SplashScreen from "./src/Telas/Splash";
 
 import { Ionicons } from "@expo/vector-icons";
+
+
 
 const Stack = createStackNavigator();
 
@@ -56,6 +59,15 @@ function Tabs() {
 
 export default function App() {
   const Stack = createStackNavigator();
+
+  const [fontsLoaded] = useFonts({
+    'MontserratAlternates-Regular': require('./assets/fonts/MontserratAlternates-Regular.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Splash">

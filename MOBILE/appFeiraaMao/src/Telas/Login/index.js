@@ -15,6 +15,7 @@ export default function Login({ navigation }) {
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
   const [opac] = useState(new Animated.Value(0));
   const [nome, setNome] = useState("");
+  const [senha, setSenha] = useState("");
 
   useEffect(() => {
     Animated.parallel([
@@ -53,6 +54,11 @@ export default function Login({ navigation }) {
               placeholder="Usuário"
               onChangeText={setNome}
             ></TextInput>
+            <TextInput
+              style={styles.input}
+              placeholder="Senha"
+              onChangeText={setSenha}
+            ></TextInput>
 
             <View style={styles.viewBotao}>
               <TouchableOpacity
@@ -77,10 +83,17 @@ const styles = StyleSheet.create({
   },
 
   Titulo: {
-    fontSize: 50,
-    fontFamily: 'Montserrat Alternates',
+    fontSize: 46,
+    fontFamily: 'MontserratAlternates-Regular',
     color: '#f5f5f5',
-    alignItems:'right',
+    textAlign: 'right'
+  },
+
+  subTitulo: {
+    fontSize: 18,
+    fontFamily: 'MontserratAlternates-Regular',
+    color: '#f5f5f5',
+    textAlign: 'right'
   },
 
   areaForm: {
@@ -89,6 +102,8 @@ const styles = StyleSheet.create({
     height: 430,
     borderRadius: 19,
     alignItems: "center",
+    marginTop: 40,
+    
   },
 
   formulario: {
@@ -102,7 +117,7 @@ const styles = StyleSheet.create({
 
   input: {
     backgroundColor: "#FFF",
-    marginBottom: 15,
+    marginBottom: 1,
     color: "#222",
     fontSize: 17,
     borderRadius: 7,
