@@ -1,57 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='imgs/css/style.css') }}"
-    />
-  </head>
-  <body>
-    <header class="bg-white py-3">
-      <img
-        src="{{url_for('static', filename='imgs/logo.jpg')}}"
-        alt="Logo"
-        id="imgLogo"
-      />
-      />
-      <nav class="container d-flex justify-content-between">
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='imgs/css/style.css') }}" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bacasime+Antique&family=Cairo+Play:wght@200..1000&family=Hurricane&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+  </style>
+</head>
+
+<body>
+  <header class="bg-white py-3">
+    <div class="container d-flex align-items-center justify-content-between">
+      <!-- Logo -->
+      <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
+
+      <!-- Links do menu -->
+      <nav class="d-flex gap-5">
         <a href="#" class="text-dark text-decoration-none">Início</a>
         <a href="#" class="text-dark text-decoration-none">Sobre</a>
         <a href="#" class="text-dark text-decoration-none">Serviços</a>
         <a href="#" class="text-dark text-decoration-none">Contato</a>
         <a href="#" class="text-dark text-decoration-none">Login</a>
       </nav>
-    </header>
-    <div class="container" id="container">
-      <h1 id="h1">Feira</h1>
-      <h2 id="h2">à mão</h2>
+    </div>
+  </header>
+
+
+  <main>
+    <section class="container" id="container">
+      <div id="titulo">
+        <h1 id="h1">FEIRA</h1>
+        <h2 id="h2">à mão</h2>
+      </div>
+      <figure>
+        <img src="{{url_for('static', filename='imgs/imgCelular.png')}}" id="imgCelular">
+      </figure>
       <p id="p1">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae
-        facilis ipsum iusto impedit nesciunt tempora quisquam id, laborum
-        temporibus, rem perspiciatis ex sunt odit. Delectus ex, vel eligendi
-        nesciunt expedita repellendus tempora repudiandae magnam, suscipit at
-        itaque culpa reiciendis. Libero aliquid earum non tenetur animi
-        exercitationem facere quia cumque hic. Quas molestiae modi, cum provident
+        projeto inovador que nasce com o propósito de transformar a forma como compramos e vendemos produtos artesanais
+        e caseiros. Através do desenvolvimento de um aplicativo acessível e intuitivo, buscamos aproximar pequenos
+        produtores e consumidores, criando um ambiente digital onde a tradição, a qualidade e a confiança andam lado a
+        lado com a tecnologia.
       </p>
-    </div>
+    </section>
 
-    <h1 id="sub1">A importância do consumo de produtos caseiros e naturais</h1>
-
-    <div>
-        <img
-            src="{{url_for('static', filename='imgs/imgFeira.png')}}"
-            alt="Feira"
-            id="imgFeira"
-        />
-    </div>
-  </body>
+    <section>
+      <h2 id="sub1">A importância do consumo de produtos caseiros e naturais</h2>
+      <figure>
+        <img src="{{ url_for('static', filename='imgs/imgFeira.png') }}"
+          alt="Imagem ilustrativa de feira com produtos naturais" id="imgFeira" />
+      </figure>
+      <p id="p2">
+        industrializados se tornou algo comum, os alimentos e objetos produzidos de forma caseira e artesanal muitas
+        vezes são ignorados. No entanto, é fundamental virar essa chave e repensar nossos Em uma sociedade onde o
+        consumo de produtos hábitos de consumo.
+        Valorizar produtos caseiros é mais do que uma escolha de compra — é uma maneira de reconhecer e preservar a
+        cultura local, apoiar pequenos produtores e manter uma alimentação mais saudável, livre de conservantes e
+        ingredientes artificiais. Além disso, ao consumir o que é feito à mão, você se aproxima das raízes da sua
+        comunidade e fortalece a economia regional.
+      </p>
+    </section>
+    <section class="container" id="containerProdutos">
+      <h1 id="tituloProdutos">Título fjngtsjvnzejnj</h1>
+      <div class="container-carrossel">
+        <!-- Carrossel dos livros -->
+        <div class="livros">
+          <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
+          <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+          <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
+          <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+          <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
+          <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+          <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
+          <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+        </div>
+      
+        <!-- Moça na frente -->
+        <img src="{{ url_for('static', filename='imgs/pessoa.png') }}" alt="Moça com celular" class="pessoa">
+      </div> 
+    </section>   
+  </main>
+</body>
 </html>
+
+html
