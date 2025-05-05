@@ -30,13 +30,14 @@
   }
   
   #tituloProdutos {
-    margin-top: 80px;
+    margin-top: 30px;
     font-size: 50px;
     text-align: left;
     font-family: "Bacasime Antique", serif;
     font-weight: 400;
     font-style: normal;
     color: #f7f0ce;
+    text-align: center;
   }
   
   /* Container da introdução */
@@ -51,6 +52,17 @@
     border-radius: 45px;
     padding: 40px 30px;
   }
+
+  #containerFooter{
+    background-color: #425010;
+    width: 100%;
+    height: 300px;
+  }
+
+  #tituloCards {
+    text-align: center;
+    color: #425010;
+  }
   
   #containerProdutos {
     width: 90%;
@@ -61,7 +73,7 @@
     z-index: 0;
     text-align: center;
     margin: 100px auto;
-    height: 600px;
+    height: 500px;
     border-radius: 45px;
     padding: 40px 30px;
   }
@@ -70,18 +82,18 @@
   #imgLogo {
     width: 100px;
     height: 100px;
-    margin-left: -70px;
+    margin-left: -170px;
     display: block;
   }
   
   /* Parágrafo introdutório */
   #p1 {
-    margin-top: -250px;
+    margin-top: -375px;
     font-size: 18px;
     color: #000000;
     width: 90%;
     max-width: 550px;
-    margin-left: 70px;
+    margin-left: 100px;
     text-align: justify;
     position: absolute;
   }
@@ -92,7 +104,7 @@
     max-width: 600px;
     height: auto;
     display: block;
-    margin-left: 180px;
+    margin-left: 380px;
   }
   
   #p2 {
@@ -101,7 +113,7 @@
     color: #000000;
     width: 90%;
     max-width: 500px;
-    margin-left: 850px;
+    margin-left: 1010px;
     text-align: justify;
     position: absolute;
   }
@@ -117,10 +129,13 @@
   }
   
   #imgCelular {
-    margin-left: 600px;
-    margin-top: -200px;
-    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.5);
+    margin-left: 750px;
+    margin-top: -150px;
+    width: 400px;
+    height: auto;
     border-radius: 20px;
+    transform: rotate(8deg); /* Rotaciona a imagem 90 graus */
+    margin-bottom: -100px;
   }
   
   nav {
@@ -131,43 +146,52 @@
     margin-right: 80px;
   }
   
-  /* Área para produtos e moça */
   .container-carrossel {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 400px; /* ajuste conforme o necessário */
+  }
+  
+  .livros,
+  .livros2 {
+    position: absolute;
+    left: 0;
+    width: 200%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    opacity: 0.8;
   }
   
   .livros {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
+    top: 50px;
     animation: deslizar 20s linear infinite;
-    opacity: 0.8; /* deixa os produtos mais suaves */
   }
   
-  .livros img {
+  .livros2 {
+    top: 200px; /* afasta da primeira linha (ajuste conforme necessário) */
+    animation: deslizarReverso 20s linear infinite;
+  }
+  
+  .livros img,
+  .livros2 img {
     width: 120px;
     height: auto;
     margin: 20px;
   }
   
   .pessoa {
-    position: relative;
+    position: absolute;
     z-index: 2;
-    width: 300px;
+    width: 150%;
     display: block;
     margin: 0 auto;
-    margin-top: 150px;
+    margin-top: -275px;
+    margin-left: -280px;
+
   }
   
-  /* Animação do carrossel */
+  /* Animação para carrossel normal */
   @keyframes deslizar {
     0% {
       transform: translateX(0);
@@ -176,3 +200,68 @@
       transform: translateX(-50%);
     }
   }
+  
+  /* Animação reversa para o carrossel de baixo */
+  @keyframes deslizarReverso {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .cards-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 50px;
+  }
+  
+  .card {
+    width: 500px;
+    height: 400px;
+    perspective: 1000px;
+  }
+  
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  
+  .card:hover .card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  .card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .card-back {
+    background-color: #1e1e1e;
+    color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  

@@ -38,7 +38,7 @@
         <h2 id="h2">à mão</h2>
       </div>
       <figure>
-        <img src="{{url_for('static', filename='imgs/imgCelular.png')}}" id="imgCelular">
+        <img src="{{url_for('static', filename='imgs/celular.png')}}" id="imgCelular">
       </figure>
       <p id="p1">
         projeto inovador que nasce com o propósito de transformar a forma como compramos e vendemos produtos artesanais
@@ -78,8 +78,19 @@
           <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
           <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
           <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+        </div>
+
+        <div class="livros2">
           <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
           <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+          <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
+          <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
+          <img src="{{ url_for('static', filename='imgs/livro1.png') }}" alt="Livro 1">
+          <img src="{{ url_for('static', filename='imgs/livro2.png') }}" alt="Livro 2">
+          <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
           <img src="{{ url_for('static', filename='imgs/livro3.png') }}" alt="Livro 3">
         </div>
       
@@ -87,8 +98,47 @@
         <img src="{{ url_for('static', filename='imgs/pessoa.png') }}" alt="Moça com celular" class="pessoa">
       </div> 
     </section>   
+    <section>
+      <h1 id="tituloCards">Benefícios para quem utiliza o nosso app</h1>
+      <div class="cards-container">
+        <div class="card">
+          <div class="card-inner">
+            <div class="card-front">
+              <h1>Vendedores</h1>
+              <img src="{{ url_for('static', filename='imgs/img1.jpg') }}" alt="Imagem 1">
+            </div>
+            <div class="card-back">
+              <h1>Vendedores</h1>
+              <p>Esse é um produto tradicional da região, feito artesanalmente.</p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-inner">
+            <div class="card-front">
+              <h1>Clientes</h1>
+              <img src="{{ url_for('static', filename='imgs/img2.jpg') }}" alt="Imagem 2">
+            </div>
+            <div class="card-back">
+              <h1>Clientes</h1>
+              <p>Outro item típico com valor cultural e gastronômico.</p>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </section>
+    <footer class=" text-white w-100 mt-5" id="containerFooter">
+      <div class="container d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
+        <div class="col-md-6 d-flex align-items-center">
+          <span class="mb-3 mb-md-0">&copy; 2025 Company, Inc</span>
+        </div>
+        <ul class="nav col-md-6 justify-content-end list-unstyled d-flex">
+          <li class="ms-3"><a class="text-white" href="#" aria-label="Instagram"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
+          <li class="ms-3"><a class="text-white" href="#" aria-label="Facebook"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+        </ul>
+      </div>
+    </footer>    
   </main>
 </body>
 </html>
-
-html
