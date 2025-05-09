@@ -10,22 +10,29 @@ import {
   ScrollView,
 } from "react-native";
 
+import { styles } from './style';
+
+import {
+    SafeAreaView,
+    Text,
+    View,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+    ActivityIndicator,
+    RefreshControl,
+    StatusBar,
+    Alert,
+
+} from 'react-native';
+
 const { width, height } = Dimensions.get("window");
 
 export default function Home({ route, navigation }) {
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {/* <ImageBackground
-          source={require("../../../assets/img/fundo.jpg")}
-          style={styles.imgBg}
-        >
-          <View style={styles.logo}>
-            <Image
-              style={{ width: 320 }}
-              source={require("../../../assets/img/logo.png")}
-            ></Image>
-          </View> */}
+      <ScrollView>  
+        
           <Text style={styles.texto}>Bem Vindo {route.params?.nome}</Text>
           <View style={styles.viewBotao}>
             <TouchableOpacity
@@ -35,7 +42,6 @@ export default function Home({ route, navigation }) {
               <Text style={styles.textoBotao}> Entrar no App</Text>
             </TouchableOpacity>
           </View>
-        {/* </ImageBackground> */}
       </ScrollView>
     </View>
   );

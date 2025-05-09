@@ -5,11 +5,11 @@ import { useFonts } from 'expo-font';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./src/Telas/Home";
-import Perfil from "./src/Telas/Perfil";
-import Cadastro from "./src/Telas/Cadastro";
-import Login from "./src/Telas/Login";
-import SplashScreen from "./src/Telas/Splash";
+import Home from "./src/Screens/Home";
+import Perfil from "./src/Screens/Perfil";
+import Cadastro from "./src/Screens/Cadastro";
+import Login from "./src/Screens/Login";
+import SplashScreen from "./src/Screens/Splash";
 
 import { Ionicons } from "@expo/vector-icons";
 
