@@ -10,38 +10,17 @@ import {
   ScrollView,
 } from "react-native";
 
-import { styles } from './style';
-
-import {
-    SafeAreaView,
-    Text,
-    View,
-    ScrollView,
-    TouchableOpacity,
-    Image,
-    ActivityIndicator,
-    RefreshControl,
-    StatusBar,
-    Alert,
-
-} from 'react-native';
-
 const { width, height } = Dimensions.get("window");
 
+
 export default function Home({ route, navigation }) {
+  
   return (
-    <View style={styles.container}>
-      <ScrollView>  
-        
+<View style={styles.container}>
+      <ScrollView>
+
           <Text style={styles.texto}>Bem Vindo {route.params?.nome}</Text>
-          <View style={styles.viewBotao}>
-            <TouchableOpacity
-              style={styles.botao}
-              onPress={() => navigation.navigate("Usuario")}
-            >
-              <Text style={styles.textoBotao}> Entrar no App</Text>
-            </TouchableOpacity>
-          </View>
+
       </ScrollView>
     </View>
   );
@@ -52,6 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#E8E1C3", 
   },
   caixa: {
     textAlign: "center",

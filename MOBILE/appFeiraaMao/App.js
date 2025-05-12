@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useFonts } from 'expo-font';
+import { useFonts } from "expo-font";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -13,35 +13,33 @@ import SplashScreen from "./src/Screens/Splash";
 
 import { Ionicons } from "@expo/vector-icons";
 
-
-
-const Stack = createStackNavigator();
-
 const Tab = createBottomTabNavigator();
 
 function Tabs() {
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          color = "#d0d";
+          color = "#F2C844";
           size = 30;
           if (route.name === "Home") {
-            iconName = focused ? "home-outline" : "home-outline";
+            iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Perfil") {
-            iconName = focused ? "person-outline" : "person-outline";
+            iconName = focused ? "person-circle" : "person-circle-outline";
           } else if (route.name === "Login") {
-            iconName = focused ? "person-outline" : "person-outline";
+            iconName = focused ? "log-in" : "log-in-outline";
           } else if (route.name === "Cadastro") {
-            iconName = focused ? "person-outline" : "person-outline";
+            iconName = focused ? "create" : "create-outline";
           }
 
           //aqui define os ícones que irão aparecer nas Tabs
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
-      tabBarOptions={{
+      tabBarStyle={{
         labelStyle: {
           fontSize: 12,
         },
@@ -49,8 +47,7 @@ function Tabs() {
         inactiveTintColor: "gray",
       }}
     >
-      <Tab.Screen name="Cadastro" component={Cadastro}></Tab.Screen>
-      <Tab.Screen name="Login" component={Login}></Tab.Screen>
+      <Tab.Screen name="Home" component={Home}></Tab.Screen>
       <Tab.Screen name="Perfil" component={Perfil}></Tab.Screen>
     </Tab.Navigator>
   );
@@ -60,8 +57,8 @@ export default function App() {
   const Stack = createStackNavigator();
 
   const [fontsLoaded] = useFonts({
-    'MontserratAlternates-Regular': require('./assets/fonts/MontserratAlternates-Regular.ttf'),
-    'Urbanist-Regular': require('./assets/fonts/Urbanist-Regular.ttf'),
+    "MontserratAlternates-Regular": require("./assets/fonts/MontserratAlternates-Regular.ttf"),
+    "Urbanist-Regular": require("./assets/fonts/Urbanist-Regular.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -77,17 +74,21 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Perfil"
-          component={Tabs}
-          options={{
-            title: "Meu Aplicativo",
-            headerStyle: {
-              backgroundColor: "#D80303",
-            },
-            headerTintColor: "#FFF",
-            headerShown: true,
-          }}
-        ></Stack.Screen>
+  name="Home"
+  component={Tabs}
+  options={{
+    headerShown: true,
+    headerTintColor: "#FFFFFF",
+    headerStyle: {
+      backgroundColor: "#425010",
+      height:70
+    },
+    headerTitleStyle: {
+      marginTop: -20, // Ajuste esse valor conforme a altura desejada
+    },
+  }}
+/>
+
         <Stack.Screen
           name="Login"
           component={Login}
@@ -98,7 +99,7 @@ export default function App() {
           component={Cadastro}
           options={{ headerShown: false }}
         ></Stack.Screen>
-        <Stack.Screen name="Home" component={Home}></Stack.Screen>
+        <Stack.Screen name="Perfil" component={Perfil}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
