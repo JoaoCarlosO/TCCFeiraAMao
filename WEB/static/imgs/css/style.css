@@ -3,6 +3,14 @@
     font-weight: 400;
     font-style: normal;
   }
+
+
+.league-spartan{
+  font-family: "League Spartan", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+}
   
   /* Título principal da seção */
   #h1 {
@@ -33,10 +41,10 @@
     margin-top: 30px;
     font-size: 50px;
     text-align: left;
-    font-family: "Bacasime Antique", serif;
+    font-family: "League Spartan", sans-serif;
     font-weight: 400;
     font-style: normal;
-    color: #f7f0ce;
+    color: #65680F;
     text-align: center;
   }
   
@@ -51,12 +59,14 @@
     margin: 10px auto;
     border-radius: 45px;
     padding: 40px 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 
+
   #containerFooter{
-    background-color: #425010;
+    background-color: #C8D69B;
     width: 100%;
-    height: 300px;
+    height: 100px;
   }
 
   #tituloCards {
@@ -67,15 +77,16 @@
   #containerProdutos {
     width: 90%;
     max-width: 1200px;
-    background-color: #425010;
+    background-color: #C8D69B;
     position: relative;
     overflow: hidden;
     z-index: 0;
     text-align: center;
     margin: 100px auto;
-    height: 500px;
+    height: 700px;
     border-radius: 45px;
     padding: 40px 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
   
   /* Logo da feira */
@@ -105,6 +116,7 @@
     height: auto;
     display: block;
     margin-left: 380px;
+    position:relative;
   }
   
   #p2 {
@@ -127,6 +139,15 @@
     color: #425010;
     font-family: "Bacasime Antique", serif;
   }
+
+  #tituloCards {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+    font-size: 60px;
+    color: #1f2507;
+    font-family: "Bacasime Antique", serif;
+  }
   
   #imgCelular {
     margin-left: 750px;
@@ -145,15 +166,10 @@
   nav a {
     margin-right: 80px;
   }
+
   
-  .container-carrossel {
-    position: relative;
-    width: 100%;
-    height: 400px; /* ajuste conforme o necessário */
-  }
-  
-  .livros,
-  .livros2 {
+  .produtos,
+  .produtos2 {
     position: absolute;
     left: 0;
     width: 200%;
@@ -163,31 +179,31 @@
     opacity: 0.8;
   }
   
-  .livros {
-    top: 50px;
-    animation: deslizar 20s linear infinite;
+  .produtos {
+    top: 270px;
+    animation: deslizar 30s linear infinite;
   }
   
-  .livros2 {
-    top: 200px; /* afasta da primeira linha (ajuste conforme necessário) */
-    animation: deslizarReverso 20s linear infinite;
+  .produtos2 {
+    top: 420px; /* afasta da primeira linha (ajuste conforme necessário) */
+    animation: deslizarReverso 30s linear infinite;
   }
   
-  .livros img,
-  .livros2 img {
-    width: 120px;
+  .produtos img,
+  .produtos2 img {
+    width: 200px;
     height: auto;
-    margin: 20px;
+    margin-bottom: 30px;
   }
   
   .pessoa {
     position: absolute;
     z-index: 2;
-    width: 150%;
+    width: 400px;
     display: block;
-    margin: 0 auto;
-    margin-top: -275px;
-    margin-left: -280px;
+    height: 400px;
+    margin-left: 375px;
+    margin-top: 162px;
 
   }
   
@@ -220,8 +236,9 @@
   
   .card {
     width: 500px;
-    height: 400px;
+    height: 600px;
     perspective: 1000px;
+    background-color: #F7F0CE;
   }
   
   .card-inner {
@@ -247,14 +264,28 @@
   }
   
   .card-front img {
-    width: 100%;
-    height: 100%;
+    width: 350px;
+    height: 450px;
     object-fit: cover;
+    position: relative;
+    border-radius: 10px;
+    margin-top: 30px;
+    margin-left: 80px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  .card-front h1 {
+    position: relative;
+    text-align: center;
+    color: #425010;
+    font-size: 40px;
+    top: 20px;
+   
   }
   
   .card-back {
-    background-color: #1e1e1e;
-    color: white;
+    background-color: #425010;
+    color: #F7F0CE;
     transform: rotateY(180deg);
     display: flex;
     flex-direction: column;
@@ -263,5 +294,3 @@
     padding: 20px;
     text-align: center;
   }
-  
-  
