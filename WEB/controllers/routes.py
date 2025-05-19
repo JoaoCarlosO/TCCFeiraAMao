@@ -20,3 +20,14 @@ def init_app(app):
     # View function - Função de vizualização
     def home():
         return render_template('index.html')
+    
+    @app.route('/login', methods=['GET', 'POST'])
+    def login():
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            if username == 'admin' and password == 'admin':
+                return render_template('login.html', success='Login successful')
+            else:
+                return render_template('login.html', error='Invalid credentials')
+        return render_template('login.html')
