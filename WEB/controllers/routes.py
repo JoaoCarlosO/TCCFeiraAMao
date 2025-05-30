@@ -34,6 +34,6 @@ def init_app(app):
                 return render_template('cadastro.html', success='Cadastro successful')
             else:
                 return render_template('cadastro.html', error='Invalid credentials')
-        return render_template('cadastro.html')
+        return render_template('cadastro.html') 
         
 

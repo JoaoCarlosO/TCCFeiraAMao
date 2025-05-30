@@ -46,8 +46,8 @@ body, html {
   top: 100px;
 }
 
-.curve-shape p,
-.curve-shape2 p {
+.curve-shape a,
+.curve-shape2 a {
   position: absolute;
   top: 50%;
   left: 40%;

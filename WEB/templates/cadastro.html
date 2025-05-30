@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='imgs/css/cadastro.css') }}">
-  <style>
-@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
-</style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7x1z5l5e5b5e5e5e5e5e5e5e5e5e5e5e" crossorigin="anonymous" />
-</head>
-<body>
-  <div class="container">
-    <!-- Lado esquerdo -->
-    <div class="image-side">
-      <img src="{{ url_for('static', filename='imgs/ImgFundoCadastro.jpg') }}" alt="Imagem de frutas" class="background-img">
-      <div class="curve-shape">
-        <p>Cadastre-se</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='imgs/css/cadastro.css') }}"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM8d7x1z5l5e5b5e5e5e5e5e5e5e5e5e5e5e"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Lado esquerdo -->
+      <div class="image-side">
+        <img
+          src="{{ url_for('static', filename='imgs/ImgFundoCadastro.jpg') }}"
+          alt="Imagem de frutas"
+          class="background-img"
+        />
+        <div class="curve-shape">
+          <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
+        </div>
+        <div class="curve-shape2">
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
       </div>
-      <div class="curve-shape2">
-        <p>Login</p>
-      </div>
-    </div>
 
-    <!-- Lado direito -->
-    <div class="login-box">
-      <div class="right-content">
-        <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" class="imgLogo"/>
-        <div class="login-form">
-          <h2>Bem-Vindo de volta!</h2>
-          <p>Faça seu Login</p>
-          <input type="email" placeholder="Email">
-          <input type="password" placeholder="Senha">
-          <button>Entrar</button>
+      <!-- Lado direito -->
+      <div class="login-box">
+        <div class="right-content">
+          <img
+            src="{{ url_for('static', filename='imgs/logo.png') }}"
+            alt="Logo da Feira à Mão"
+            class="imgLogo"
+          />
+          <div class="login-form">
+            <h2>Crie sua conta</h2>
+            <p>Preencha os dados abaixo para se cadastrar</p>
+            <input type="text" placeholder="Nome completo" />
+            <input type="tel" placeholder="Telefone" />
+            <input type="email" placeholder="Email" />
+            <input type="date" placeholder="Data de nascimento" />
+            <input type="text" placeholder="CPF" />
+            <input type="password" placeholder="Senha" />
+            <button>Cadastrar</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>
