@@ -12,11 +12,15 @@
 </head>
 <body>
   <div>
-    <img src="{{url_for}}" alt="">
+    <img src="{{url_for('static', filename='imgs/seta.png')}}" alt="botão voltar" class="btn_voltar">
   </div>
   <div class="container">
     <!-- Lado esquerdo -->
     <div class="image-side">
+      <a href="{{ url_for('home') }}" class="btn_voltar">
+  <img src="{{url_for('static', filename='imgs/botaoVoltar.png')}}" alt="botão voltar">
+</a>
+
       <img src="{{ url_for('static', filename='imgs/ImgLoginFundo.png') }}" alt="Imagem de frutas" class="background-img">
       <div class="curve-shape">
         <a href="{{ url_for('cadastro') }}">Cadastre-se</a>

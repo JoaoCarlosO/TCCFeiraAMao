@@ -22,6 +22,9 @@
     <div class="container">
       <!-- Lado esquerdo -->
       <div class="image-side">
+         <a href="{{ url_for('home') }}" class="btn_voltar">
+  <img src="{{url_for('static', filename='imgs/botaoVoltar.png')}}" alt="botão voltar">
+</a>
         <img
           src="{{ url_for('static', filename='imgs/ImgFundoCadastro.jpg') }}"
           alt="Imagem de frutas"
