@@ -11,28 +11,62 @@ import {
 } from "react-native";
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { DrawerActions } from "@react-navigation/native";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-reanimated-carousel";
 import { Ionicons } from "@expo/vector-icons";
+
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 const data = [
-  { title: "Card 1", backgroundColor: "#425010" },
-  { title: "Card 2", backgroundColor: "#425010" },
-  { title: "Card 3", backgroundColor: "#425010" },
+  {
+    title: "OFERTA ESPECIAL",
+    descricao: "Bala de Banana com Coco 200g",
+    preco: "R$12,00",
+    imagem: require("../../../assets/img/bala-de-banana.png"),
+  },
+  {
+    title: "OFERTA ESPECIAL",
+    descricao: "Doce de Leite Artesanal 300g",
+    preco: "R$18,00",
+    imagem: require("../../../assets/img/bala-de-banana.png"),
+  },
+  {
+    title: "OFERTA ESPECIAL",
+    descricao: "Bolo de Milho Cremoso 400g",
+    preco: "R$15,00",
+    imagem: require("../../../assets/img/bala-de-banana.png"),
+  },
 ];
+
+const CardOfertaEspecial = ({ item, navigation }) => (
+  <View style={styles.cardOferta}>
+    <Image source={item.imagem} style={styles.imagemOferta} />
+    <Text style={styles.tituloOferta}>{item.title}</Text>
+    <View style={styles.infoOferta}>
+      
+      <Text style={styles.descricao}>{item.descricao}</Text>
+      <Text style={styles.precoOferta}>{item.preco}</Text>
+      <TouchableOpacity style={styles.botaoComprar}
+      onPress={() => navigation.navigate("Pedido")}>
+        <Text style={styles.textoBotao}>Comprar</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+);
+
+
 
 const produtos = [
   {
     id: "1",
     nome: "Bolo de roda",
     preco: "R$12,00",
-    imagem: require("../../../assets/img/bolo.png"), // Substitua com sua imagem
+    imagem: require("../../../assets/img/bolo.png"),
   },
   {
     id: "2",
-    nome: "Bolsa de fibra de banana",
+    nome: "Bala de banana",
     preco: "R$25,00",
     imagem: require("../../../assets/img/bolo.png"),
   },
@@ -42,30 +76,57 @@ const produtos = [
     preco: "R$25,00",
     imagem: require("../../../assets/img/bolo.png"),
   },
+  {
+    id: "4",
+    nome: "Pamonha",
+    preco: "R$12,00",
+    imagem: require("../../../assets/img/bolo.png"),
+  },
+  {
+    id: "5",
+    nome: "Palmito em conserva",
+    preco: "R$25,00",
+    imagem: require("../../../assets/img/bolo.png"),
+  },
+  {
+    id: "6",
+    nome: "Coruja",
+    preco: "R$25,00",
+    imagem: require("../../../assets/img/bolo.png"),
+  },
 ];
 
-const CARD_WIDTH = screenWidth * 0.7; // 70% da tela
-const CARD_HEIGHT = screenHeight * 0.2; // 20% da tela
+const CARD_WIDTH = screenWidth * 0.7;
+const CARD_HEIGHT = screenHeight * 0.2;
 
-const CardProduto = ({ item }) => (
+const CardProduto = ({ item, navigation }) => (
   <View style={styles.card2}>
     <Image source={item.imagem} style={styles.imagem} />
     <Text style={styles.nome}>{item.nome}</Text>
-    <Text style={styles.preco}>{item.preco}</Text>
     <View style={styles.linha}>
-      <TouchableOpacity style={styles.botaoMais}>
-        <Text style={styles.botaoTexto}>+</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.icone}>♡</Text>
-      </TouchableOpacity>
+      <View style={styles.icones}>
+        <Text style={styles.preco}>{item.preco}</Text>
+        <TouchableOpacity>
+          <Image
+            source={require("../../../assets/img/adicionar-icon.png")}
+            style={styles.icone}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+      onPress={() => navigation.navigate("Carrinho")}>
+          <Image
+            source={require("../../../assets/img/heart-icon.png")}
+            style={styles.icone}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   </View>
 );
 
 export default function Home({ navigation }) {
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView showsVerticalScrollIndicator={true}>
       <View style={styles.container}>
         {/* Cabeçalho */}
         <View style={styles.header}>
@@ -86,22 +147,15 @@ export default function Home({ navigation }) {
             marginRight="8"
           />
         </View>
-
         <View>
           <Carousel
-            width={width * 1}
-            height={200}
+            width={screenWidth * 1}
+            height={screenHeight * 0.25}
             data={data}
             mode="parallax"
             autoPlay
             scrollAnimationDuration={1000}
-            renderItem={({ item }) => (
-              <View
-                style={[styles.card, { backgroundColor: item.backgroundColor }]}
-              >
-                <Text style={styles.text}>{item.title}</Text>
-              </View>
-            )}
+            renderItem={({ item }) => <CardOfertaEspecial item={item} navigation={navigation}/>}
           />
         </View>
         <View style={styles.containerPerfil}>
@@ -114,7 +168,22 @@ export default function Home({ navigation }) {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <View style={styles.containerPerfil}></View>
+        <View style={styles.containerPerfil}>
+          <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+            <Image
+              source={require("../../../assets/img/imgPerfil.png")}
+              style={{ width: 43, height: 43, alignSelf: "flex-start" }}
+            ></Image>
+            <Text style={styles.titulo}>Seu Manoel</Text>
+          </View>
+          <FlatList
+            data={produtos}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <CardProduto item={item} navigation={navigation} />}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
       </View>
     </ScrollView>
   );
@@ -122,8 +191,8 @@ export default function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
+    paddingBottom: 100,
   },
 
   header: {
@@ -135,7 +204,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     borderBottomRightRadius: 5,
     borderBottomLeftRadius: 5,
-    height: 85,
+    height: 75,
     justifyContent: "center",
   },
 
@@ -151,48 +220,117 @@ const styles = StyleSheet.create({
     top: -5,
   },
 
-  card: {
-    flex: 1,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-  },
+  cardOferta: {
+  flexDirection: "row",
+  backgroundColor: "#425010",
+  borderRadius: 20,
+  padding: 10,
+  alignItems: "center",
+  marginHorizontal: 10,
+  marginVertical: 5,
+  height: "100%"
+},
+
+imagemOferta: {
+  width: 170,
+  height: 170,
+  resizeMode: "contain",
+  marginRight: 10,
+  marginBottom: 35
+},
+
+infoOferta: {
+  flex: 1,
+  justifyContent: "center",
+},
+
+tituloOferta: {
+  color: "#F7F0CE",
+  fontSize: 50,
+  fontFamily: "MouseMemoirs",
+  position: "absolute",
+  marginLeft: "45%",
+  alignSelf:"flex-start",
+  marginTop: 10
+},
+
+descricao: {
+  color: "#fff",
+  fontSize: 15,
+  marginVertical: 2,
+  fontFamily: "PTSans",
+
+},
+
+precoOferta: {
+  color: "#fff",
+  fontSize: 40,
+  marginVertical: 5,
+  textAlign: "center",
+  fontFamily: "PTSans"
+},
+
+botaoComprar: {
+  backgroundColor: "#F2C844",
+  paddingVertical: 4,
+  paddingHorizontal: 12,
+  borderRadius: 15,
+  alignSelf: "flex-end",
+  marginTop: 150,
+  position: 'absolute'
+},
+
+textoBotao: {
+  color: "#fff",
+  fontWeight: "bold",
+  fontSize: 20,
+},
   card2: {
     backgroundColor: "#F5F5F5",
     borderRadius: 10,
-    padding: 1,
     marginRight: 10,
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
-    justifyContent: "space-between",
+    width: CARD_WIDTH * 0.46,
+    height: CARD_HEIGHT * 0.97,
+    justifyContent: "flex-start",
   },
   imagem: {
     width: "100%",
-    height: "50%",
-    borderRadius: 8,
+    height: "70%",
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
+    position: "absolute",
+    resizeMode: "cover",
   },
   nome: {
-    fontWeight: "bold",
-    marginTop: 5,
+    marginTop: 115,
+    fontFamily: "ABeeZee",
+    fontSize: 13,
   },
   preco: {
     color: "#f39c12",
     fontWeight: "bold",
+    marginTop: 7,
+    fontSize: 18
   },
   linha: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 5,
+    width: "100%",
+    marginTop: 9,
+    marginLeft: 5
   },
-  botaoMais: {
-    backgroundColor: "#fdd835",
-    paddingHorizontal: 6,
-    borderRadius: 5,
+
+  icones: {
+    position: "absolute",
+    flexDirection: "row",
   },
-  botaoTexto: {
-    fontWeight: "bold",
-    fontSize: 16,
+
+  icone: {
+    width: 19,
+    height: 18,
+    marginTop: 8,
+    marginLeft: 8
   },
   text: {
     fontSize: 24,
@@ -201,8 +339,9 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 20,
-    fontWeight: "bold",
     marginBottom: 10,
+    marginLeft: 7,
+    fontFamily: "ABeeZee",
   },
   searchContainer: {
     backgroundColor: "#F2C844",
@@ -219,8 +358,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFE7C5",
     justifyContent: "center",
     alignItems: "center",
+    textAlign: "left",
     marginTop: 20,
     width: "100%",
-    height: "20%",
+    paddingVertical: 20,
+    minHeight: 200,
   },
 });

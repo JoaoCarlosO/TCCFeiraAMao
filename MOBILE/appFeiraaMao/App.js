@@ -23,6 +23,7 @@ import Alterar from "./src/Screens/Perfil/Alterar";
 import CadVend from "./src/Screens/Perfil/cadvend";
 import TipoLoja from "./src/Screens/tipoloja";
 import CadCPF from "./src/Screens/Perfil/CadCPF";
+import Carrinho from "./src/Screens/Carrinho";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -36,11 +37,11 @@ function Tabs() {
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: "#000", // cor do ícone ativo
-        tabBarInactiveTintColor: "white", // cor do ícone inativo
-        tabBarLabelStyle: { fontSize: 12 }, // estilo do texto
+        tabBarActiveTintColor: "#000",
+        tabBarInactiveTintColor: "white",
+        tabBarLabelStyle: { fontSize: 12 },
         tabBarStyle: {
-          backgroundColor: "#F2C844", // 👈 cor de fundo da tab bar
+          backgroundColor: "#F2C844",
           borderTopWidth: 0,
           height: 75,
           position: "absolute",
@@ -69,7 +70,6 @@ function Tabs() {
   );
 }
 
-// Drawer envolvendo o Tabs
 function DrawerRoutes() {
   return (
     <Drawer.Navigator screenOptions={{ headerShown: false }}>
@@ -82,6 +82,10 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     "MontserratAlternates-Regular": require("./assets/fonts/MontserratAlternates-Regular.ttf"),
     "Urbanist-Regular": require("./assets/fonts/Urbanist-Regular.ttf"),
+    "ABeeZee": require("./assets/fonts/ABeeZee-Regular.ttf"),
+    "Poppins": require("./assets/fonts/Poppins-Regular.ttf"),
+    "MouseMemoirs": require("./assets/fonts/MouseMemoirs-Regular.ttf"),
+    "PTSans": require("./assets/fonts/PTSans-Regular.ttf"),
   });
 
   if (!fontsLoaded) return null;
@@ -89,100 +93,113 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash">
-          <Stack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Encomenda"
-            component={Encomenda}
-            options={{ headerShown: true }}
-          />
-          <Stack.Screen
-            name="Pedido"
-            component={Pedido}
-            options={{ headerShown: true }}
-          />
-          <Stack.Screen
-            name="Perfil"
-            component={Perfil}
-            options={{ headerShown: true }}
-          />
-          <Stack.Screen
-            name="Notificacao"
-            component={Notificacao}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Cadastro"
-            component={Cadastro}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CadCPF"
-            component={CadCPF}
-            options={{
-              headerShown: true,
-              headerTintColor: "#FFFFFF",
-              headerStyle: {
-                backgroundColor: "#425010",
-                height: 70,
-              },
-            }}
-          />
-          <Stack.Screen
-            name="Alterar"
-            component={Alterar}
-            options={{
-              headerShown: true,
-              headerTintColor: "#FFFFFF",
-              headerStyle: {
-                backgroundColor: "#425010",
-                height: 70,
-              },
-            }}
-          />
-          <Stack.Screen
-            name="tipoloja"
-            component={TipoLoja}
-            options={{
-              headerShown: true,
-              headerTintColor: "#FFFFFF",
-              headerStyle: {
-                backgroundColor: "#425010",
-                height: 70,
-              },
-            }}
-          />
-          <Stack.Screen
-            name="cadvend"
-            component={CadVend}
-            options={{
-              headerShown: true,
-              headerTintColor: "#FFFFFF",
-              headerStyle: {
-                backgroundColor: "#425010",
-                height: 70,
-              },
-            }}
-          />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Splash">
+            <Stack.Screen
+              name="Splash"
+              component={SplashScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Encomenda"
+              component={Encomenda}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Pedido"
+              component={Pedido}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Perfil"
+              component={Perfil}
+              options={{ headerShown: false, tabBarStyle: false }}
+            />
+            <Stack.Screen
+              name="Notificacao"
+              component={Notificacao}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Cadastro"
+              component={Cadastro}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CadCPF"
+              component={CadCPF}
+              options={{
+                headerShown: true,
+                headerTintColor: "#FFFFFF",
+                headerStyle: {
+                  backgroundColor: "#425010",
+                  height: 70,
+                },
+              }}
+            />
+            <Stack.Screen
+              name="Alterar"
+              component={Alterar}
+              options={{
+                headerShown: true,
+                headerTintColor: "#FFFFFF",
+                headerStyle: {
+                  backgroundColor: "#425010",
+                  height: 70,
+                },
+              }}
+            />
+            <Stack.Screen
+              name="tipoloja"
+              component={TipoLoja}
+              options={{
+                headerShown: true,
+                headerTintColor: "#FFFFFF",
+                headerStyle: {
+                  backgroundColor: "#425010",
+                  height: 70,
+                },
+              }}
+            />
+            <Stack.Screen
+              name="cadvend"
+              component={CadVend}
+              options={{
+                headerShown: true,
+                headerTintColor: "#FFFFFF",
+                headerStyle: {
+                  backgroundColor: "#425010",
+                  height: 70,
+                },
+              }}
+            />
 
-          {/* Aqui é onde o Drawer entra */}
-          <Stack.Screen
-            name="Home"
-            component={DrawerRoutes}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen
+              name="Home"
+              component={DrawerRoutes}
+              options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+              name="Carrinho"
+              component={Carrinho}
+              options={{
+                headerShown: true,
+                headerTintColor: "#FFFFFF",
+                headerStyle: {
+                  backgroundColor: "#425010",
+                  height: 70,
+                },
+              }}
+            />
+
+          </Stack.Navigator>
+        </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
