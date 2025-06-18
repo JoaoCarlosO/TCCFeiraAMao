@@ -23,7 +23,22 @@
   </head>
 
   <body>
-    <header class="bg-white py-3">
+    <style>
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("{{ url_for('static', filename='imgs/fundoBg.png') }}");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.1;
+        z-index: -1;
+      }
+    </style>
+    <header class="py-3">
       <div class="container d-flex align-items-center justify-content-between">
         <!-- Logo -->
         <img
@@ -36,7 +51,7 @@
         <nav class="d-flex gap-5">
           <a href="#" class="text-dark text-decoration-none">Sobre</a>
           <a href="#" class="text-dark text-decoration-none">Serviços</a>
-          <a href="#" class="text-dark text-decoration-none">Contato</a>
+          <a href="#" class="text-dark text-decoration-none">Perfil</a>
           <a href="login" class="text-dark text-decoration-none">Login</a>
           <a href="cadastro" class="text-dark text-decoration-none">Cadastro</a>
         </nav>
@@ -67,27 +82,8 @@
 
       <section id="container2">
         <h2 id="sub1">
-          A importância do consumo de produtos caseiros e naturais
+          "Valorizar o feito à mão é cuidar da saúde, da cultura e da comunidade."
         </h2>
-        <figure>
-          <img
-            src="{{ url_for('static', filename='imgs/imgFeira.png') }}"
-            alt="Imagem ilustrativa de feira com produtos naturais"
-            id="imgFeira"
-          />
-        </figure>
-        <p id="p2">
-          industrializados se tornou algo comum, os alimentos e objetos
-          produzidos de forma caseira e artesanal muitas vezes são ignorados. No
-          entanto, é fundamental virar essa chave e repensar nossos Em uma
-          sociedade onde o consumo de produtos hábitos de consumo. Valorizar
-          produtos caseiros é mais do que uma escolha de compra — é uma maneira
-          de reconhecer e preservar a cultura local, apoiar pequenos produtores
-          e manter uma alimentação mais saudável, livre de conservantes e
-          ingredientes artificiais. Além disso, ao consumir o que é feito à mão,
-          você se aproxima das raízes da sua comunidade e fortalece a economia
-          regional.
-        </p>
       </section>
       <section class="container" id="containerProdutos">
         <h1 id="tituloProdutos">Confira os produtos em nosso App</h1>
@@ -202,15 +198,9 @@
               <div class="card-back">
                 <h1>Vendedores</h1>
                 <p class="card-text">
-                  Para você, empreendedor que deseja expandir suas vendas,
-                  valorizar a essência dos seus produtos e transmitir mais
-                  confiança aos seus clientes, o aplicativo Feira à Mão será
-                  muito mais do que uma simples ferramenta — será uma
-                  experiência transformadora. Com ele, você poderá mostrar ao
-                  mundo a verdadeira natureza do seu trabalho, conquistar maior
-                  visibilidade, fortalecer sua marca e se conectar diretamente
-                  com um público que valoriza qualidade, autenticidade e o
-                  comércio justo.
+                  Feira à Mão é o app ideal para divulgar seu trabalho,
+                  valorizar seus produtos e conquistar clientes que prezam por
+                  qualidade e autenticidade.
                 </p>
               </div>
             </div>
@@ -228,16 +218,9 @@
               <div class="card-back">
                 <h1>Clientes</h1>
                 <p class="card-text">
-                  Para os clientes, a plataforma digital Feira à Mão oferece uma
-                  experiência diferenciada, cheia de vantagens exclusivas. Ao
-                  acessar a plataforma, você encontrará uma ampla variedade de
-                  produtos orgânicos, caseiros e frescos, vindos diretamente das
-                  mãos de pequenos produtores locais. Tudo com rapidez,
-                  praticidade e a confiança de saber a origem do que está
-                  consumindo. Além disso, os usuários terão acesso a promoções
-                  imperdíveis e descontos surreais, pensados especialmente para
-                  valorizar quem escolhe consumir de forma consciente e
-                  sustentável. Imersa nessa experiência única.
+                  Feira à Mão oferece praticidade, produtos locais e frescos,
+                  com promoções exclusivas para quem valoriza consumo consciente
+                  e sustentável.
                 </p>
               </div>
             </div>
@@ -255,12 +238,14 @@
             <li class="ms-3">
               <a class="text-white" href="#" aria-label="Instagram"
                 ><svg class="bi" width="24" height="24">
-                  <use xlink:href="#instagram" /></svg></a>
+                  <use xlink:href="#instagram" /></svg
+              ></a>
             </li>
             <li class="ms-3">
               <a class="text-white" href="#" aria-label="Facebook"
                 ><svg class="bi" width="24" height="24">
-                  <use xlink:href="#facebook" /></svg></a>
+                  <use xlink:href="#facebook" /></svg
+              ></a>
             </li>
           </ul>
         </div>

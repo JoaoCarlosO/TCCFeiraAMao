@@ -95,6 +95,7 @@
     height: 100px;
     margin-left: -170px;
     display: block;
+    border-radius: 10%;
   }
   
   /* Parágrafo introdutório */
@@ -109,35 +110,15 @@
     position: absolute;
   }
   
-  /* Imagem da feira */
-  #imgFeira {
-    width: 90%;
-    max-width: 600px;
-    height: auto;
-    display: block;
-    margin-left: 380px;
-    position:relative;
-  }
-  
-  #p2 {
-    margin-top: -320px;
-    font-size: 18px;
-    color: #000000;
-    width: 90%;
-    max-width: 500px;
-    margin-left: 1010px;
-    text-align: justify;
-    position: absolute;
-  }
-  
   /* Subtítulo da segunda seção */
   #sub1 {
-    margin-top: 50px;
+    margin-top: 120px;
     margin-bottom: 50px;
     text-align: center;
     font-size: 50px;
     color: #425010;
     font-family: "Bacasime Antique", serif;
+    font-weight: bold;
   }
 
   #tituloCards {
@@ -159,13 +140,31 @@
     margin-bottom: -100px;
   }
   
-  nav {
-    margin-right: 200px;
-  }
-  
-  nav a {
-    margin-right: 80px;
-  }
+header {
+  background-color: transparent; /* remove fundo branco do header */
+  position: relative;
+  z-index: 10;
+}
+
+nav {
+  margin-right: 200px;
+  background-color: rgba(255, 255, 255, 0.3); /* mais transparente */
+  backdrop-filter: blur(4px); /* opcional: dá um efeito de vidro */
+  -webkit-backdrop-filter: blur(4px);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+nav a {
+  margin-right: 80px;
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: #007bff;
+}
 
   
   .produtos,
@@ -300,3 +299,4 @@
     margin-top: 20px;
     color: #F7F0CE;
   }
+ 
