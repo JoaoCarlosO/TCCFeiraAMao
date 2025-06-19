@@ -46,7 +46,7 @@ const Drawer = createDrawerNavigator();
           backgroundColor: "#F2C844",
           borderTopWidth: 0,
           height: 75,
-          position: "absolute",
+          position: "absolute",git
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
