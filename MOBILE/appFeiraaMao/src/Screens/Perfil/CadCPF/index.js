@@ -5,10 +5,14 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
-  TextInput
+  TextInput,
+  ScrollView,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as DocumentPicker from 'expo-document-picker';
+import { Feather } from '@expo/vector-icons';
 
 const CadastroCPF = () => {
   const navigation = useNavigation();
@@ -19,6 +23,23 @@ const CadastroCPF = () => {
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
   const [barraca, setBarraca] = useState("");
+  const [documento, setDocumento] = useState(null);
+
+  const selecionarDocumento = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*",
+        copyToCacheDirectory: true,
+      });
+
+      if (result.type === "success") {
+        setDocumento(result);
+        alert("Documento anexado com sucesso!");
+      }
+    } catch (error) {
+      console.log("Erro ao selecionar o documento:", error);
+    }
+  };
 
   const CustomCheckbox = ({ label, value }) => (
     <TouchableOpacity
@@ -33,89 +54,110 @@ const CadastroCPF = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <View style={styles.containerPrincipal}>
-          <View style={styles.containerInterno}>
-            <Text style={styles.textForm}>Nome completo *</Text>
-            <TextInput
-              style={styles.input}
-              value={nome}
-              onChangeText={setNome}
-              placeholder="Digite seu nome completo"
-              placeholderTextColor="#999"
-            />
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ImageBackground
+            source={require("../../../../assets/img/fundo-perfil.png")}
+            style={styles.containerPrincipal}
+            imageStyle={styles.imageStyle}
+          >
+            <View style={styles.containerInterno}>
+              <Text style={styles.textForm}>Nome completo *</Text>
+              <TextInput
+                style={styles.input}
+                value={nome}
+                onChangeText={setNome}
+                placeholder="Digite seu nome completo"
+                placeholderTextColor="#999"
+              />
 
-            <Text style={styles.textForm}>Nome</Text>
-            <TextInput
-              style={styles.input}
-              value={barraca}
-              onChangeText={setBarraca}
-              placeholder="Digite o nome da sua barraca:"
-              placeholderTextColor="#999"
-            />
+              <Text style={styles.textForm}>Nome da barraca</Text>
+              <TextInput
+                style={styles.input}
+                value={barraca}
+                onChangeText={setBarraca}
+                placeholder="Digite o nome da sua barraca"
+                placeholderTextColor="#999"
+              />
 
-            <Text style={styles.textForm}>Telefone</Text>
-            <TextInput
-              style={styles.input}
-              value={telefone}
-              onChangeText={setTelefone}
-              placeholder="(00) 00000-0000"
-              placeholderTextColor="#999"
-              keyboardType="phone-pad"
-            />
+              <Text style={styles.textForm}>Telefone</Text>
+              <TextInput
+                style={styles.input}
+                value={telefone}
+                onChangeText={setTelefone}
+                placeholder="(00) 00000-0000"
+                placeholderTextColor="#999"
+                keyboardType="phone-pad"
+              />
 
-            <Text style={styles.textForm}>CPF</Text>
-            <TextInput
-              style={styles.input}
-              value={cpf}
-              onChangeText={setCpf}
-              placeholder="Digite seu CPF"
-              placeholderTextColor="#999"
-              keyboardType="numeric"
-              autoCorrect={false}
-            />
+              <Text style={styles.textForm}>CPF</Text>
+              <TextInput
+                style={styles.input}
+                value={cpf}
+                onChangeText={setCpf}
+                placeholder="Digite seu CPF"
+                placeholderTextColor="#999"
+                keyboardType="numeric"
+                autoCorrect={false}
+              />
 
-            <Text style={styles.textForm}>Email *</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              placeholder="seu@email.com"
-              placeholderTextColor="#999"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+              <Text style={styles.textForm}>Email *</Text>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="seu@email.com"
+                placeholderTextColor="#999"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
 
-            <Text style={styles.termos}>
-              Eu li e concordo sobre os Termos de serviço, política de privacidade do app e os termos.
-            </Text>
+              <Text style={styles.termos}>
+                Eu li e concordo sobre os Termos de serviço, política de privacidade do app e os termos.
+              </Text>
 
-            <View style={styles.radiosconter}>
-              <CustomCheckbox label="Aceito" value="lojaP" />
+              <View style={styles.radiosconter}>
+                <CustomCheckbox label="Aceito" value="lojaP" />
+              </View>
+
+              {/* Anexar documento no final */}
+              <TouchableOpacity style={styles.anexoLink} onPress={selecionarDocumento}>
+                <Feather name="paperclip" size={16} color="#fff" style={{ marginRight: 6 }} />
+                <Text style={styles.anexoTexto}>Anexar documento</Text>
+              </TouchableOpacity>
+
+              {documento && (
+                <Text style={styles.documentoNome}>
+                  📎 {documento.name}
+                </Text>
+              )}
+
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    if (
+                      nome.trim() !== "" &&
+                      telefone.trim() !== "" &&
+                      email.trim() !== "" &&
+                      cpf.trim() !== "" &&
+                      selectedOption !== null
+                    ) {
+                      navigation.navigate("tipoloja");
+                    } else {
+                      alert("Por favor, preencha todos os campos obrigatórios e aceite os termos.");
+                    }
+                  }}
+                >
+                  <Text style={styles.buttonText}>Confirmar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                if (
-                  nome.trim() !== "" &&
-                  telefone.trim() !== "" &&
-                  email.trim() !== "" &&
-                  cpf.trim() !== "" &&
-                  selectedOption !== null
-                ) {
-                  navigation.navigate("tipoloja");
-                } else {
-                  alert("Por favor, preencha todos os campos obrigatórios e aceite os termos.");
-                }
-              }}
-            >
-              <Text style={styles.buttonText}>Continuar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+          </ImageBackground>
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -124,44 +166,55 @@ const CadastroCPF = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#F5F5F5',
+  },
+  scrollContent: {
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   containerPrincipal: {
-    backgroundColor: '#E8E1C3',
     padding: 20,
     borderRadius: 10,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    width: '100%',
+    maxWidth: 500,
+    alignItems: 'center',
+  },
+  imageStyle: {
+    resizeMode: 'cover',
+    borderRadius: 10,
   },
   containerInterno: {
     backgroundColor: '#404A22',
     padding: 20,
     borderRadius: 8,
-    marginBottom: 10,
-    opacity: 0.5,
+    width: '100%',
   },
-  texto: {
-    fontSize: 30,
+  textForm: {
     color: '#fff',
-  },
-  textoInformativo: {
     fontSize: 16,
     marginTop: 10,
   },
-  buttonsContainer: {
+  input: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  anexoLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 20,
   },
-  button: {
-    backgroundColor: '#404A22',
-    padding: 20,
-    borderRadius: 8,
-    alignItems: 'center',
+  anexoTexto: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 15,
   },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+  documentoNome: {
+    marginTop: 6,
+    color: "#fff",
+    fontStyle: "italic",
+    fontSize: 14,
   },
   termos: {
     color: '#fff',
@@ -190,18 +243,23 @@ const styles = StyleSheet.create({
   label: {
     color: '#fff',
   },
-  textForm: {
-    color: '#fff',
-    fontSize: 16,
-    marginTop: 10,
+  buttonsContainer: {
+    marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
   },
-  input: {
+  button: {
     backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 5,
-    marginBottom: 10,
-  }
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#404A22',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default CadastroCPF;

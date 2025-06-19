@@ -21,8 +21,9 @@ import Pedido from "./src/Screens/Pedido";
 import Encomenda from "./src/Screens/Encomenda";
 import Alterar from "./src/Screens/Perfil/Alterar";
 import CadVend from "./src/Screens/Perfil/cadvend";
-import TipoLoja from "./src/Screens/tipoloja";
+import TipoLoja from "./src/Screens/Perfil/tipoloja";
 import CadCPF from "./src/Screens/Perfil/CadCPF";
+import CadCNPJ from "./src/Screens/Perfil/CadCNPJ";
 import Carrinho from "./src/Screens/Carrinho";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -31,7 +32,8 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-function Tabs() {
+ 
+   function Tabs() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -44,31 +46,50 @@ function Tabs() {
           backgroundColor: "#F2C844",
           borderTopWidth: 0,
           height: 75,
-          position: "absolute",
+          position: "absolute",git
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          color = "#fff";
+          color = focused ? "#425010" : "#fff";
           size = 30;
 
-          if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Perfil") {
-            iconName = focused ? "person-circle" : "person-circle-outline";
+          switch (route.name) {
+            case "Perfil":
+              iconName = focused ? "person" : "person-outline";
+              break;
+            case "Carrinho":
+              iconName = focused ? "cart" : "cart-outline";
+              break;
+            case "Notificacao":
+              iconName = focused ? "notifications" : "notifications-outline";
+              break;
+            case "Home":
+              iconName = focused ? "home" : "home-outline";
+              break;
+            case "Pedido":
+              iconName = focused ? "bag" : "bag-outline";
+              break;
+            case "Encomenda":
+              iconName = focused ? "cube" : "cube-outline";
+              break;
+            default:
+              iconName = "alert-circle";
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
     >
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Pedido" component={Pedido} />
       <Tab.Screen name="Encomenda" component={Encomenda} />
-      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Notificacao" component={Notificacao} />
+      <Tab.Screen name="Carrinho" component={Carrinho} />
       <Tab.Screen name="Perfil" component={Perfil} />
     </Tab.Navigator>
   );
 }
+
 
 function DrawerRoutes() {
   return (
@@ -133,6 +154,17 @@ export default function App() {
             <Stack.Screen
               name="CadCPF"
               component={CadCPF}
+              options={{
+                headerShown: true,
+                headerTintColor: "#FFFFFF",
+                headerStyle: {
+                  backgroundColor: "#425010",
+                  height: 70,
+                },
+              }}
+            /><Stack.Screen
+              name="CadCNPJ"
+              component={CadCNPJ}
               options={{
                 headerShown: true,
                 headerTintColor: "#FFFFFF",
