@@ -35,7 +35,7 @@ export default function AreaUsuario() {
           <View style={styles.profileContainer}>
             <View style={styles.profileImage}>
               <Image
-                source={require("../../../assets/img/Ftperfil.jpg")}
+                source={require("../../../assets/img/imgPerfil.png")}
                 style={styles.image}
                 resizeMode="cover"
               />

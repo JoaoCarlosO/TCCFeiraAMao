@@ -30,7 +30,7 @@ const Alterar = () => {
   });
 
   const [fotoPerfil, setFotoPerfil] = useState(
-    require("../../../../assets/img/Ftperfil.jpg")
+    require("../../../../assets/img/imgPerfil.png")
   );
   const [isLoading, setIsLoading] = useState(false);
 

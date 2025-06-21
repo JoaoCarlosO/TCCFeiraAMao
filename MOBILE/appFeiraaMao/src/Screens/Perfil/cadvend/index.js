@@ -33,7 +33,7 @@ const Cadastro = () => {
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("tipoloja")}
+            // onPress={() => navigation.navigate("tipoloja")}
           >
             <Text style={styles.buttonText}>Continuar</Text>
           </TouchableOpacity>

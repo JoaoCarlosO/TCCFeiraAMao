@@ -1,3 +1,4 @@
+import { normalize } from "path";
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -20,6 +21,8 @@ export default function Cadastro({ navigation }) {
   const [cpf, setCpf] = useState("");
   const [senha, setSenha] = useState("");
 
+  const normalize = (size) => (screenWidth / 375) * size;
+  
   useEffect(() => {
     Animated.parallel([
       Animated.spring(offset.y, {
@@ -55,17 +58,17 @@ export default function Cadastro({ navigation }) {
           </View>
           <View style={styles.areaForm}>
             <Text style={styles.textForm}>Digite o seu nome completo:</Text>
-            <TextInput style={styles.input} onChangeText={setNome}></TextInput>
+            <TextInput style={styles.input} placeholder="Manoel Ferreira da Silva" onChangeText={setNome}></TextInput>
             <Text style={styles.textForm}>Digite o seu número de telefone:</Text>
-            <TextInput style={styles.input} onChangeText={setTelefone}></TextInput>
+            <TextInput style={styles.input} placeholder="(13) 9797-4040" onChangeText={setTelefone}></TextInput>
             <Text style={styles.textForm}>Digite o seu email:</Text>
-            <TextInput style={styles.input} onChangeText={setEmail}></TextInput>
+            <TextInput style={styles.input} placeholder="manoel.ferreira31@gmail.com" onChangeText={setEmail}></TextInput>
             <Text style={styles.textForm}>Digite a sua data de nascimento:</Text>
-            <TextInput style={styles.input} onChangeText={setDatanasct}></TextInput>
+            <TextInput style={styles.input} placeholder="31/05/1975" onChangeText={setDatanasct}></TextInput>
             <Text style={styles.textForm}>Digite o seu CPF:</Text>
-            <TextInput style={styles.input} onChangeText={setCpf}></TextInput>
+            <TextInput style={styles.input} placeholder="432.432.432-61" onChangeText={setCpf}></TextInput>
             <Text style={styles.textForm}>Digite a sua senha:</Text>
-            <TextInput style={styles.input} onChangeText={setSenha} secureTextEntry={true}></TextInput>
+            <TextInput style={styles.input} placeholder="********" onChangeText={setSenha} secureTextEntry={true}></TextInput>
             
             <View style={styles.viewBotao}>
               <TouchableOpacity
@@ -148,6 +151,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     justifyContent: "center",
     opacity: 0.7,
+    textAlign: "center",
+    fontSize: normalize(16)
   },
 
   viewBotao: {

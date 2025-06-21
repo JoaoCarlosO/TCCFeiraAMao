@@ -58,29 +58,28 @@ export default function NotificacoesCliente() {
   );
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <ImageBackground
-        source={require("../../../assets/img/fundo-perfil.png")}
-        style={{ flex: 1 }}
-        resizeMode="cover"
-      >
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.tituloHeader}>NOTIFICAÇÕES</Text>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <MaterialIcons name="arrow-back" size={28} color="black" />
-            </TouchableOpacity>
-          </View>
-
-          <FlatList
-            data={notificacoes}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            contentContainerStyle={styles.lista}
-          />
+    <ImageBackground
+      source={require("../../../assets/img/fundo-perfil.png")}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.tituloHeader}>NOTIFICAÇÕES</Text>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back" size={28} color="black" />
+          </TouchableOpacity>
         </View>
-      </ImageBackground>
-    </ScrollView>
+
+        <FlatList
+          data={notificacoes}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.lista}
+        />
+      </View>
+    </ImageBackground>
+
   );
 }
 

@@ -25,6 +25,7 @@ import TipoLoja from "./src/Screens/Perfil/tipoloja";
 import CadCPF from "./src/Screens/Perfil/CadCPF";
 import CadCNPJ from "./src/Screens/Perfil/CadCNPJ";
 import Carrinho from "./src/Screens/Carrinho";
+import PerfilLoja from "./src/Screens/PerfilLoja";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -46,7 +47,7 @@ const Drawer = createDrawerNavigator();
           backgroundColor: "#F2C844",
           borderTopWidth: 0,
           height: 75,
-          position: "absolute",git
+          position: "absolute",
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -142,6 +143,11 @@ export default function App() {
               options={{ headerShown: false, tabBarStyle: false }}
             />
             <Stack.Screen
+              name="PerfilLoja"
+              component={PerfilLoja}
+              options={{ headerShown: true, tabBarStyle: false }}
+            />
+            <Stack.Screen
               name="Notificacao"
               component={Notificacao}
               options={{ headerShown: false }}
@@ -162,7 +168,8 @@ export default function App() {
                   height: 70,
                 },
               }}
-            /><Stack.Screen
+            />
+            <Stack.Screen
               name="CadCNPJ"
               component={CadCNPJ}
               options={{
