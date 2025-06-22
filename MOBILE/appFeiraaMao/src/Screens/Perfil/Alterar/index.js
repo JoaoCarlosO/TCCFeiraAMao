@@ -30,7 +30,7 @@ const Alterar = () => {
   });
 
   const [fotoPerfil, setFotoPerfil] = useState(
-    require("../../../../assets/img/imgPerfil.png")
+    require("../../../../assets/img/Ftperfil.jpg")
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -221,7 +221,7 @@ const Alterar = () => {
     </ImageBackground>
   );
 };
-// Estilos (MANTIDOS IGUAIS ao seu original)
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

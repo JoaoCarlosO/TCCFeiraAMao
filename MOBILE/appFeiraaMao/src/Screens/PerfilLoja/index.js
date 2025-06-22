@@ -3,19 +3,15 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    ScrollView,
-    Dimensions,
     Text,
     FlatList,
     Image,
+    Dimensions,
 } from "react-native";
 
-import { MaterialIcons } from "@expo/vector-icons";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
-import Carousel from "react-native-reanimated-carousel";
-import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const { width: screenWidth } = Dimensions.get("window");
 const normalize = (size) => (screenWidth / 375) * size;
 
 const produtos = [
@@ -46,14 +42,17 @@ const CardProduto = ({ item, navigation }) => (
 );
 
 export default function PerfilLoja() {
+    const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
                 <Image source={require("../../../assets/img/seujo.png")} style={styles.imgPerfil} />
                 <Text style={styles.titulo}>Seu João</Text>
             </View>
+
             <FlatList
-                data={produtos2}
+                data={produtos}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <CardProduto item={item} navigation={navigation} />}
                 horizontal
@@ -73,5 +72,52 @@ const styles = StyleSheet.create({
     texto: {
         fontSize: 24,
         fontWeight: "bold",
+    },
+    imgPerfil: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        margin: 10,
+    },
+    titulo: {
+        fontSize: 20,
+        alignSelf: "center",
+    },
+    card2: {
+        width: 150,
+        backgroundColor: "#fff",
+        margin: 10,
+        padding: 10,
+        borderRadius: 10,
+        alignItems: "center",
+    },
+    imagem: {
+        width: 80,
+        height: 80,
+        marginBottom: 10,
+    },
+    nome: {
+        fontSize: 16,
+        fontWeight: "bold",
+        marginBottom: 5,
+    },
+    linha: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    icones: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+    },
+    preco: {
+        fontSize: 14,
+        color: "#333",
+        marginRight: 5,
+    },
+    icone: {
+        width: 24,
+        height: 24,
+        marginHorizontal: 5,
     },
 });

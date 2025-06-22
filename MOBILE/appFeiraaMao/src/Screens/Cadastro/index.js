@@ -1,4 +1,3 @@
-import { normalize } from "path";
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -9,7 +8,12 @@ import {
   ImageBackground,
   TouchableOpacity,
   TextInput,
+  Dimensions
 } from "react-native";
+
+// 👇 MOVER ISSO PARA FORA DO COMPONENTE
+const { width: screenWidth } = Dimensions.get("window");
+const normalize = (size) => (screenWidth / 375) * size;
 
 export default function Cadastro({ navigation }) {
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
@@ -20,8 +24,21 @@ export default function Cadastro({ navigation }) {
   const [datanasct, setDatanasct] = useState("");
   const [cpf, setCpf] = useState("");
   const [senha, setSenha] = useState("");
+  
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(offset.y, {
+        toValue: 0,
+        speed: 4,
+        bounciness: 20,
+      }),
+      Animated.timing(opac, {
+        toValue: 1,
+        duration: 2000,
+      }),
+    ]).start();
+  }, []);
 
-  const normalize = (size) => (screenWidth / 375) * size;
   
   useEffect(() => {
     Animated.parallel([
