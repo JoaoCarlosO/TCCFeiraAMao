@@ -9,20 +9,22 @@ import {
   SafeAreaView,
   ImageBackground,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 export default function AreaUsuario() {
   const navigation = useNavigation();
   const [user] = useState({
-    name: "Kelly Soares",
-    email: "Kelly.Soares35@example.com",
+    name: "Manoel Marcos Xavier",
+    email: "Manoelmarcos005@gmail.com",
   });
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={require("../../../assets/img/fundo-perfil.png")}
-      style={{width: "100%", height: "100%"}}>
+      <ImageBackground
+        source={require("../../../assets/img/fundo-perfil.png")}
+        style={{ width: "100%", height: "100%" }}
+      >
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={{ paddingBottom: 20 }}
@@ -33,7 +35,7 @@ export default function AreaUsuario() {
           <View style={styles.profileContainer}>
             <View style={styles.profileImage}>
               <Image
-                source={require("../../../assets/img/iconperfil.jpg")}
+                source={require("../../../assets/img/Ftperfil.jpg")}
                 style={styles.image}
                 resizeMode="cover"
               />
@@ -52,13 +54,23 @@ export default function AreaUsuario() {
             style={styles.button}
             onPress={() => navigation.navigate("Alterar", { nome: user.name })}
           >
-            <Text style={styles.buttonText}>Alterar</Text>
+            <Text style={styles.buttonText}>Alterar dados da conta</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, styles.sellerButton]}
             onPress={() => navigation.navigate("cadvend")}
           >
-            <Text style={styles.buttonText}>Torne-se vendedor</Text>
+            <View style={styles.iconButtonContent}>
+              <MaterialCommunityIcons
+                name="storefront"
+                size={24}
+                color="#425010"
+              />
+              <Text style={[styles.buttonText, { color: "#425010" }]}>
+                Torne-se vendedor
+              </Text>
+            </View>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -83,16 +95,6 @@ const styles = StyleSheet.create({
   header: {
     padding: 20,
     alignItems: "flex-end",
-  },
-  sellerButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 8,
-  },
-  sellerButtonText: {
-    marginLeft: 8,
-    color: "#425010",
-    fontWeight: "bold",
   },
   profileContainer: {
     alignItems: "center",
@@ -130,24 +132,34 @@ const styles = StyleSheet.create({
     bottom: 60,
   },
   button: {
-    backgroundColor: "#425010",
+    backgroundColor: "#404A12",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
-    minWidth: "100%", // ou 'auto' se quiser ajustar ao texto
+    borderRadius: 20,
+    minWidth: "100%",
     alignItems: "center",
     marginBottom: 10,
-    borderRadius: 20, // espaço entre os botões
+  },
+  sellerButton: {
+    backgroundColor: "#CDA527", // cor especial para "Torne-se vendedor"
   },
   logoutButton: {
     backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#425010",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
   },
-
+  buttonText: {
+    marginLeft: 8,
+    color: "#BCAF77",
+    fontWeight: "Urbanist",
+  },
   logoutText: {
     color: "#425010",
+  },
+  iconButtonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
   },
 });

@@ -1,67 +1,121 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  StyleSheet,
   View,
+  Text,
+  FlatList,
+  StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  Dimensions,
+  ImageBackground,
 } from "react-native";
-
 import { MaterialIcons } from "@expo/vector-icons";
-import { DrawerActions } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
-const { width, height } = Dimensions.get("window");
 
-export default function Home({ navigation }) {
+const pedidos = [
+  { id: "1", vendedor: "Confeitaria da Lu", status: "Confirmado", total: 45.5 },
+  { id: "2", vendedor: "Peixaria Água Viva", status: "Em preparo", total: 32.9 },
+  { id: "3", vendedor: "Seu João Artesanais", status: "Entregue", total: 27.0 },
+];
+
+export default function PedidosCliente() {
+  const navigation = useNavigation();
+  const [listaPedidos, setListaPedidos] = useState(pedidos);
+
+  const cancelarPedido = (id) => {
+    const novaLista = listaPedidos.map((pedido) =>
+      pedido.id === id ? { ...pedido, status: "Cancelado" } : pedido
+    );
+    setListaPedidos(novaLista);
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <Text style={styles.vendedor}>{item.vendedor}</Text>
+      <Text style={styles.status}>Status: {item.status}</Text>
+      <Text style={styles.total}>Total: R$ {item.total.toFixed(2)}</Text>
+
+      {item.status !== "Cancelado" && item.status !== "Entregue" && (
+        <TouchableOpacity
+          style={styles.botaoCancelar}
+          onPress={() => cancelarPedido(item.id)}
+        >
+          <Text style={styles.textoCancelar}>Cancelar pedido</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}>
-        {/* Cabeçalho */}
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        source={require("../../../assets/img/fundo-perfil.png")}
+        style={{ flex: 1 }}
+      >
         <View style={styles.header}>
-          <View style={styles.containerHeader}>
-            <TouchableOpacity
-              style={styles.menu}
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            >
-              <MaterialIcons name="menu" size={35} color="white" />
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.tituloHeader}>MEUS PEDIDOS</Text>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back" size={28} color="black" />
+          </TouchableOpacity>
         </View>
 
-        {/* Conteúdo da tela aqui */}
-      </View>
-    </ScrollView>
+        <FlatList
+          data={listaPedidos}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={{ padding: 16 }}
+        />
+      </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#E8E1C3"
-  },
-
   header: {
-    backgroundColor: "#F2C844",
-    shadowColor: "rgba(0, 0, 0, 0.1)",
-    shadowOpacity: 0.1,
-    elevation: 6,
-    shadowRadius: 15,
-    shadowOffset: { width: 1, height: 5 },
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
-    height: 85,
-    justifyContent: "center",
-  },
-
-  containerHeader: {
+    backgroundColor: "#425010",
+    height: 70,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
+    paddingHorizontal: 15,
   },
-
-  menu: {
-    position: "absolute",
-    left: 15,
-    top: -5,
+  tituloHeader: {
+    color: "#BCAF77",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  card: {
+    backgroundColor: "#F5F5F5",
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+  },
+  vendedor: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 4,
+  },
+  status: {
+    fontSize: 14,
+    marginBottom: 4,
+    color: "#666",
+  },
+  total: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#4C5340",
+  },
+  botaoCancelar: {
+    marginTop: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: "#E57373",
+    borderRadius: 6,
+    alignSelf: "flex-start",
+  },
+  textoCancelar: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 13,
   },
 });
