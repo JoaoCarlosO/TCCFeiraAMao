@@ -65,27 +65,27 @@
     <form method="POST" action="/perfil">
       <div class="input-group">
         <label>Nome:</label>
-        <input type="text" name="nome" placeholder="Manoel Silva" required />
+        <input type="text" name="nome" value="{{ cliente.NomeCli }}"/>
       </div>
       <div class="input-group">
         <label>CPF:</label>
-        <input type="text" name="cpf" placeholder="123.456.789-00" required />
+        <input type="text" name="cpf" value="{{ cliente.CPF }}"/>
       </div>
       <div class="input-group">
         <label>Endereço:</label>
-        <input type="text" name="endereco" placeholder="Rua São Paulo" required />
+        <input type="text" name="endereco" value="{{ cliente.Endereco }}"/>
       </div>
       <div class="input-group">
         <label>Email:</label>
-        <input type="email" name="email" placeholder="manoelsilva239@email.com" required />
+        <input type="email" name="email" value="{{ cliente.Email }}"/>
       </div>
       <div class="input-group">
         <label>Telefone:</label>
-        <input type="tel" name="telefone" placeholder="13 989765423" required />
+        <input type="tel" name="telefone" value="{{ cliente.Telefone }}"/>
       </div>
       <div class="input-group">
         <label>Senha:</label>
-        <input type="password" name="senha" placeholder="*********" required />
+        <input type="password" name="senha"/>
       </div>
       <button type="submit">Alterar</button>
     </form>

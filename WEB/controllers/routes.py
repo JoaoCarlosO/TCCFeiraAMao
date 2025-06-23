@@ -1,8 +1,9 @@
 from flask import render_template, request, redirect, url_for, flash
-
+from models.database import Cliente, db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 def init_app(app):
-    app.secret_key = 'sua-chave-secreta'  # Obrigatório para usar flash
+    app.secret_key = 'sua-chave-secreta'
 
     @app.route('/')
     def home():
@@ -11,17 +12,17 @@ def init_app(app):
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         if request.method == 'POST':
-            username = request.form['username']
-            password = request.form['password']
+            email = request.form['username']
+            senha = request.form['password']
+            cliente = Cliente.query.filter_by(Email=email).first()
 
-            if username == 'admin@email.com' and password == '12345':
+            if cliente and check_password_hash(cliente.Senha, senha):
                 flash('Login realizado com sucesso!', 'success')
-                return redirect(url_for('home'))
             else:
                 flash('Credenciais inválidas.', 'error')
-                return redirect(url_for('home'))
 
-        # Apenas exibe o formulário no GET
+            return redirect(url_for('home'))
+
         return render_template('login.html')
 
     @app.route('/cadastro', methods=['GET', 'POST'])
@@ -32,41 +33,41 @@ def init_app(app):
             email = request.form.get('email')
             nascimento = request.form.get('nascimento')
             cpf = request.form.get('cpf')
-            senha = request.form.get('senha')
+            senha = generate_password_hash(request.form.get('senha'))
+            endereco = ''  # pode deixar em branco no cadastro
 
-            # Verificação de dados (apenas para simulação)
-            if (
-                nome == 'admin' and telefone == '13 997549008' and
-                email == 'admin@email.com' and nascimento == '2007-10-03' and cpf == '495.780.418-45' and senha == '12345'
-            ):
+            novo_cliente = Cliente(nome, telefone, nascimento, endereco, email, cpf, senha)
+
+            try:
+                db.session.add(novo_cliente)
+                db.session.commit()
                 flash('Cadastro realizado com sucesso!', 'success')
-                return redirect(url_for('home'))
-            else:
-                flash('Preencha os dados corretamente para se cadastrar.', 'error')
-                return redirect(url_for('home'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro no cadastro: {e}', 'error')
 
-        # Exibe o formulário se for GET
+            return redirect(url_for('home'))
+
         return render_template('cadastro.html')
 
     @app.route('/perfil', methods=['GET', 'POST'])
     def perfil():
+        cliente = Cliente.query.first()  # Simulando cliente logado
+
         if request.method == 'POST':
-            nome = request.form.get('nome')
-            cpf = request.form.get('cpf')
-            endereco = request.form.get('endereco')
-            email = request.form.get('email')
-            telefone = request.form.get('telefone')
-            senha = request.form.get('senha')
+            cliente.NomeCli = request.form.get('nome')
+            cliente.CPF = request.form.get('cpf')
+            cliente.Endereco = request.form.get('endereco')
+            cliente.Email = request.form.get('email')
+            cliente.Telefone = request.form.get('telefone')
+            cliente.Senha = generate_password_hash(request.form.get('senha'))
 
-            if nome and cpf and endereco and email and telefone and senha:
-                flash('Perfil atualizado com sucesso!', 'success')
-                return redirect(url_for('home'))
-            else:
-                flash('Por favor, preencha todos os campos.', 'error')
-                return redirect(url_for('home'))
+            db.session.commit()
+            flash('Perfil atualizado com sucesso!', 'success')
+            return redirect(url_for('home'))
 
-        return render_template('perfil.html')
-
+        return render_template('perfil.html', cliente=cliente)
+    
     @app.route('/sobre')
     def sobre():
         return render_template('sobre.html')
