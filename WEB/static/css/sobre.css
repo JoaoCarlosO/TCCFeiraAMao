@@ -1,0 +1,174 @@
+/* ----------------- Navbar ------------------ */
+.navbar-container {
+  background-color: #425010;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container img#imgLogo {
+  width: 80px;
+}
+
+.navbar-container nav a {
+  color: #C8D69B;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+}
+
+.navbar-container nav a:hover {
+  text-decoration: underline;
+}
+
+.btn_voltar-navbar img {
+  width: 45px;
+  height: 45px;
+  border-radius: 10%;
+  background-color: #fff;
+  padding: 4px;
+  transition: transform 0.2s ease;
+}
+
+.btn_voltar-navbar img:hover {
+  transform: scale(1.05);
+}
+
+/* ----------------- Conteúdo ------------------ */
+.sobre {
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  background-color: #fcf8e8;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  margin-top: 40px;
+  margin-bottom: 60px;
+  line-height: 1.8;
+}
+
+.sobre h1 {
+  font-size: 2.5rem;
+  color: #425010;
+  font-weight: bold;
+}
+
+.sobre h4 {
+  font-weight: bold;
+  color: #425010;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.sobre .servicos h4 {
+  font-weight: bold;
+  color: #f7f0ce;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.sobre p {
+  font-size: 1.1rem;
+  text-align: justify;
+}
+
+.sobre strong {
+  color: #425010;
+  font-size: 1.2rem;
+}
+
+/* Imagens genéricas */
+.sobre img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.sobre img:hover {
+  transform: scale(1.03);
+}
+
+/* Imagens dos blocos */
+.img-bloco {
+  max-width: 300px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.img-bloco:hover {
+  transform: scale(1.03);
+}
+
+.descricao-servico {
+  font-size: 0.95rem;
+  margin-top: 10px;
+  color: #444;
+}
+
+.servicos {
+  font-size: 0.95rem;
+  margin-top: 10px;
+  color: #fdffe1;
+  background-color: #425010;
+  padding: 50px;
+  border-radius: 10px;
+}
+
+/* ----------------- Equipe ------------------ */
+.img-wrapper {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.img-equipe {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.img-equipe:hover {
+  transform: scale(1.05);
+}
+
+.equipe-img p {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  color: #333;
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ----------------- Rodapé ------------------ */
+footer {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  color: #555;
+  border-top: 1px solid #ccc;
+  background-color: #C8D69B;
+  margin-top: 30px;
+  width: 100%;
+}
+
+
+/* ----------------- Responsividade ------------------ */
+@media (max-width: 768px) {
+  .text-md-start {
+    text-align: center !important;
+  }
+}

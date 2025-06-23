@@ -154,6 +154,7 @@ body, html {
   width: 75px;
   height: 75px;
   background-color: rgb(255, 255, 255);
+  border-radius: 10%;
 }
 
 .btn_voltar img {
@@ -161,3 +162,5 @@ body, html {
   height: 100%;
   border-radius: 10%;
 }
+
+

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sobre.css') }}" />
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Bacasime+Antique&family=Cairo+Play:wght@200..1000&family=Hurricane&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap");
+    </style>
+    <style>
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='imgs/fundoBg.png') }}");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<!-- ... HEAD permanece o mesmo -->
+
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar-container">
+        <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
+        <nav class="d-flex gap-4 align-items-center">
+            <a href="{{ url_for('sobre') }}" class="text-decoration-none">Sobre</a>
+            <a href="#containerFooter" class="text-decoration-none">Ajuda</a>
+            <a href="{{ url_for('perfil') }}" class="text-decoration-none">Perfil</a>
+            <a href="{{ url_for('login') }}" class="text-decoration-none">Login</a>
+            <a href="{{ url_for('cadastro') }}" class="text-decoration-none">Cadastro</a>
+        </nav>
+        <a href="{{ url_for('home') }}" class="btn_voltar-navbar">
+            <img src="{{ url_for('static', filename='imgs/botaoVoltar.png') }}" alt="botão voltar" />
+        </a>
+    </div>
+
+    <!-- CONTEÚDO -->
+    <section class="sobre container py-5 text-center">
+        <h1 class="mb-5">Sobre o Feira à Mão</h1>
+
+        <!-- BLOCO 1 - OBJETIVO + IMAGEM 1 -->
+        <div class="row justify-content-center align-items-center mb-5">
+            <div class="col-md-6 text-md-start text-center">
+                <h4>OBJETIVO</h4>
+                <p class="mt-3">
+                    O projeto tem como objetivo principal desenvolver duas plataformas — um aplicativo mobile e uma
+                    página web — para facilitar a venda de produtos naturais e ampliar sua visibilidade. Além disso,
+                    busca incentivar o consumo de itens naturais e culturais da região, promover a compra e venda de
+                    forma acessível, contribuir para uma melhor gestão da demanda e impulsionar o crescimento econômico
+                    local. A proposta também visa fortalecer a identidade cultural das comunidades envolvidas,
+                    destacando o valor dos saberes tradicionais e das práticas sustentáveis. Por meio dessas
+                    ferramentas, espera-se aproximar produtores e consumidores, criando uma rede de apoio mútuo e
+                    valorização dos produtos regionais.
+                </p>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="{{ url_for('static', filename='imgs/artesao.png') }}" alt="Imagem 1 - Artesão"
+                    class="img-bloco" />
+            </div>
+        </div>
+
+        <!-- BLOCO 2 - TÍTULO CENTRAL -->
+        <div class="servicos row mb-5">
+            <div class="col-12">
+                <h4 class="text-center">SERVIÇOS PRESTADOS</h4>
+                <p class=" mt-3">
+                    Além do desenvolvimento das plataformas mobile e web, o projeto também inclui a prestação de
+                    serviços contínuos que garantam seu bom funcionamento e evolução. Entre esses serviços estão a
+                    manutenção corretiva e preventiva dos sistemas, atualizações periódicas para aprimorar a experiência
+                    do usuário e a segurança dos dados, suporte técnico para usuários e vendedores, além da integração
+                    com ferramentas de análise para acompanhar o desempenho das vendas. Também será oferecido
+                    treinamento inicial aos produtores e comerciantes para uso das plataformas, garantindo
+                    acessibilidade e autonomia na gestão de seus produtos. Dessa forma, o projeto visa não apenas criar
+                    as ferramentas, mas também garantir sua sustentabilidade e eficácia a longo prazo.
+
+                </p>
+            </div>
+        </div>
+
+        <!-- BLOCO 3 - IMAGEM 2 + TEXTO EXPLICATIVO -->
+        <div class="row justify-content-center align-items-center mb-5">
+            <div class="col-md-6 text-center">
+                <img src="{{ url_for('static', filename='imgs/imgFeira.png') }}" alt="Imagem 2 - Feira"
+                    class="img-bloco" />
+            </div>
+            <div class="col-md-6 text-md-start text-center">
+                <p class="descricao-servico">
+                    Atualmente, muitos feirantes enfrentam dificuldades para divulgar seus produtos e alcançar novos
+                    clientes, sendo limitados à venda presencial e à divulgação boca a boca. O projeto busca transformar
+                    essa realidade ao oferecer uma alternativa digital acessível, que amplia a visibilidade dos produtos
+                    e facilita o contato direto com os consumidores. Com as plataformas desenvolvidas, os feirantes
+                    poderão expor seus itens de forma organizada, atrativa e com maior alcance, aumentando suas chances
+                    de venda e garantindo uma fonte de renda mais estável. Dessa forma, a tecnologia se torna uma aliada
+                    no fortalecimento do comércio local e na valorização do trabalho artesanal e natural da região.
+                </p>
+            </div>
+        </div>
+
+
+        <!-- BLOCO 4 - QUEM SOMOS -->
+        <div class="row">
+            <h4 class="mb-4 text-center">QUEM SOMOS?</h4>
+            <div class="col-12 d-flex justify-content-center gap-4 flex-wrap">
+                <div class="equipe-img text-center">
+                    <div class="img-wrapper">
+                        <img src="{{ url_for('static', filename='imgs/AnaLuisa.jpg') }}" alt="Ana Luiza"
+                            class="img-equipe" />
+                    </div>
+                    <p>Ana Luisa Leite</p>
+                </div>
+                <div class="equipe-img text-center">
+                    <div class="img-wrapper">
+                        <img src="{{ url_for('static', filename='imgs/Fantinny.jpg') }}" alt="Fantinny"
+                            class="img-equipe" />
+                    </div>
+                    <p>Fantinny Rodrigues</p>
+                </div>
+                <div class="equipe-img text-center">
+                    <div class="img-wrapper">
+                        <img src="{{ url_for('static', filename='imgs/JC.jpg') }}" alt="João Carlos"
+                            class="img-equipe" />
+                    </div>
+                    <p>João Carlos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- RODAPÉ -->
+    <footer class="text-center py-4" id="containerFooter">
+        <p>&copy; 2023 Feira à Mão. Todos os direitos reservados.</p>
+        <p>Desenvolvido por João Carlos, Ana Luiza e Fantinny.</p>
+    </footer>
+
+</body>
+
+</html>
