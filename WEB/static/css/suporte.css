@@ -71,6 +71,20 @@ body {
   border-radius: 0 10px 10px 0;
 }
 
+/* Adicionado para suportar o campo de mensagem do suporte */
+.input-group textarea {
+  flex: 1;
+  padding: 12px 15px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 0 10px 10px 0;
+  resize: vertical;
+  min-height: 100px;
+  width: 500px;
+  box-sizing: border-box;
+}
+
 
 button {
   background-color: #425010;
@@ -107,7 +121,7 @@ button:hover {
 
 /* Estilo para a navbar */
 .navbar-container {
-  background-color: #425010; /* levemente transparente */
+  background-color: #425010;
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
@@ -119,7 +133,6 @@ button:hover {
   height: 90px;
 }
 
-/* Logo da navbar */
 .navbar-container img#imgLogo {
   width: 80px;
 }
@@ -131,21 +144,19 @@ button:hover {
   flex-grow: 1;
 }
 
-/* Estilo para os links do menu */
 .navbar-container nav a {
   color: #C8D69B;
   text-decoration: none;
   font-weight: 600;
   margin-left: 20px;
   font-family: "Poppins", sans-serif;
-  align-items: center;
   font-size: 18px;
 }
 
 .navbar-container nav a:hover {
   text-decoration: underline;
 }
-/* Botão voltar dentro da navbar */
+
 .btn_voltar-navbar img {
   width: 50px;
   height: 50px;
@@ -162,14 +173,20 @@ button:hover {
 footer {
   font-family: "Poppins", sans-serif;
   font-size: 0.95rem;
-  color: #555;
+  color: #141414;
   border-top: 1px solid #ccc;
   background-color: #C8D69B;
-  margin-top: 30px;
+  margin-top: 0px;
   width: 100%;
+  padding: 20px 10px;
 }
 
 footer img {
-  width: 50px; 
+  width: 50px;
   margin-bottom: 10px;
 }
+
+main.flex-fill {
+  flex: 1;
+}
+

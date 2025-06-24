@@ -5,13 +5,13 @@ from models.database import db
 
 app = Flask(__name__, template_folder='templates')
 
-routes.init_app(app)
-
 DB_NAME = 'feiraamao'
-app.config['DATABASE_NAME'] = DB_NAME
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root@localhost/{DB_NAME}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://root:@localhost/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['DATABASE_NAME'] = DB_NAME
+app.secret_key = 'sua-chave-secreta'  # deve estar aqui
 
+# Criação do banco, se não existir
 if __name__ == '__main__':
     connection = pymysql.connect(host='localhost',
                                  user='root',
@@ -30,6 +30,8 @@ if __name__ == '__main__':
 
     db.init_app(app)
     with app.app_context():
+        from models.database import MensagemSuporte  # importa os models
         db.create_all()
 
+    routes.init_app(app)  # garantir que vem DEPOIS do init do banco
     app.run(host='localhost', port=5000, debug=True)

@@ -1,10 +1,8 @@
 from flask import render_template, request, redirect, url_for, flash
-from models.database import Cliente, db
+from models.database import Cliente, MensagemSuporte, db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def init_app(app):
-    app.secret_key = 'sua-chave-secreta'
-
     @app.route('/')
     def home():
         return render_template('index.html')
@@ -31,10 +29,10 @@ def init_app(app):
             nome = request.form.get('nome')
             telefone = request.form.get('telefone')
             email = request.form.get('email')
+            endereco = request.form.get('endereco')
             nascimento = request.form.get('nascimento')
             cpf = request.form.get('cpf')
             senha = generate_password_hash(request.form.get('senha'))
-            endereco = ''  # pode deixar em branco no cadastro
 
             novo_cliente = Cliente(nome, telefone, nascimento, endereco, email, cpf, senha)
 
@@ -55,19 +53,50 @@ def init_app(app):
         cliente = Cliente.query.first()  # Simulando cliente logado
 
         if request.method == 'POST':
-            cliente.NomeCli = request.form.get('nome')
-            cliente.CPF = request.form.get('cpf')
-            cliente.Endereco = request.form.get('endereco')
-            cliente.Email = request.form.get('email')
-            cliente.Telefone = request.form.get('telefone')
-            cliente.Senha = generate_password_hash(request.form.get('senha'))
+            nome = request.form.get('nome')
+            cpf = request.form.get('cpf')
+            endereco = request.form.get('endereco')
+            email = request.form.get('email')
+            telefone = request.form.get('telefone')
+            senha = request.form.get('senha')
+
+            if nome:
+                cliente.NomeCli = nome
+            if cpf:
+                cliente.CPF = cpf
+            if endereco:
+                cliente.Endereco = endereco
+            if email:
+                cliente.Email = email
+            if telefone:
+                cliente.Telefone = telefone
+            if senha:
+                cliente.Senha = generate_password_hash(senha)
 
             db.session.commit()
             flash('Perfil atualizado com sucesso!', 'success')
             return redirect(url_for('home'))
 
         return render_template('perfil.html', cliente=cliente)
-    
+
     @app.route('/sobre')
     def sobre():
         return render_template('sobre.html')
+
+    @app.route('/suporte', methods=['GET', 'POST'])
+    def suporte():
+        if request.method == 'POST':
+            nome = request.form.get('nome')
+            email = request.form.get('email')
+            mensagem = request.form.get('mensagem')
+
+            if not nome or not email or not mensagem:
+                flash('Por favor, preencha todos os campos.', 'danger')
+            else:
+                nova_msg = MensagemSuporte(nome=nome, email=email, mensagem=mensagem)
+                db.session.add(nova_msg)
+                db.session.commit()
+                flash('Mensagem enviada com sucesso! Obrigado pelo contato.', 'success')
+                return redirect(url_for('suporte'))
+
+        return render_template('suporte.html')

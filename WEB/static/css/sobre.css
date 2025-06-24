@@ -165,6 +165,11 @@ footer {
   width: 100%;
 }
 
+footer img {
+  width: 50px; 
+  margin-bottom: 10px;
+}
+
 
 /* ----------------- Responsividade ------------------ */
 @media (max-width: 768px) {

@@ -162,10 +162,31 @@
         </div>
       </div>
     </section>
-    <footer class="text-center py-4" id="containerFooter">
-      <p>&copy; 2023 Feira à Mão. Todos os direitos reservados.</p>
-      <p>Desenvolvido por João Carlos, Ana Luiza e Fantinny.</p>
-    </footer>
+<footer class="text-center py-4 mt-5" id="containerFooter">
+  <div class="container">
+    <div class="row">
+      <!-- Coluna de Informações -->
+      <div class="col-md-6 mb-3">
+         <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogoFooter" />
+        <h5>Feira à Mão</h5>
+        <p>&copy; 2025 Feira à Mão. Todos os direitos reservados.</p>
+        <p>Desenvolvido por João Carlos, Ana Luiza e Fantinny.</p>
+      </div>
+
+      <!-- Coluna de Contato e Links -->
+      <div class="col-md-6">
+        <h5>Contato</h5>
+        <p>Email: <a href="mailto:contato@feiraamao.com">contato@feiraamao.com</a></p>
+        <p>Instagram: <a href="https://instagram.com/feiraamao" target="_blank">@feiraamao</a></p>
+        <p>Telefone: (13) 99999-9999</p>
+        <p>
+          <a href="{{ url_for('suporte') }}">Suporte</a> |
+          <a href="{{ url_for('sobre') }}">Sobre nós</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
   </main>
 </body>
 </html>
