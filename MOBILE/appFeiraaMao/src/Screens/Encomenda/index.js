@@ -5,63 +5,49 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Text,
+  FlatList,
+  Image,
 } from "react-native";
+export default function Encomenda({ route }) {
+  const produto = route?.params?.produto;
 
-import { MaterialIcons } from "@expo/vector-icons";
-import { DrawerActions } from "@react-navigation/native";
-
-const { width, height } = Dimensions.get("window");
-
-export default function Home({ navigation }) {
-  return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}>
-        {/* Cabeçalho */}
-        <View style={styles.header}>
-          <View style={styles.containerHeader}>
-            <TouchableOpacity
-              style={styles.menu}
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            >
-              <MaterialIcons name="menu" size={35} color="white" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Conteúdo da tela aqui */}
+  if (!produto) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Produto não encontrado 😢</Text>
       </View>
-    </ScrollView>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.nome}>{produto.nome}</Text>
+      <Image source={produto.imagem} style={styles.imagem} />
+      <Text style={styles.preco}>{produto.preco}</Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E1C3"
-  },
-
-  header: {
-    backgroundColor: "#F2C844",
-    shadowColor: "rgba(0, 0, 0, 0.1)",
-    shadowOpacity: 0.1,
-    elevation: 6,
-    shadowRadius: 15,
-    shadowOffset: { width: 1, height: 5 },
-    borderBottomRightRadius: 5,
-    borderBottomLeftRadius: 5,
-    height: 85,
-    justifyContent: "center",
-  },
-
-  containerHeader: {
-    flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
-
-  menu: {
-    position: "absolute",
-    left: 15,
-    top: -5,
+  nome: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  preco: {
+    fontSize: 20,
+    color: "#27ae60",
+    marginTop: 10,
+  },
+  imagem: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
   },
 });

@@ -52,9 +52,9 @@ export default function Login({ navigation }) {
           </View>
           <View style={styles.areaForm}>
             <Text style={styles.textForm}>Digite o seu email</Text>
-            <TextInput style={styles.input} onChangeText={setNome}></TextInput>
+            <TextInput style={styles.input} placeholder="manoel.ferreira31@gmail.com" onChangeText={setNome}></TextInput>
             <Text style={styles.textForm}>Digite sua senha</Text>
-            <TextInput style={styles.input} onChangeText={setSenha} secureTextEntry={true}></TextInput>
+            <TextInput style={styles.input} placeholder="********" onChangeText={setSenha} secureTextEntry={true}></TextInput>
             <View style={styles.viewBotao}>
               <TouchableOpacity
                 style={styles.botao}
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     height: "7%",
     justifyContent: "center",
     opacity: 0.7,
+    color: "#000"
   },
 
   viewBotao: {
