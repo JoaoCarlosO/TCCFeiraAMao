@@ -176,7 +176,7 @@ footer {
   color: #141414;
   border-top: 1px solid #ccc;
   background-color: #C8D69B;
-  margin-top: 0px;
+
   width: 100%;
   padding: 20px 10px;
 }
@@ -184,9 +184,17 @@ footer {
 footer img {
   width: 50px;
   margin-bottom: 10px;
+  margin-top: -10px;
 }
 
 main.flex-fill {
   flex: 1;
+}
+
+main h2{
+  font-family: Poppins, sans-serif;
+  font-size: 35px;
+  font-weight: bold;
+  color: #131805;
 }
 
