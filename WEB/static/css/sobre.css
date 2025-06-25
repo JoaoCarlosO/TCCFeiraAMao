@@ -177,3 +177,24 @@ footer img {
     text-align: center !important;
   }
 }
+
+#imgsFooter{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.icon{
+  margin-bottom: -10px;
+}
+
+footer .container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 230px;
+  margin-bottom: -20px;
+}

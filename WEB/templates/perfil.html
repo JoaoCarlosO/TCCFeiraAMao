@@ -92,30 +92,26 @@
 
     <a href="/login" class="sair">Sair</a>
   </div>
-<footer class="text-center py-4 mt-5" id="containerFooter">
-  <div class="container">
-    <div class="row">
-      <!-- Coluna de Informações -->
-      <div class="col-md-6 mb-3">
-         <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogoFooter" />
-        <h5>Feira à Mão</h5>
-        <p>&copy; 2025 Feira à Mão. Todos os direitos reservados.</p>
-        <p>Desenvolvido por João Carlos, Ana Luiza e Fantinny.</p>
+    <footer class="text-center py-4 mt-auto" id="containerFooter">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogoFooter" />
+            <h5>Feira à Mão</h5>
+            <p>&copy; 2023 Feira à Mão. Todos os direitos reservados.</p>
+            <p>Desenvolvido por João Carlos, Ana Luiza e Fantinny.</p>
+          </div>
+          <div class="col-md-6">
+            <h5>Contato</h5>
+            <p class="icon"><img src="{{ url_for('static', filename='imgs/email_icone.png') }}" id="imgsFooter" />Email: feiraamao239@email.com</p>
+            <p class="icon"><img src="{{ url_for('static', filename='imgs/instagram_icone.png') }}" id="imgsFooter" />Instagram: @feiraamao</p>
+            <p class="icon"><img src="{{ url_for('static', filename='imgs/tel_icone.png') }}" id="imgsFooter" />Telefone: (13) 99754-9008</p>
+              <a href="{{ url_for('suporte') }}">Suporte</a> 
+              <a href="{{ url_for('sobre') }}">Sobre nós</a>
+            </p>
+          </div>
+        </div>
       </div>
-
-      <!-- Coluna de Contato e Links -->
-      <div class="col-md-6">
-        <h5>Contato</h5>
-        <p>Email: contato@feiraamao.com</p>
-        <p>Instagram: @feiraamao</p>
-        <p>Telefone: (13) 99754-9008</p>
-        <p>
-          <a href="{{ url_for('suporte') }}">Suporte</a> |
-          <a href="{{ url_for('sobre') }}">Sobre nós</a>
-        </p>
-      </div>
-    </div>
-  </div>
-</footer>
+    </footer>
 </body>
 </html>
