@@ -7,16 +7,18 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  ImageBackground
+  ImageBackground,
+  Button,
+  TouchableOpacity
 } from "react-native";
-import {useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
+import { useNavigation } from "@react-navigation/native";
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.4; // 40% da largura da tela para cada item
 
 export default function PerfilLoja({ route }) {
   const { nome, imagem, produtos } = route.params;
+  const navigation = useNavigation(); // Adicione esta linha
 
   // Divide os produtos em 4 categorias (exemplo)
   const linhasProdutos = [
@@ -29,7 +31,12 @@ export default function PerfilLoja({ route }) {
     <View style={styles.item}>
       <Image source={item.imagem} style={styles.imagem} />
       <Text style={styles.nome}>{item.nome}</Text>
-      <Text style={styles.preco}>{item.preco}</Text>
+      <Text style={styles.descricao}>{item.descricao}</Text>
+      <View style={{ flexDirection: "row", marginTop: 3 }}>
+        <Text style={styles.preco}>{item.preco}</Text>
+        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate("Encomenda", { produto: item })}>
+          <Text style={styles.textoBotao}>Comprar</Text></TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -50,10 +57,13 @@ export default function PerfilLoja({ route }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <ImageBackground source={require("../../../assets/img/fundoLoja.png")} style={styles.headerBackground} resizeMode="cover">
-        <Icon name="arrow-back" color="#FFF" size={30} onPress={() => navigation.navigate("Home")}/>   
-        <Image source={imagem} style={styles.logo} />
-        <Text style={styles.tituloLoja}>{nome}</Text>
+        <ImageBackground source={require("../../../assets/img/fundoLoja.png")}
+          style={styles.headerBackground}
+          resizeMode="cover">
+          <Icon name="arrow-back" color="#fff" size={30} style={styles.icone} onPress={() => navigation.goBack()} />
+          <Image source={imagem} style={styles.logo} />
+          <Text style={styles.tituloLoja}>{nome}</Text>
+
         </ImageBackground>
       </View>
 
@@ -71,9 +81,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 85,
-    height: 85,
+    width: 90,
+    height: 90,
     borderRadius: 40,
+  },
+  icone: {
+    position: "absolute",
+    alignSelf: "flex-start",
+    marginBottom: 120,
+    marginLeft: 10
   },
   tituloLoja: {
     fontSize: 22,
@@ -96,7 +112,7 @@ const styles = StyleSheet.create({
   },
   item: {
     width: ITEM_WIDTH,
-    height: 180,
+    height: 225,
     marginHorizontal: 8,
     backgroundColor: "#F7F0CE",
     borderRadius: 10,
@@ -105,27 +121,44 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   imagem: {
-    width: 150,
-    height: 80,
+    width: 135,
+    height: 120,
     resizeMode: 'contain',
-    marginBottom: 10,
+    marginBottom: -10,
   },
   nome: {
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: '500',
     textAlign: "center",
-    marginBottom: 5,
+  },
+  descricao: {
+    fontSize: 12,
   },
   preco: {
-    fontSize: 14,
+    fontSize: 20,
     color: "#425010",
     fontWeight: 'bold',
   },
   headerBackground: {
-  width: '100%',
-  height: 240,
-  justifyContent: 'center',
-  alignItems: 'center',
-  
-},
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerContent: {
+    backgroundColor: 'rgba(0,0,0,0.4)', // Fundo semi-transparente para melhor contraste
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  botao: {
+    backgroundColor: "#425010",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  textoBotao: {
+    color: 'white',
+    fontSize: 14,
+  }
 });

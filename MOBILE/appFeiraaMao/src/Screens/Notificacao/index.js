@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  ScrollView,
   Text,
   FlatList,
   Image,
@@ -57,7 +58,6 @@ export default function NotificacoesCliente() {
   );
 
   return (
-
       <ImageBackground
         source={require("../../../assets/img/fundo-perfil.png")}
         style={{ flex: 1 }}

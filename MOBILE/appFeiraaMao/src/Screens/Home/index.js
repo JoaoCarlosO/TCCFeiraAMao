@@ -43,7 +43,7 @@ const CardOfertaEspecial = ({ item, navigation }) => (
     <Image source={item.imagem} style={styles.imagemOferta} />
     <Text style={styles.tituloOferta}>{item.title}</Text>
     <View style={styles.infoOferta}>
-      <Text style={styles.descricao}>{item.descricao}</Text>
+      <Text style={{color: "#fff"}}>{item.descricao}</Text>
       <Text style={styles.precoOferta}>{item.preco}</Text>
       <TouchableOpacity
         style={styles.botaoComprar}
@@ -58,187 +58,216 @@ const CardOfertaEspecial = ({ item, navigation }) => (
 const produtos = [
   {
     id: "1",
-    nome: "Bolo de roda",
-    preco: "R$12,00",
-    imagem: require("../../../assets/img/bolo.png"),
+    nome: "Banana Chips",
+    descricao: "Pacote de 150g de banana desidratada.",
+    preco: "R$18,90",
+    imagem: require("../../../assets/img/banana-chips.png"),
   },
   {
     id: "2",
-    nome: "Bala de banana",
-    preco: "R$8,00",
-    imagem: require("../../../assets/img/banana-bala.png"),
-  },
-  {
-    id: "3",
-    nome: "Coruja",
-    preco: "R$17,00",
-    imagem: require("../../../assets/img/coruja.png"),
-  },
-  {
-    id: "4",
-    nome: "Pamonha",
-    preco: "R$12,00",
-    imagem: require("../../../assets/img/pamonha.png"),
-  },
-  {
-    id: "5",
-    nome: "Palmito",
-    preco: "R$18,00",
-    imagem: require("../../../assets/img/palmito.png"),
-  },
-  {
-    id: "6",
-    nome: "Hidromel",
-    preco: "R$45,00",
-    imagem: require("../../../assets/img/hidromel.png"),
-  },
-  {
-    id: "7",
-    nome: "Shimeji",
-    preco: "R$7,00",
-    imagem: require("../../../assets/img/shimeji.png"),
-  },
-  {
-    id: "8",
-    nome: "Bala de coco",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/bala-coco.png"),
-  },
-  {
-    id: "9",
-    nome: "Mel",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/mel.png"),
-  },
-  {
-    id: "10",
-    nome: "Tapioca",
-    preco: "R$12,00",
-    imagem: require("../../../assets/img/tapioca.png"),
-  },
-  {
-    id: "11",
-    nome: "Pão Caseiro",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/pao-caseiro.png"),
-  },
-  {
-    id: "12",
-    nome: "Cuca de banana",
-    preco: "R$25,00",
+    nome: "Cuca de Banana",
+    descricao: "Bolo tradicional com banana, peso aproximado 500g.",
+    preco: "R$32,50",
     imagem: require("../../../assets/img/cuca-banana.png"),
   },
   {
-    id: "13",
-    nome: "Cocada",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/cocada.png"),
+    id: "3",
+    nome: "Cachaça de banana",
+    descricao: "Garrafa de 500mL de cachaça artesanal.",
+    preco: "R$45,00",
+    imagem: require("../../../assets/img/cachaca-banana.png"),
   },
   {
-    id: "14",
-    nome: "Doce de Abóbora",
-    preco: "R$25,00",
+    id: "4",
+    nome: "Bala de banana",
+    descricao: "Pacote com 20 balas caseiras (100g).",
+    preco: "R$12,50",
+    imagem: require("../../../assets/img/banana-bala.png"),
+  },
+  {
+    id: "5",
+    nome: "Nhoque",
+    descricao: "Pacote de 400g, feito com biomassa de banana verde.",
+    preco: "R$15,90",
+    imagem: require("../../../assets/img/nhoque.png"),
+  },
+  {
+    id: "6",
+    nome: "Bolo de roda",
+    descricao: "Bolo artesanal de 400g.",
+    preco: "R$28,00",
+    imagem: require("../../../assets/img/bolo.png"),
+  },
+  {
+    id: "7",
+    nome: "Coruja",
+    descricao: "Pacote de 200g de pão feito a base de mandioca.",
+    preco: "R$10,90",
+    imagem: require("../../../assets/img/coruja.png"),
+  },
+  {
+    id: "8",
+    nome: "Pão Caseiro",
+    descricao: "Pão artesanal de fermentação natural, unidade 400g.",
+    preco: "R$14,50",
+    imagem: require("../../../assets/img/pao-caseiro.png"),
+  },
+  {
+    id: "9",
+    nome: "Doce de abóbora",
+    descricao: "Pote de 250g de doce cremoso de abóbora.",
+    preco: "R$18,00",
     imagem: require("../../../assets/img/doce-de-abobora.png"),
   },
   {
-    id: "15",
-    nome: "Farinha de Mandioca",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/farinha-tapioca.png"),
+    id: "10",
+    nome: "Bala de coco",
+    descricao: "Pacote com 15 balas de coco caseiras (90g).",
+    preco: "R$9,90",
+    imagem: require("../../../assets/img/bala-coco.png"),
   },
-
+  {
+    id: "11",
+    nome: "Pamonha",
+    descricao: "Unidade de 300g de pamonha tradicional (doce ou salgada).",
+    preco: "R$8,50",
+    imagem: require("../../../assets/img/pamonha.png"),
+  },
+  {
+    id: "12",
+    nome: "Cocada",
+    descricao: "Pacote com 10 unidades de cocada (200g).",
+    preco: "R$14,90",
+    imagem: require("../../../assets/img/cocada.png"),
+  },
+  {
+    id: "13",
+    nome: "Mel",
+    descricao: "Pote de 300g de mel puro de abelhas nativas.",
+    preco: "R$22,00",
+    imagem: require("../../../assets/img/mel.png"),
+  },
+  {
+    id: "14",
+    nome: "Hidromel",
+    descricao: "Garrafa de 500mL de hidromel artesanal.",
+    preco: "R$55,00",
+    imagem: require("../../../assets/img/hidromel.png"),
+  },
+  {
+    id: "15",
+    nome: "Farinha de mandioca",
+    descricao: "Pacote de 1kg de farinha de mandioca torrada.",
+    preco: "R$12,90",
+    imagem: require("../../../assets/img/farinha-de-mandioca.png"),
+  },
 ];
 
 const produtos2 = [
   {
     id: "1",
     nome: "Mandioca",
-    preco: "R$12,00",
+    descricao: "Pacote de 1kg de mandioca fresca.",
+    preco: "R$7,90",
     imagem: require("../../../assets/img/mandioca.png"),
   },
   {
     id: "2",
     nome: "Banana-da-terra",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/banana-terra.png"),
+    descricao: "Cacho com aproximadamente 5 unidades (1kg).",
+    preco: "R$9,50",
+    imagem: require("../../../assets/img/banana.png"),
   },
   {
     id: "3",
     nome: "Inhame",
-    preco: "R$25,00",
+    descricao: "Pacote de 1kg de inhame orgânico.",
+    preco: "R$10,90",
     imagem: require("../../../assets/img/inhame.png"),
   },
   {
     id: "4",
     nome: "Açafrão",
-    preco: "R$12,00",
+    descricao: "Pacote de 100g de açafrão-da-terra fresco.",
+    preco: "R$8,50",
     imagem: require("../../../assets/img/Acafrao.png"),
   },
   {
     id: "5",
     nome: "Pitaya",
-    preco: "R$25,00",
+    descricao: "Unidade de pitaya vermelha (300g em média).",
+    preco: "R$15,00",
     imagem: require("../../../assets/img/pitaya.png"),
   },
   {
     id: "6",
     nome: "Milho",
-    preco: "R$25,00",
+    descricao: "Pacote com 5 espigas de milho verde.",
+    preco: "R$12,00",
     imagem: require("../../../assets/img/milho.png"),
   },
   {
     id: "7",
-    nome: "Alface crespa  ",
-    preco: "R$12,00",
-    imagem: require("../../../assets/img/alface-crespa.png"),
-  },
-  {
-    id: "8",
     nome: "Cambuci",
-    preco: "R$25,00",
+    descricao: "Pacote de 500g.",
+    preco: "R$18,00",
     imagem: require("../../../assets/img/cambuci.png"),
   },
   {
-    id: "9",
+    id: "8",
     nome: "Jaca",
-    preco: "R$25,00",
+    descricao: "Fatias de jaca madura (300g).",
+    preco: "R$14,90",
     imagem: require("../../../assets/img/jaca.png"),
   },
   {
-    id: "10",
-    nome: "Caju",
-    preco: "R$12,00",
-    imagem: require("../../../assets/img/caju.png"),
-  },
-  {
-    id: "11",
+    id: "9",
     nome: "Manga",
-    preco: "R$25,00",
+    descricao: "Unidade de manga Palmer (500g em média).",
+    preco: "R$6,50",
     imagem: require("../../../assets/img/manga.png"),
   },
   {
+    id: "10",
+    nome: "Alface crespa",
+    descricao: "Maço de alface crespa orgânica (200g).",
+    preco: "R$4,90",
+    imagem: require("../../../assets/img/alface-crespa.png"),
+  },
+  {
+    id: "11",
+    nome: "Palmito Juçara",
+    descricao: "Pote de vidro com 300g de palmito sustentável.",
+    preco: "R$35,00",
+    imagem: require("../../../assets/img/palmito.png"),
+  },
+  {
     id: "12",
-    nome: "Tangerina",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/tangerina.png"),
+    nome: "Gengibre",
+    descricao: "Pedaço de 100g de gengibre fresco.",
+    preco: "R$5,50",
+    imagem: require("../../../assets/img/gengibre.png"),
   },
   {
     id: "13",
-    nome: "Banana nanica",
-    preco: "R$12,00",
-    imagem: require("../../../assets/img/banana.png"),
+    nome: "Pokan",
+    descricao: "Pacote de 500g do fruto exótico.",
+    preco: "R$22,00",
+    imagem: require("../../../assets/img/pokan.png"),
   },
   {
     id: "14",
-    nome: "Batata-baroa",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/mandioquinha.png"),
+    nome: "Shimeji",
+    descricao: "Bandeja de 200g de shimeji fresco.",
+    preco: "R$16,90",
+    imagem: require("../../../assets/img/shimeji.png"),
   },
   {
     id: "15",
-    nome: "Bacupari",
-    preco: "R$25,00",
-    imagem: require("../../../assets/img/bacupari.png"),
+    nome: "Batata-baroa",
+    descricao: "Pacote de 1kg.",
+    preco: "R$11,50",
+    imagem: require("../../../assets/img/mandioquinha.png"),
   },
 ];
 
@@ -249,9 +278,11 @@ const CardProduto = ({ item, navigation }) => (
   <View style={styles.card2}>
     <Image source={item.imagem} style={styles.imagem} />
     <Text style={styles.nome}>{item.nome}</Text>
+    <Text style={styles.descricao}>{item.descricao}</Text>
     <View style={styles.linha}>
       <View style={styles.icones}>
         <Text style={styles.preco}>{item.preco}</Text>
+
         <TouchableOpacity
           onPress={() => navigation.navigate("Encomenda", { produto: item })}
         >
@@ -260,7 +291,7 @@ const CardProduto = ({ item, navigation }) => (
             style={styles.icone}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Carrinho")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Carrinho", {produto: item})}>
           <Image
             source={require("../../../assets/img/carrinho.png")}
             style={styles.icone}
@@ -285,16 +316,18 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity>
-          <View style={styles.searchContainer}>
+
+        <View style={styles.searchContainer}>
+          <TouchableOpacity>
             <MaterialIcons
               name="search"
               size={35}
               color="white"
               style={{ marginRight: 8 }}
             />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
+
         <View>
           <Carousel
             width={normalize(375)}
@@ -434,9 +467,8 @@ const styles = StyleSheet.create({
     marginTop: normalize(10),
   },
   descricao: {
-    color: "#fff",
-    fontSize: normalize(15),
-    marginVertical: normalize(2),
+    color: "#000",
+    fontSize: normalize(12),
     fontFamily: "PTSans",
   },
   precoOferta: {
@@ -464,22 +496,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     borderRadius: 10,
     marginRight: normalize(10),
-    width: normalize(130),
-    height: normalize(160),
+    width: normalize(150),
+    height: normalize(230),
     justifyContent: "flex-start",
   },
   imagem: {
     width: "100%",
-    height: "70%",
+    height: "60%",
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8,
     position: "absolute",
     resizeMode: "cover",
   },
   nome: {
-    marginTop: normalize(115),
+    marginTop: normalize(160),
     fontFamily: "ABeeZee",
-    fontSize: normalize(13),
+    fontSize: normalize(16),
   },
   preco: {
     color: "#f39c12",
@@ -500,10 +532,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   icone: {
-    width: normalize(22),
-    height: normalize(21),
-    marginTop: normalize(8),
-    marginLeft: normalize(4),
+    width: normalize(20),
+    height: normalize(20),
+    marginTop: normalize(7),
+    marginLeft: normalize(15),
   },
   text: {
     fontSize: normalize(24),

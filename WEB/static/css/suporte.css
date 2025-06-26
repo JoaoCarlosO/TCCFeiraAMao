@@ -1,0 +1,246 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.logo img {
+  width: 80px;
+  margin-bottom: 10px;
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.profile-pic {
+  position: relative;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+
+.profile-pic img {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.camera-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 200px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.input-group {
+  display: flex;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.input-group label {
+  background-color: #C8D69B;
+  color: #425010;
+  padding: 12px 15px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  border-radius: 10px 0 0 10px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 12px 15px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 0 10px 10px 0;
+}
+
+/* Adicionado para suportar o campo de mensagem do suporte */
+.input-group textarea {
+  flex: 1;
+  padding: 12px 15px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 0 10px 10px 0;
+  resize: vertical;
+  min-height: 100px;
+  width: 500px;
+  box-sizing: border-box;
+}
+
+
+button {
+  background-color: #425010;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+button:hover {
+  background-color: #6b8e23;
+}
+
+.sair {
+  display: block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #556B2F;
+  font-weight: bold;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+/* Estilo para a navbar */
+.navbar-container {
+  background-color: #425010;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 90px;
+}
+
+.navbar-container img#imgLogo {
+  width: 80px;
+}
+
+.navbar-container nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.navbar-container nav a {
+  color: #C8D69B;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+}
+
+.navbar-container nav a:hover {
+  text-decoration: underline;
+}
+
+.btn_voltar-navbar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10%;
+  background-color: #fff;
+  padding: 5px;
+  transition: transform 0.2s ease;
+}
+
+.btn_voltar-navbar img:hover {
+  transform: scale(1.05);
+}
+
+footer {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  color: #141414;
+  border-top: 1px solid #ccc;
+  background-color: #C8D69B;
+
+  width: 100%;
+  padding: 20px 10px;
+}
+
+footer img {
+  width: 50px;
+  margin-bottom: 10px;
+  margin-top: -10px;
+}
+
+main.flex-fill {
+  flex: 1;
+}
+
+main h2{
+  font-family: Poppins, sans-serif;
+  font-size: 35px;
+  font-weight: bold;
+  color: #131805;
+}
+
+#imgsFooter{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.icon{
+  margin-bottom: -10px;
+}
+
+footer .container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 230px;
+  margin-bottom: -20px;
+}
+
+#imgsFooter{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.icon{
+  margin-bottom: -10px;
+}
+
+footer .container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 230px;
+  margin-bottom: -20px;
+}
+
+
+
+
+

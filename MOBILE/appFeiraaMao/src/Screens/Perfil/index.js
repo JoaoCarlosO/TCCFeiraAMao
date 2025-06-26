@@ -16,7 +16,7 @@ export default function AreaUsuario() {
   const navigation = useNavigation();
   const [user] = useState({
     name: "Manoel Marcos Xavier",
-    email: "Manoelmarcos005@gmail.com",
+    email: "manoel.ferreira31@gmail.com",
   });
 
   return (

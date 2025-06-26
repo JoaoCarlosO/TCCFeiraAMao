@@ -8,10 +8,11 @@ import {
   TextInput,
   ScrollView,
   ImageBackground,
+  Alert,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import * as DocumentPicker from "expo-document-picker";
 
 const CadastroCNPJ = () => {
   const navigation = useNavigation();
@@ -22,21 +23,74 @@ const CadastroCNPJ = () => {
   const [email, setEmail] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [barraca, setBarraca] = useState("");
-  const [documento, setDocumento] = useState(null);
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const selecionarDocumento = async () => {
+  const handleSubmit = async () => {
+    if (
+      !razaoSocial.trim() ||
+      !telefone.trim() ||
+      !email.trim() ||
+      !cnpj.trim() ||
+      !senha.trim() ||
+      !selectedOption
+    ) {
+      Alert.alert("Atenção", "Preencha todos os campos obrigatórios e aceite os termos.");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      Alert.alert("Erro", "Digite um e-mail válido.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: "*/*",
-        copyToCacheDirectory: true,
+      const apiUrl =
+        Platform.OS === "android"
+          ? "http://10.0.2.2/BDTCC/CadastrarVendedor.php"
+          : "http://localhost/BDTCC/CadastrarVendedor.php";
+
+      const formData = new FormData();
+      formData.append("nome", razaoSocial);
+      formData.append("telefone", telefone);
+      formData.append("email", email);
+      formData.append("cpfcnpj", cnpj);
+      formData.append("barraca", barraca || "");
+      formData.append("senha", senha);
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
       });
 
-      if (result.type === "success") {
-        setDocumento(result);
-        alert("Documento anexado com sucesso!");
+      const textResponse = await response.text();
+      console.log("Resposta bruta do servidor:", textResponse);
+
+      try {
+        const res = JSON.parse(textResponse);
+        if (res.erro === false) {
+          Alert.alert("Sucesso", res.mensagem || "Cadastro realizado!");
+          navigation.navigate("HomeVend");
+        } else {
+          Alert.alert("Erro", res.mensagem || "Erro ao cadastrar.");
+        }
+      } catch (e) {
+        console.error("Erro ao parsear resposta JSON:", e);
+        Alert.alert("Erro", "Resposta inválida do servidor: " + textResponse);
       }
     } catch (error) {
-      console.log("Erro ao selecionar o documento:", error);
+      console.error("Erro ao enviar dados:", error);
+      Alert.alert(
+        "Erro de conexão",
+        "Verifique se o servidor está online, o PHP está correto e o endereço da API está acessível."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,10 +98,9 @@ const CadastroCNPJ = () => {
     <TouchableOpacity
       style={styles.optionContainer}
       onPress={() => setSelectedOption(value)}
+      disabled={loading}
     >
-      <View
-        style={[styles.checkbox, selectedOption === value && styles.checkedBox]}
-      />
+      <View style={[styles.checkbox, selectedOption === value && styles.checkedBox]} />
       <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>
   );
@@ -55,10 +108,7 @@ const CadastroCNPJ = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-        >
+        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
           <View style={styles.containerPrincipal}>
             <ImageBackground
               source={require("../../../../assets/img/fundo-perfil.png")}
@@ -67,98 +117,40 @@ const CadastroCNPJ = () => {
             >
               <View style={styles.containerInterno}>
                 <Text style={styles.textForm}>Razão Social *</Text>
-                <TextInput
-                  style={styles.input}
-                  value={razaoSocial}
-                  onChangeText={setRazaoSocial}
-                  placeholder="Digite a razão social"
-                  placeholderTextColor="#999"
-                />
+                <TextInput style={styles.input} value={razaoSocial} onChangeText={setRazaoSocial} placeholder="Digite a razão social" placeholderTextColor="#999" editable={!loading} />
 
                 <Text style={styles.textForm}>Nome da barraca</Text>
-                <TextInput
-                  style={styles.input}
-                  value={barraca}
-                  onChangeText={setBarraca}
-                  placeholder="Digite o nome da barraca"
-                  placeholderTextColor="#999"
-                />
+                <TextInput style={styles.input} value={barraca} onChangeText={setBarraca} placeholder="Digite o nome da barraca" placeholderTextColor="#999" editable={!loading} />
 
-                <Text style={styles.textForm}>Licença de feirante</Text>
-                <TouchableOpacity
-                  style={styles.anexoBotao}
-                  onPress={selecionarDocumento}
-                >
-                  <Text style={styles.anexoTexto}>+ Anexar documento</Text>
-                </TouchableOpacity>
-                {documento && (
-                  <Text style={styles.documentoNome}>📎 {documento.name}</Text>
-                )}
-
-                <Text style={styles.textForm}>Telefone</Text>
-                <TextInput
-                  style={styles.input}
-                  value={telefone}
-                  onChangeText={setTelefone}
-                  placeholder="(00) 00000-0000"
-                  placeholderTextColor="#999"
-                  keyboardType="phone-pad"
-                />
+                <Text style={styles.textForm}>Telefone *</Text>
+                <TextInput style={styles.input} value={telefone} onChangeText={setTelefone} placeholder="(00) 00000-0000" placeholderTextColor="#999" keyboardType="phone-pad" editable={!loading} />
 
                 <Text style={styles.textForm}>CNPJ *</Text>
-                <TextInput
-                  style={styles.input}
-                  value={cnpj}
-                  onChangeText={setCnpj}
-                  placeholder="Digite o CNPJ"
-                  placeholderTextColor="#999"
-                  keyboardType="numeric"
-                  autoCorrect={false}
-                />
+                <TextInput style={styles.input} value={cnpj} onChangeText={setCnpj} placeholder="Digite o CNPJ" placeholderTextColor="#999" keyboardType="numeric" editable={!loading} />
 
                 <Text style={styles.textForm}>Email *</Text>
-                <TextInput
-                  style={styles.input}
-                  value={email}
-                  onChangeText={setEmail}
-                  placeholder="empresa@email.com"
-                  placeholderTextColor="#999"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
+                <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="empresa@email.com" placeholderTextColor="#999" keyboardType="email-address" autoCapitalize="none" editable={!loading} />
+
+                <Text style={styles.textForm}>Senha *</Text>
+                <TextInput style={styles.input} value={senha} onChangeText={setSenha} placeholder="Digite sua senha" placeholderTextColor="#999" secureTextEntry={true} editable={!loading} />
 
                 <Text style={styles.termos}>
-                  Eu li e concordo com os Termos de serviço, política de
-                  privacidade do app e os termos.
+                  Eu li e concordo com os Termos de serviço, política de privacidade do app e os termos.
                 </Text>
 
                 <View style={styles.radiosconter}>
-                  <CustomCheckbox label="Aceito" value="lojaCNPJ" />
+                  <CustomCheckbox label="Aceito os termos" value="aceito" />
                 </View>
-              </View>
 
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    if (
-                      razaoSocial.trim() !== "" &&
-                      telefone.trim() !== "" &&
-                      email.trim() !== "" &&
-                      cnpj.trim() !== "" &&
-                      selectedOption !== null
-                    ) {
-                      navigation.navigate("tipoloja");
-                    } else {
-                      alert(
-                        "Preencha os campos obrigatórios e aceite os termos."
-                      );
-                    }
-                  }}
-                >
-                  <Text style={styles.buttonText}>Confirmar</Text>
-                </TouchableOpacity>
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity
+                    style={[styles.button, loading && styles.disabledButton]}
+                    onPress={handleSubmit}
+                    disabled={loading}
+                  >
+                    <Text style={styles.buttonText}>{loading ? "Enviando..." : "Confirmar"}</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </ImageBackground>
           </View>
@@ -169,110 +161,24 @@ const CadastroCNPJ = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
-  containerPrincipal: {
-    padding: 20,
-    borderRadius: 10,
-    width: "100%",
-    maxWidth: 500,
-    alignItems: "center",
-  },
-  imageBackground: {
-    flex: 1,
-    width: "100%",
-    padding: 20,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  imageStyle: {
-    borderRadius: 10,
-  },
-  containerInterno: {
-    backgroundColor: "rgba(64, 74, 34, 0.9)",
-    padding: 20,
-    borderRadius: 8,
-    marginBottom: 10,
-    width: "100%",
-  },
-  textForm: {
-    color: "#fff",
-    fontSize: 16,
-    marginTop: 10,
-  },
-  input: {
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  anexoBotao: {
-    backgroundColor: "#BCAF77",
-    padding: 12,
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 8,
-  },
-  anexoTexto: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  documentoNome: {
-    marginTop: 6,
-    color: "#fff",
-    fontStyle: "italic",
-    fontSize: 14,
-  },
-  termos: {
-    color: "#fff",
-    fontSize: 14,
-    marginTop: 10,
-  },
-  radiosconter: {
-    marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  optionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderColor: "#fff",
-    marginRight: 8,
-  },
-  checkedBox: {
-    backgroundColor: "#fff",
-  },
-  label: {
-    color: "#fff",
-  },
-  buttonsContainer: {
-    marginTop: 20,
-    width: "100%",
-    alignItems: "center",
-  },
-  button: {
-    backgroundColor: "#404A22",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
+  container: { flex: 1 },
+  scrollContent: { paddingBottom: 20, paddingHorizontal: 20 },
+  containerPrincipal: { padding: 20, borderRadius: 10, width: "100%", maxWidth: 500, alignItems: "center" },
+  imageBackground: { flex: 1, width: "100%", padding: 20, borderRadius: 10, overflow: "hidden" },
+  imageStyle: { borderRadius: 10 },
+  containerInterno: { backgroundColor: "rgba(64, 74, 34, 0.9)", padding: 20, borderRadius: 8, marginBottom: 10, width: "100%" },
+  textForm: { color: "#fff", fontSize: 16, marginTop: 10 },
+  input: { backgroundColor: "#fff", padding: 10, borderRadius: 5, marginTop: 5, marginBottom: 10 },
+  termos: { color: "#fff", fontSize: 14, marginTop: 10 },
+  radiosconter: { marginTop: 10, flexDirection: "row", alignItems: "center" },
+  optionContainer: { flexDirection: "row", alignItems: "center" },
+  checkbox: { width: 20, height: 20, borderWidth: 1, borderColor: "#fff", marginRight: 8 },
+  checkedBox: { backgroundColor: "#fff" },
+  label: { color: "#fff" },
+  buttonsContainer: { marginTop: 20, width: "100%", alignItems: "center" },
+  button: { backgroundColor: "#404A22", paddingVertical: 15, paddingHorizontal: 40, borderRadius: 8, alignItems: "center" },
+  buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
+  disabledButton: { backgroundColor: "#ccc" },
 });
 
 export default CadastroCNPJ;

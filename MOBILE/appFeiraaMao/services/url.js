@@ -1,3 +1,3 @@
 
-const url =  '10.68.36.112';
+const url =  'http://192.168.3.114/';
 export default url;

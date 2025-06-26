@@ -5,14 +5,13 @@
 }
 
 body, html {
-  height: 100%;
+  height: 10%;
   font-family: Arial, sans-serif;
 }
 
 .container {
   display: flex;
   height: 100vh;
-  overflow: hidden;
 }
 
 /* LADO ESQUERDO */
@@ -20,15 +19,12 @@ body, html {
   width: 50%;
   position: relative;
   overflow: hidden;
-  /* top: 0; */
 }
 
 .background-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  position: absolute;
-  /* top: 0; */
 }
 
 .curve-shape,
@@ -81,8 +77,9 @@ body, html {
 .imgLogo {
   width: 100px;
   height: 100px;
-  margin-bottom: 70px;
-  margin-top: 10px;
+  margin-bottom: 50px;
+  margin-top: -40px;
+  margin-right: 20px;
 }
 
 .login-form {
@@ -95,7 +92,7 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 500px;
+  height: 700px;
 }
 
 .login-form h2 {
@@ -154,6 +151,7 @@ body, html {
   width: 75px;
   height: 75px;
   background-color: rgb(255, 255, 255);
+  border-radius: 10%;
 }
 
 .btn_voltar img {
@@ -161,3 +159,8 @@ body, html {
   height: 100%;
   border-radius: 10%;
 }
+
+
+
+
+
