@@ -249,6 +249,7 @@ nav a:hover {
     height: 600px;
     perspective: 1000px;
     background-color: #F7F0CE;
+    margin-bottom: 50px;
   }
   
   .card-inner {
