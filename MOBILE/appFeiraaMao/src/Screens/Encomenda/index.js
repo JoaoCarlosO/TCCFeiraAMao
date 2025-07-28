@@ -107,7 +107,7 @@ export default function Encomenda({ route, navigation }) {
           
           <TouchableOpacity 
             style={styles.botaoFinalizar} 
-            onPress={() => navigation.navigate("Pagamento", { total: `R$${total.replace(".", ",")}`})}
+            onPress={() => navigation.navigate("Home")}
           >
             <Text style={styles.textoBotao}>Confirmar Pedido</Text>
           </TouchableOpacity>

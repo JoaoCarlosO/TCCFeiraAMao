@@ -35,7 +35,6 @@ import AlterarVend from "./src/Screens/PerfilVend/AlterarVend";
 import BarracaAlterar from "./src/Screens/PerfilVend/BarracaAlterar";
 import NotificacaoVend from "./src/Screens/NotificacaoVend";
 import EncomendaVend from "./src/Screens/EncomendaVend";
-import Pagamento from "./src/Screens/Pagamento";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -208,7 +207,7 @@ export default function App() {
             <Stack.Screen
               name="PerfilLoja"
               component={PerfilLoja}
-              options={headerConfig}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Alterar"
@@ -274,11 +273,6 @@ export default function App() {
               name="NotificacaoVend"
               component={NotificacaoVend}
               options={headerConfig}
-            />
-            <Stack.Screen
-              name="Pagamento"
-              component={Pagamento}
-              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="EncomendaVend"
