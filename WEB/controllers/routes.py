@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def init_app(app):
     @app.route('/')
     def home():
-        return render_template('index.html')
+        return render_template('home.html')
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -19,7 +19,7 @@ def init_app(app):
             else:
                 flash('Credenciais inválidas.', 'error')
 
-            return redirect(url_for('home'))
+            return redirect(url_for('homeCli'))
 
         return render_template('login.html')
 
@@ -44,7 +44,7 @@ def init_app(app):
                 db.session.rollback()
                 flash(f'Erro no cadastro: {e}', 'error')
 
-            return redirect(url_for('home'))
+            return redirect(url_for('homeCli'))
 
         return render_template('cadastro.html')
 
@@ -75,7 +75,7 @@ def init_app(app):
 
             db.session.commit()
             flash('Perfil atualizado com sucesso!', 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('homeCli'))
 
         return render_template('perfil.html', cliente=cliente)
 
@@ -100,3 +100,7 @@ def init_app(app):
                 return redirect(url_for('suporte'))
 
         return render_template('suporte.html')
+    
+    @app.route('/homeCli')
+    def homeCli():
+        return render_template('homeCli.html')
