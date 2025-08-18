@@ -42,7 +42,7 @@
 
 
   <header class="py-3">
-    <div class="container d-flex align-items-center justify-content-between">
+    <div class="container d-flex  ">
       <!-- Logo -->
       <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
 
@@ -50,139 +50,263 @@
       <nav class="d-flex gap-5">
         <a href="{{ url_for('sobre')}}" class="text-decoration-none">Carrinho</a>
         <a href="#containerFooter" class="text-decoration-none">Ajuda</a>
-        <a href="{{ url_for('perfil')}}" class="text-decoration-none">Perfil</a>
+        <a href="{{ url_for('perfilCli')}}" class="text-decoration-none">Perfil</a>
         <a href="{{ url_for('login')}}" class="text-decoration-none">Notificações</a>
         <a href="{{ url_for('cadastro')}}" class="text-decoration-none">Encomendas</a>
       </nav>
     </div>
-
-    {% with mensagens = get_flashed_messages(with_categories=true) %}
-    {% if mensagens %}
-    {% for categoria, mensagem in mensagens %}
-    <div class="{{ categoria }}">{{ mensagem }}</div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-
   </header>
 
-  <main>
-    <section class="container" id="container">
-      <div id="titulo">
-        <h1 id="h1">FEIRA</h1>
-        <h2 id="h2">à mão</h2>
-      </div>
-      <figure>
-        <img src="{{url_for('static', filename='imgs/celular.png')}}" id="imgCelular" />
-      </figure>
-      <p id="p1">
-        projeto inovador que nasce com o propósito de transformar a forma como
-        compramos e vendemos produtos artesanais e caseiros. Através do
-        desenvolvimento de um aplicativo acessível e intuitivo, buscamos
-        aproximar pequenos produtores e consumidores, criando um ambiente
-        digital onde a tradição, a qualidade e a confiança andam lado a lado
-        com a tecnologia.
-      </p>
-    </section>
+  <!-- {% with mensagens = get_flashed_messages(with_categories=true) %}
+  {% if mensagens %}
+  {% for categoria, mensagem in mensagens %}
+  <div class="{{ categoria }}">{{ mensagem }}</div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %} -->
 
-    <section id="container2">
-      <h2 id="sub1">
-        "Valorizar o feito à mão é cuidar da saúde, da cultura e da comunidade."
-      </h2>
-    </section>
-    <section class="container" id="containerProdutos">
-      <h1 id="tituloProdutos">Confira os produtos em nosso App</h1>
-      <div class="container-carrossel">
-        <!-- Carrossel dos livros -->
-        <div class="produtos">
-          <img src="{{ url_for('static', filename='imgs/produto1.png') }}" alt="Produto 1" />
-          <img src="{{ url_for('static', filename='imgs/produto2.png') }}" alt="Produto 2" />
-          <img src="{{ url_for('static', filename='imgs/produto3.png') }}" alt="Produto 3" />
-          <img src="{{ url_for('static', filename='imgs/produto4.png') }}" alt="Produto 4" />
-          <img src="{{ url_for('static', filename='imgs/produto5.png') }}" alt="Produto 5" />
-          <img src="{{ url_for('static', filename='imgs/produto6.png') }}" alt="Produto 6" />
-          <img src="{{ url_for('static', filename='imgs/produto7.png') }}" alt="Produto 7" />
-          <img src="{{ url_for('static', filename='imgs/produto8.png') }}" alt="Produto 8" />
-          <img src="{{ url_for('static', filename='imgs/produto9.png') }}" alt="Produto 9" />
-          <img src="{{ url_for('static', filename='imgs/produto10.png') }}" alt="Produto 10" />
-        </div>
+  <div class="pesquisa">
+    <form method="POST">
+      <input type="text" name="search" placeholder="Buscar..." value="{{ search_query }}">
+      <button type="submit"><img src="{{url_for('static', filename='imgs/Lupa.png')}}" id="imgLupa"></button>
+    </form>
+    {% if search_query %}
+    <h2>Resultados da pesquisa para: "{{ search_query }}"</h2>
+    <!-- Aqui você pode exibir os resultados da pesquisa -->
+    {% endif %}
+  </div>
+  <main class="container py-4">
+    <section id="carouselOfertas" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="4000">
+      <div class="carousel-inner">
 
-        <div class="produtos2">
-          <img src="{{ url_for('static', filename='imgs/produto11.png') }}" alt="Produto 11" />
-          <img src="{{ url_for('static', filename='imgs/produto12.png') }}" alt="Produto 12" />
-          <img src="{{ url_for('static', filename='imgs/produto13.png') }}" alt="Produto 13" />
-          <img src="{{ url_for('static', filename='imgs/produto14.png') }}" alt="Produto 14" />
-          <img src="{{ url_for('static', filename='imgs/produto15.png') }}" alt="Produto 15" />
-          <img src="{{ url_for('static', filename='imgs/produto16.png') }}" alt="Produto 16" />
-          <img src="{{ url_for('static', filename='imgs/produto17.png') }}" alt="Produto 17" />
-          <img src="{{ url_for('static', filename='imgs/produto18.png') }}" alt="Produto 18" />
-          <img src="{{ url_for('static', filename='imgs/produto19.png') }}" alt="Produto 19" />
-          <img src="{{ url_for('static', filename='imgs/produto20.png') }}" alt="Produto 20" />
-        </div>
-
-        <!-- Moça na frente -->
-        <img src="{{ url_for('static', filename='imgs/pessoa.png') }}" alt="Moça com celular" class="pessoa" />
-      </div>
-    </section>
-    <section>
-      <h1 id="tituloCards">Benefícios para quem utiliza o nosso app</h1>
-      <div class="cards-container">
-        <div class="card">
-          <div class="card-inner">
-            <div class="card-front">
-              <h1>Vendedores</h1>
-              <img src="{{ url_for('static', filename='imgs/imgVendedor.png') }}" alt="Imagem 1" />
-            </div>
-            <div class="card-back">
-              <h1>Vendedores</h1>
-              <p class="card-text">
-                Feira à Mão é o app ideal para divulgar seu trabalho,
-                valorizar seus produtos e conquistar clientes que prezam por
-                qualidade e autenticidade.
-              </p>
+        <!-- Oferta 1 -->
+        <div class="carousel-item active">
+          <div class="oferta-card d-flex align-items-center">
+            <img src="{{ url_for('static', filename='imgs/imgCarrossel1.png') }}" class="oferta-img">
+            <div class="ms-3" id="oferta-textos">
+              <h2 class="oferta-titulo">OFERTA ESPECIAL</h2>
+              <p class="oferta-desc">Bala de banana com coco 200g</p>
+              <p class="oferta-preco">R$12,00</p>
+              <button class="btn-comprar">Comprar</button>
             </div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-inner">
-            <div class="card-front">
-              <h1>Clientes</h1>
-              <img src="{{ url_for('static', filename='imgs/imgCliente.png') }}" alt="Imagem 2" />
+        <!-- Oferta 2 -->
+        <div class="carousel-item">
+          <div class="oferta-card d-flex align-items-center">
+            <img src="{{ url_for('static', filename='imgs/boloOferta.png') }}" class="oferta-img" alt="Bolo caseiro">
+            <div class="ms-3">
+              <h2 class="oferta-titulo">OFERTA ESPECIAL</h2>
+              <p class="oferta-desc">Bolo caseiro de fubá 500g</p>
+              <p class="oferta-preco">R$20,00</p>
+              <button class="btn-comprar">Comprar</button>
             </div>
-            <div class="card-back">
-              <h1>Clientes</h1>
-              <p class="card-text">
-                Feira à Mão oferece praticidade, produtos locais e frescos,
-                com promoções exclusivas para quem valoriza consumo consciente
-                e sustentável.
-              </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Perfil do vendedor -->
+    <section class="perfil-vendedor d-flex align-items-center mb-3">
+      <img src="{{ url_for('static', filename='imgs/vendedor1.png') }}" class="foto-vendedor" alt="Foto da vendedora">
+      <span class="nome-vendedor ms-2">Dona Marta</span>
+    </section>
+
+    <!-- Produtos com scroll horizontal -->
+    <section class="produto-scroll">
+      <div class="scroll-container">
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/boloderoda.png') }}" class="produto-img" alt="Bolo de roda">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Bolo de roda</p>
+            <p class="produto-preco">R$12,00</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/paoCaseiro.png') }}" class="produto-img" alt="Pão Caseiro">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Pão Caseiro</p>
+            <p class="produto-preco">R$10,00</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/bolsaPalha.png') }}" class="produto-img" alt="Bolsa de Palha">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Bolsa de Palha</p>
+            <p class="produto-preco">R$20,00</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/coruja.png') }}" class="produto-img" alt="Coruja">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Coruja</p>
+            <p class="produto-preco">R$12,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/tapioca.png') }}" class="produto-img" alt="Tapioca">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Tapioca</p>
+            <p class="produto-preco">R$6,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/descansoPanela.png') }}" class="produto-img"
+            alt="Descanso de Panela">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Descanso de Panela</p>
+            <p class="produto-preco">R$9,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/sushi.png') }}" class="produto-img" alt="Bandeja de Sushi">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Bandeja de Sushi</p>
+            <p class="produto-preco">R$14,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <footer class="text-center py-4 mt-auto" id="containerFooter">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogoFooter" />
-            <h5>Feira à Mão</h5>
-            <p>&copy; 2023 Feira à Mão. Todos os direitos reservados.</p>
-            <p>Desenvolvido por João Carlos, Ana Luiza e Fantinny.</p>
+
+    <!-- Perfil do vendedor -->
+    <section class="perfil-vendedor d-flex align-items-center mb-3">
+      <img src="{{ url_for('static', filename='imgs/vendedor1.png') }}" class="foto-vendedor" alt="Foto da vendedora">
+      <span class="nome-vendedor ms-2">Dona Marta</span>
+    </section>
+
+    <!-- Produtos com scroll horizontal -->
+    <section class="produto-scroll">
+      <div class="scroll-container">
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/boloderoda.png') }}" class="produto-img" alt="Bolo de roda">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Bolo de roda</p>
+            <p class="produto-preco">R$12,00</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
           </div>
-          <div class="col-md-6">
-            <h5>Contato</h5>
-            <p class="icon"><img src="{{ url_for('static', filename='imgs/email_icone.png') }}" id="imgsFooter" />Email: feiraamao239@email.com</p>
-            <p class="icon"><img src="{{ url_for('static', filename='imgs/instagram_icone.png') }}" id="imgsFooter" />Instagram: @feiraamao</p>
-            <p class="icon"><img src="{{ url_for('static', filename='imgs/tel_icone.png') }}" id="imgsFooter" />Telefone: (13) 99754-9008</p>
-              <a href="{{ url_for('suporte') }}">Suporte</a> 
-              <a href="{{ url_for('sobre') }}">Sobre nós</a>
-            </p>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/paoCaseiro.png') }}" class="produto-img" alt="Pão Caseiro">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Pão Caseiro</p>
+            <p class="produto-preco">R$10,00</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/bolsaPalha.png') }}" class="produto-img" alt="Bolsa de Palha">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Bolsa de Palha</p>
+            <p class="produto-preco">R$20,00</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/coruja.png') }}" class="produto-img" alt="Coruja">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Coruja</p>
+            <p class="produto-preco">R$12,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/tapioca.png') }}" class="produto-img" alt="Tapioca">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Tapioca</p>
+            <p class="produto-preco">R$6,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/descansoPanela.png') }}" class="produto-img"
+            alt="Descanso de Panela">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Descanso de Panela</p>
+            <p class="produto-preco">R$9,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="produto-item">
+          <img src="{{ url_for('static', filename='imgs/sushi.png') }}" class="produto-img" alt="Bandeja de Sushi">
+          <div class="produto-info p-2">
+            <p class="produto-nome">Bandeja de Sushi</p>
+            <p class="produto-preco">R$14,99</p>
+            <div class="produto-acoes">
+              <span>♡</span>
+              <span>➕</span>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
+    </section>
+    
+
+
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pzjw8f+ua7Kw1TIq0Z5m34ybkdu1onfM" crossorigin="anonymous"></script>
+
 </body>
+
 </html>
