@@ -78,6 +78,37 @@ def init_app(app):
             return redirect(url_for('homeCli'))
 
         return render_template('perfil.html', cliente=cliente)
+    
+    @app.route('/perfilCli', methods=['GET', 'POST'])
+    def perfilCli():
+        cliente = Cliente.query.first()  # Simulando cliente logado
+
+        if request.method == 'POST':
+            nome = request.form.get('nome')
+            cpf = request.form.get('cpf')
+            endereco = request.form.get('endereco')
+            email = request.form.get('email')
+            telefone = request.form.get('telefone')
+            senha = request.form.get('senha')
+
+            if nome:
+                cliente.NomeCli = nome
+            if cpf:
+                cliente.CPF = cpf
+            if endereco:
+                cliente.Endereco = endereco
+            if email:
+                cliente.Email = email
+            if telefone:
+                cliente.Telefone = telefone
+            if senha:
+                cliente.Senha = generate_password_hash(senha)
+
+            db.session.commit()
+            flash('Perfil atualizado com sucesso!', 'success')
+            return redirect(url_for('homeCli'))
+
+        return render_template('perfilCli.html', cliente=cliente)
 
     @app.route('/sobre')
     def sobre():
@@ -104,3 +135,15 @@ def init_app(app):
     @app.route('/homeCli')
     def homeCli():
         return render_template('homeCli.html')
+    
+    @app.route('/notificacoesCli')
+    def notificacoesCli():
+        return render_template('notificacoesCli.html')
+    
+    @app.route('/encomendasCli')
+    def encomendasCli():
+        return render_template('encomendasCli.html')
+    
+    @app.route('/carrinhoCli')
+    def carrinhoCli():
+        return render_template('carrinhoCli.html')

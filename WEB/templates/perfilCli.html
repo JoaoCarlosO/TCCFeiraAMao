@@ -37,14 +37,14 @@
 
     <!-- Links do menu -->
     <nav class="d-flex gap-4 align-items-center">
-      <a href="{{ url_for('sobre')}}" class="text-decoration-none">Sobre</a>
+      <a href="{{ url_for('sobreCli')}}" class="text-decoration-none">Carrinho</a>
       <a href="#containerFooter" class="text-decoration-none">Ajuda</a>
-      <a href="{{ url_for('perfil') }}" class="text-decoration-none">Perfil</a>
-      <a href="{{ url_for('login') }}" class="text-decoration-none">Login</a>
-      <a href="{{ url_for('cadastro') }}" class="text-decoration-none">Cadastro</a>
+      <a href="{{ url_for('perfilCli') }}" class="text-decoration-none">Perfil</a>
+      <a href="{{ url_for('notificacoes') }}" class="text-decoration-none">Notificações</a>
+      <a href="{{ url_for('encomenda') }}" class="text-decoration-none">Encomendas</a>
     </nav>
 
-    <a href="{{ url_for('home') }}" class="btn_voltar-navbar">
+    <a href="{{ url_for('homeCli') }}" class="btn_voltar-navbar">
       <img src="{{ url_for('static', filename='imgs/botaoVoltar.png') }}" alt="botão voltar" />
     </a>
   </div>
@@ -62,7 +62,7 @@
     <p class="error">{{ error }}</p>
     {% endif %}
 
-    <form method="POST" action="/perfil">
+    <form method="POST" action="/perfilCli">
       <div class="input-group">
         <label>Nome:</label>
         <input type="text" name="nome" value="{{ cliente.NomeCli }}"/>
@@ -90,7 +90,7 @@
       <button type="submit">Alterar</button>
     </form>
 
-    <a href="/login" class="sair">Sair</a>
+    <a href="/home" class="sair">Sair</a>
   </div>
     <footer class="text-center py-4 mt-auto" id="containerFooter">
       <div class="container">
