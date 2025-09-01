@@ -147,3 +147,7 @@ def init_app(app):
     @app.route('/carrinhoCli')
     def carrinhoCli():
         return render_template('carrinhoCli.html')
+    
+    @app.route('/sobreCli')
+    def sobreCli():
+        return render_template('sobreCli.html')
