@@ -163,12 +163,13 @@ body, html {
 .toggle-container {
     display: flex;
     align-items: center;
-    background: #ccc;
+    background: #f5f5f5;
     border-radius: 50px;
     width: 150px;
     height: 50px;
     position: relative;
     cursor: pointer;
+    bottom: 20px;
   }
 
   .toggle-circle {
@@ -176,7 +177,7 @@ body, html {
     width: 50%;
     height: 100%;
     border-radius: 50px;
-    background: green;
+    background: #425010;
     transition: all 0.3s;
   }
 
@@ -191,7 +192,7 @@ body, html {
 
   .toggle-container.active .toggle-circle {
     left: 50%;
-    background: yellow;
+    background: #d8bc19;
   }
 
   .toggle-container .toggle-text-left {
@@ -209,6 +210,29 @@ body, html {
   .toggle-container.active .toggle-text-right {
     color: white;
   }
+
+/* ====== TEMA CNPJ ====== */
+body.cnpj-mode .login-form {
+  background-color: #F7F0CE; /* fundo mais claro */
+}
+
+body.cnpj-mode .login-form h2 {
+  color: #d8bc19; /* título amarelo */
+}
+
+body.cnpj-mode .login-form button {
+  background-color: #d8bc19; /* botão amarelo */
+  color: #425010; /* texto verde */
+}
+
+body.cnpj-mode .curve-shape a,
+body.cnpj-mode .curve-shape2 a {
+  color: #d8bc19; /* links laterais em amarelo */
+}
+
+body.cnpj-mode .toggle-circle {
+  background: #d8bc19; /* bolinha amarela */
+}
 
 
 

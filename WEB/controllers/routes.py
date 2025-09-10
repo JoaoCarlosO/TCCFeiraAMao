@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, flash
 from models.database import Cliente, MensagemSuporte, db
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 def init_app(app):
     @app.route('/')
     def home():
@@ -34,7 +35,8 @@ def init_app(app):
             cpf = request.form.get('cpf')
             senha = generate_password_hash(request.form.get('senha'))
 
-            novo_cliente = Cliente(nome, telefone, nascimento, endereco, email, cpf, senha)
+            novo_cliente = Cliente(
+                nome, telefone, nascimento, endereco, email, cpf, senha)
 
             try:
                 db.session.add(novo_cliente)
@@ -47,7 +49,7 @@ def init_app(app):
             return redirect(url_for('homeCli'))
 
         return render_template('cadastro.html')
-    
+
     @app.route('/cadastroVend', methods=['GET', 'POST'])
     def cadastroVend():
         if request.method == 'POST':
@@ -59,7 +61,8 @@ def init_app(app):
             cpf = request.form.get('cpf')
             senha = generate_password_hash(request.form.get('senha'))
 
-            novo_cliente = Cliente(nome, telefone, nascimento, endereco, email, cpf, senha)
+            novo_cliente = Cliente(
+                nome, telefone, nascimento, endereco, email, cpf, senha)
 
             try:
                 db.session.add(novo_cliente)
@@ -72,7 +75,6 @@ def init_app(app):
             return redirect(url_for('homeVend'))
 
         return render_template('cadastroVend.html')
-
 
     @app.route('/perfil', methods=['GET', 'POST'])
     def perfil():
@@ -104,7 +106,7 @@ def init_app(app):
             return redirect(url_for('homeCli'))
 
         return render_template('perfil.html', cliente=cliente)
-    
+
     @app.route('/perfilCli', methods=['GET', 'POST'])
     def perfilCli():
         cliente = Cliente.query.first()  # Simulando cliente logado
@@ -135,7 +137,7 @@ def init_app(app):
             return redirect(url_for('homeCli'))
 
         return render_template('perfilCli.html', cliente=cliente)
-    
+
     @app.route('/perfilVend', methods=['GET', 'POST'])
     def perfilVend():
         cliente = Cliente.query.first()  # Simulando cliente logado
@@ -181,50 +183,68 @@ def init_app(app):
             if not nome or not email or not mensagem:
                 flash('Por favor, preencha todos os campos.', 'danger')
             else:
-                nova_msg = MensagemSuporte(nome=nome, email=email, mensagem=mensagem)
+                nova_msg = MensagemSuporte(
+                    nome=nome, email=email, mensagem=mensagem)
                 db.session.add(nova_msg)
                 db.session.commit()
                 flash('Mensagem enviada com sucesso! Obrigado pelo contato.', 'success')
                 return redirect(url_for('suporte'))
 
         return render_template('suporte.html')
-    
+
     @app.route('/homeCli')
     def homeCli():
-        return render_template('homeCli.html')
-    
+        ofertas = [
+            {"nome": "Bala de banana com coco 200g", "preco": "12,00", "img": "imgs/imgCarrossel1.png"},
+            {"nome": "Bolo caseiro de fubá 500g", "preco": "20,00", "img": "imgs/produto5.png"}
+        ]
+
+        vendedores = [
+            {
+                "nome": "Dona Marta",
+                "foto": "imgs/vendedor1.png",
+                "produtos": [
+                    {"nome": "Bolo de roda", "preco": "12,00", "img": "imgs/boloderoda.png"},
+                    {"nome": "Pão Caseiro", "preco": "10,00", "img": "imgs/paoCaseiro.png"},
+                    {"nome": "Bolsa de Palha", "preco": "20,00", "img": "imgs/bolsaPalha.png"},
+                ]
+            }
+        ]
+
+        return render_template("homeCli.html", ofertas=ofertas, vendedores=vendedores)
+
     @app.route('/homeVend')
     def homeVend():
         return render_template('homeVend.html')
-    
+
     @app.route('/notificacoesCli')
     def notificacoesCli():
         return render_template('notificacoesCli.html')
-    
+
     @app.route('/notificacoesVend')
     def notificacoesVend():
         return render_template('notificacoesVend.html')
-    
+
     @app.route('/encomendasCli')
     def encomendasCli():
         return render_template('encomendasCli.html')
-    
+
     @app.route('/encomendasVend')
     def encomendasVend():
         return render_template('encomendasVend.html')
-    
+
     @app.route('/carrinhoCli')
     def carrinhoCli():
         return render_template('carrinhoCli.html')
-    
+
     @app.route('/carrinhoVend')
     def carrinhoVend():
         return render_template('carrinhoVend.html')
-    
+
     @app.route('/sobreCli')
     def sobreCli():
         return render_template('sobreCli.html')
-    
+
     @app.route('/sobreVend')
     def sobreVend():
         return render_template('sobreVend.html')

@@ -67,7 +67,7 @@ header nav {
 header nav a {
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: #425010;
   padding: 8px 15px;
   border-radius: 8px;
   transition: 0.3s;
@@ -136,7 +136,7 @@ header nav a:hover {
   background-color: #FFF1C4;
   border-radius: 20px;
   padding: 30px;
-  color: #fff;
+  color: #141900;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -182,7 +182,7 @@ header nav a:hover {
   padding: 8px 18px;
   border-radius: 20px;
   font-weight: 600;
-  color: #333;
+  color: #f5f5f5;
   cursor: pointer;
   font-size: 15px;
   transition: background-color 0.3s ease;

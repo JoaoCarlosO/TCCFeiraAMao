@@ -6,12 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
+    crossorigin="anonymous" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/homeCli.css') }}" />
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Bacasime+Antique&family=Cairo+Play:wght@200..1000&family=Hurricane&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-  </style>
-  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
     @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap");
   </style>
 </head>
@@ -39,15 +37,12 @@
   </div>
   {% endif %}
 
-
-
+  <!-- HEADER -->
   <header class="py-3">
-    <div class="container d-flex  ">
-      <!-- Logo -->
+    <div class="container d-flex align-items-center justify-content-between">
       <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
 
-      <!-- Links do menu -->
-      <nav class="d-flex gap-5">
+      <nav class="d-flex gap-4">
         <a href="{{ url_for('carrinhoCli')}}" class="text-decoration-none">Carrinho</a>
         <a href="#containerFooter" class="text-decoration-none">Ajuda</a>
         <a href="{{ url_for('perfilCli')}}" class="text-decoration-none">Perfil</a>
@@ -57,14 +52,7 @@
     </div>
   </header>
 
-  <!-- {% with mensagens = get_flashed_messages(with_categories=true) %}
-  {% if mensagens %}
-  {% for categoria, mensagem in mensagens %}
-  <div class="{{ categoria }}">{{ mensagem }}</div>
-  {% endfor %}
-  {% endif %}
-  {% endwith %} -->
-
+  <!-- PESQUISA -->
   <div class="pesquisa">
     <form method="POST">
       <input type="text" name="search" placeholder="Buscar..." value="{{ search_query }}">
@@ -72,241 +60,60 @@
     </form>
     {% if search_query %}
     <h2>Resultados da pesquisa para: "{{ search_query }}"</h2>
-    <!-- Aqui você pode exibir os resultados da pesquisa -->
     {% endif %}
   </div>
+
   <main class="container py-4">
+
+    <!-- CARROSSEL -->
     <section id="carouselOfertas" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="4000">
       <div class="carousel-inner">
-
-        <!-- Oferta 1 -->
-        <div class="carousel-item active">
+        {% for oferta in ofertas %}
+        <div class="carousel-item {% if loop.first %}active{% endif %}">
           <div class="oferta-card d-flex align-items-center">
-            <img src="{{ url_for('static', filename='imgs/imgCarrossel1.png') }}" class="oferta-img">
+            <img src="{{ url_for('static', filename=oferta.img) }}" class="oferta-img" alt="{{ oferta.nome }}">
             <div class="ms-3" id="oferta-textos">
               <h2 class="oferta-titulo">OFERTA ESPECIAL</h2>
-              <p class="oferta-desc">Bala de banana com coco 200g</p>
-              <p class="oferta-preco">R$12,00</p>
+              <p class="oferta-desc">{{ oferta.nome }}</p>
+              <p class="oferta-preco">R${{ oferta.preco }}</p>
               <button class="btn-comprar">Comprar</button>
             </div>
           </div>
         </div>
-
-        <!-- Oferta 2 -->
-        <div class="carousel-item">
-          <div class="oferta-card d-flex align-items-center">
-            <img src="{{ url_for('static', filename='imgs/boloOferta.png') }}" class="oferta-img" alt="Bolo caseiro">
-            <div class="ms-3">
-              <h2 class="oferta-titulo">OFERTA ESPECIAL</h2>
-              <p class="oferta-desc">Bolo caseiro de fubá 500g</p>
-              <p class="oferta-preco">R$20,00</p>
-              <button class="btn-comprar">Comprar</button>
-            </div>
-          </div>
-        </div>
-
+        {% endfor %}
       </div>
     </section>
 
-
-    <!-- Perfil do vendedor -->
+    <!-- PRODUTOS POR VENDEDOR -->
+    {% for vendedor in vendedores %}
     <section class="perfil-vendedor d-flex align-items-center mb-3">
-      <img src="{{ url_for('static', filename='imgs/vendedor1.png') }}" class="foto-vendedor" alt="Foto da vendedora">
-      <span class="nome-vendedor ms-2">Dona Marta</span>
+      <img src="{{ url_for('static', filename=vendedor.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
+      <span class="nome-vendedor ms-2">{{ vendedor.nome }}</span>
     </section>
 
-    <!-- Produtos com scroll horizontal -->
-    <section class="produto-scroll">
+    <section class="produto-scroll mb-4">
       <div class="scroll-container">
+        {% for produto in vendedor.produtos %}
         <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/boloderoda.png') }}" class="produto-img" alt="Bolo de roda">
+          <img src="{{ url_for('static', filename=produto.img) }}" class="produto-img" alt="{{ produto.nome }}">
           <div class="produto-info p-2">
-            <p class="produto-nome">Bolo de roda</p>
-            <p class="produto-preco">R$12,00</p>
+            <p class="produto-nome">{{ produto.nome }}</p>
+            <p class="produto-preco">R${{ produto.preco }}</p>
             <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
+              <span class="btn-like">♡</span>
+              <span class="btn-add">➕</span>
             </div>
           </div>
         </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/paoCaseiro.png') }}" class="produto-img" alt="Pão Caseiro">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Pão Caseiro</p>
-            <p class="produto-preco">R$10,00</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/bolsaPalha.png') }}" class="produto-img" alt="Bolsa de Palha">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Bolsa de Palha</p>
-            <p class="produto-preco">R$20,00</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/coruja.png') }}" class="produto-img" alt="Coruja">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Coruja</p>
-            <p class="produto-preco">R$12,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/tapioca.png') }}" class="produto-img" alt="Tapioca">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Tapioca</p>
-            <p class="produto-preco">R$6,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/descansoPanela.png') }}" class="produto-img"
-            alt="Descanso de Panela">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Descanso de Panela</p>
-            <p class="produto-preco">R$9,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/sushi.png') }}" class="produto-img" alt="Bandeja de Sushi">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Bandeja de Sushi</p>
-            <p class="produto-preco">R$14,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </section>
-
-    <!-- Perfil do vendedor -->
-    <section class="perfil-vendedor d-flex align-items-center mb-3">
-      <img src="{{ url_for('static', filename='imgs/vendedor1.png') }}" class="foto-vendedor" alt="Foto da vendedora">
-      <span class="nome-vendedor ms-2">Dona Marta</span>
-    </section>
-
-    <!-- Produtos com scroll horizontal -->
-    <section class="produto-scroll">
-      <div class="scroll-container">
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/boloderoda.png') }}" class="produto-img" alt="Bolo de roda">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Bolo de roda</p>
-            <p class="produto-preco">R$12,00</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/paoCaseiro.png') }}" class="produto-img" alt="Pão Caseiro">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Pão Caseiro</p>
-            <p class="produto-preco">R$10,00</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/bolsaPalha.png') }}" class="produto-img" alt="Bolsa de Palha">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Bolsa de Palha</p>
-            <p class="produto-preco">R$20,00</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/coruja.png') }}" class="produto-img" alt="Coruja">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Coruja</p>
-            <p class="produto-preco">R$12,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/tapioca.png') }}" class="produto-img" alt="Tapioca">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Tapioca</p>
-            <p class="produto-preco">R$6,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/descansoPanela.png') }}" class="produto-img"
-            alt="Descanso de Panela">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Descanso de Panela</p>
-            <p class="produto-preco">R$9,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename='imgs/sushi.png') }}" class="produto-img" alt="Bandeja de Sushi">
-          <div class="produto-info p-2">
-            <p class="produto-nome">Bandeja de Sushi</p>
-            <p class="produto-preco">R$14,99</p>
-            <div class="produto-acoes">
-              <span>♡</span>
-              <span>➕</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-
-
+    {% endfor %}
   </main>
+
+  <!-- BOOTSTRAP + SCRIPT -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-pzjw8f+ua7Kw1TIq0Z5m34ybkdu1onfM" crossorigin="anonymous"></script>
-
+    crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
-
 </html>

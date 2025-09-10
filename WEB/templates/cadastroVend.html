@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastroVend.css') }}" />
   <style>
     @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
   </style>
@@ -17,13 +17,13 @@
   <div class="container">
     <!-- Lado esquerdo -->
     <div class="image-side">
-      <a href="{{ url_for('homeVend') }}" class="btn_voltar">
+      <a href="{{ url_for('homeCli') }}" class="btn_voltar">
         <img src="{{url_for('static', filename='imgs/botaoVoltar.png')}}" alt="botão voltar">
       </a>
       <img src="{{ url_for('static', filename='imgs/ImgFundoCadastro.png') }}" alt="Imagem de frutas"
         class="background-img" />
       <div class="curve-shape">
-        <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
+        <a href="{{ url_for('cadastroVend') }}">Cadastre-se</a>
       </div>
       <div class="curve-shape2">
         <a href="{{ url_for('login') }}">Login</a>
@@ -33,25 +33,12 @@
     <!-- Lado direito -->
     <div class="login-box">
       <div class="right-content">
-        <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" class="imgLogo" />
         <div class="toggle-container" id="toggle">
           <div class="toggle-circle"></div>
           <div class="toggle-text toggle-text-left">CPF</div>
           <div class="toggle-text toggle-text-right">CNPJ</div>
         </div>
 
-        <script>
-          const toggle = document.getElementById('toggle');
-
-          toggle.addEventListener('click', () => {
-            toggle.classList.toggle('active');
-            if (toggle.classList.contains('active')) {
-              console.log("CNPJ selecionado");
-            } else {
-              console.log("CPF selecionado");
-            }
-          });
-        </script>
         <form class="login-form" method="POST" action="/cadastroVend">
           <h2>Crie sua conta</h2>
           <p>Preencha os dados abaixo para se cadastrar</p>
@@ -60,11 +47,45 @@
           <input type="tel" name="telefone" placeholder="Telefone" />
           <input type="email" name="email" placeholder="Email" />
           <input type="text" name="endereco" placeholder="Endereço" />
-          <input type="date" name="nascimento" placeholder="Data de nascimento" />
-          <input type="text" name="cpf" placeholder="CPF" />
+
+          <!-- campo nascimento com id -->
+          <input type="date" id="nascimentoField" name="nascimento" placeholder="Data de nascimento" />
+
+          <!-- campo cpf/cnpj com id -->
+          <input type="text" id="docField" name="cpf" placeholder="CPF" />
+
           <input type="password" name="senha" placeholder="Senha" />
           <button type="submit">Cadastrar</button>
         </form>
+
+        <script>
+          const toggle = document.getElementById('toggle');
+          const body = document.body;
+          const docField = document.getElementById('docField');
+          const nascimentoField = document.getElementById('nascimentoField');
+
+          toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
+            body.classList.toggle('cnpj-mode'); // muda o tema
+
+            if (toggle.classList.contains('active')) {
+              console.log("CNPJ selecionado");
+              docField.placeholder = "CNPJ";
+              docField.name = "cnpj";
+
+              // Esconde nascimento
+              nascimentoField.style.display = "none";
+            } else {
+              console.log("CPF selecionado");
+              docField.placeholder = "CPF";
+              docField.name = "cpf";
+
+              // Mostra nascimento
+              nascimentoField.style.display = "block";
+            }
+          });
+        </script>
+
       </div>
     </div>
   </div>
