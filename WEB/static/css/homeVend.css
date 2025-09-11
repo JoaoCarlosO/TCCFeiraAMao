@@ -42,7 +42,7 @@ body {
 
 /* ======== HEADER ======== */
 header {
-  background-color: #FFF1C4;
+  background-color: #ffeaa4;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -76,7 +76,7 @@ header nav a {
 
 header nav a:hover {
   background-color: #425010;
-  color: #FFF1C4;
+  color: #ffeaa4;
   transform: scale(1.05);
 }
 
@@ -133,7 +133,7 @@ header nav a:hover {
 }
 
 .oferta-card {
-  background-color: #FFF1C4;
+  background-color: #ffeaa4;
   border-radius: 20px;
   padding: 30px;
   color: #141900;
@@ -149,6 +149,8 @@ header nav a:hover {
   height: 250px;
   object-fit: cover;
   margin: 0 auto;
+  margin-left: 80px;
+  margin-top: -20px;
 }
 
 #oferta-textos {
@@ -199,7 +201,7 @@ header nav a:hover {
 }
 
 .perfil-vendedor {
-  background-color: #FFF1C4;
+  background-color: #ffeaa4;
   border-radius: 20px;
   padding: 10px 15px;
   display: flex;

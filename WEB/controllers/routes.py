@@ -196,7 +196,8 @@ def init_app(app):
     def homeCli():
         ofertas = [
             {"nome": "Bala de banana com coco 200g", "preco": "12,00", "img": "imgs/imgCarrossel1.png"},
-            {"nome": "Bolo caseiro de fubá 500g", "preco": "20,00", "img": "imgs/produto5.png"}
+            {"nome": "Bolsa de Palha ", "preco": "35,00", "img": "imgs/bolsaPalha.png"},
+            {"nome": "Pão Caseiro 1kg", "preco": "20,00", "img": "imgs/paoCaseiro.png"},
         ]
 
         vendedores = [

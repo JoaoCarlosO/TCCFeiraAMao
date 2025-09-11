@@ -52,16 +52,13 @@ header {
 #imgLogo {
   height: 50px;
   object-fit: contain;
-  margin-left: -280px;
 }
 
 header nav {
   display: flex;
   gap: 20px;
   align-items: center;
-  justify-content: center;
   position: relative;
-  margin-left: 35%;
 }
 
 header nav a {
@@ -149,6 +146,8 @@ header nav a:hover {
   height: 250px;
   object-fit: cover;
   margin: 0 auto;
+  margin-left: 80px;
+  margin-top: -20px;
 }
 
 #oferta-textos {
