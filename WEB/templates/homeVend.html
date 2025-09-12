@@ -28,7 +28,7 @@
       background-image: url("{{ url_for('static', filename='imgs/fundoBg.png') }}");
       background-size: cover;
       background-position: center;
-      opacity: 0.2;
+      opacity: 0.7;
       z-index: -1;
     }
   </style>
@@ -42,7 +42,7 @@
 
 
   <header class="py-3">
-    <div class="container d-flex  ">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
       <!-- Logo -->
       <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
 
@@ -56,6 +56,7 @@
       </nav>
     </div>
   </header>
+
 
   <!-- {% with mensagens = get_flashed_messages(with_categories=true) %}
   {% if mensagens %}
@@ -300,7 +301,7 @@
         </div>
       </div>
     </section>
-    
+
 
 
   </main>

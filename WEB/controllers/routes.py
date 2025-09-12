@@ -195,24 +195,28 @@ def init_app(app):
     @app.route('/homeCli')
     def homeCli():
         ofertas = [
-            {"nome": "Bala de banana com coco 200g", "preco": "12,00", "img": "imgs/imgCarrossel1.png"},
+            {"nome": "Bala de banana com coco 200g",
+                "preco": "12,00", "img": "imgs/imgCarrossel1.png"},
             {"nome": "Bolsa de Palha ", "preco": "35,00", "img": "imgs/bolsaPalha.png"},
             {"nome": "Pão Caseiro 1kg", "preco": "20,00", "img": "imgs/paoCaseiro.png"},
         ]
 
-        vendedores = [
+        vendedor = [
             {
                 "nome": "Dona Marta",
                 "foto": "imgs/vendedor1.png",
                 "produtos": [
-                    {"nome": "Bolo de roda", "preco": "12,00", "img": "imgs/boloderoda.png"},
-                    {"nome": "Pão Caseiro", "preco": "10,00", "img": "imgs/paoCaseiro.png"},
-                    {"nome": "Bolsa de Palha", "preco": "20,00", "img": "imgs/bolsaPalha.png"},
+                    {"nome": "Bolo de roda", "preco": "12,00",
+                        "img": "imgs/boloderoda.png"},
+                    {"nome": "Pão Caseiro", "preco": "10,00",
+                        "img": "imgs/paoCaseiro.png"},
+                    {"nome": "Bolsa de Palha", "preco": "20,00",
+                        "img": "imgs/bolsaPalha.png"},
                 ]
             }
-        ]
+         ]
 
-        return render_template("homeCli.html", ofertas=ofertas, vendedores=vendedores)
+        return render_template("homeCli.html", ofertas=ofertas, vendedor=vendedor)
 
     @app.route('/homeVend')
     def homeVend():

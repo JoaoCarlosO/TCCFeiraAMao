@@ -47,6 +47,7 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%; /* garante que o fundo ocupe toda a tela */
 }
 
 #imgLogo {
@@ -56,10 +57,12 @@ header {
 
 header nav {
   display: flex;
-  gap: 20px;
+  gap: 40px;
   align-items: center;
-  position: relative;
+  justify-content: center; /* centraliza os links */
+  flex-grow: 1; /* faz ocupar espaço central */
 }
+
 
 header nav a {
   font-size: 18px;
@@ -69,6 +72,8 @@ header nav a {
   border-radius: 8px;
   transition: 0.3s;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
 }
 
 header nav a:hover {
@@ -76,6 +81,7 @@ header nav a:hover {
   color: #425010;
   transform: scale(1.05);
 }
+
 
 /* ======== PESQUISA ======== */
 .pesquisa {
@@ -195,6 +201,14 @@ header nav a:hover {
 .vendedor-section {
   margin: 30px auto;
   max-width: 900px;
+  width: 100%;
+}
+
+.perfil-vendedor-produtos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .perfil-vendedor {
@@ -204,9 +218,8 @@ header nav a:hover {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  width: fit-content;
+  width: 100%;
 }
 
 .foto-vendedor {
@@ -223,34 +236,22 @@ header nav a:hover {
 }
 
 /* ======== PRODUTOS ======== */
-.produto-scroll {
-  margin: 30px 0;
-}
-
-.scroll-container {
+.produtos-vendedor {
   display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 20px;
-  padding: 10px;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scroll-container::-webkit-scrollbar {
-  display: none;
 }
 
 .produto-item {
-  flex: 0 0 auto;
-  width: 200px;
+  flex: 0 0 calc(33.333% - 20px);
   background-color: #fff;
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
-/* Imagem do produto */
 .produto-img {
   width: 100%;
   height: 150px;
@@ -258,19 +259,16 @@ header nav a:hover {
   border-radius: 10px;
 }
 
-/* Informações do produto */
 .produto-info {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #fff;
   padding: 10px 0;
 }
 
 .produto-nome {
   font-weight: bold;
   font-size: 16px;
-  margin-bottom: 5px;
 }
 
 .produto-preco {
@@ -295,6 +293,8 @@ header nav a:hover {
   transform: scale(1.2);
   color: #f6c63f;
 }
+
+
 
 /* ======== RESPONSIVO ======== */
 @media (max-width: 768px) {

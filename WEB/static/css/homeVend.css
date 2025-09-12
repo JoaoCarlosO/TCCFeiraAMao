@@ -47,21 +47,20 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 #imgLogo {
   height: 50px;
   object-fit: contain;
-  margin-left: -280px;
 }
 
 header nav {
   display: flex;
-  gap: 20px;
+  gap: 40px;
   align-items: center;
   justify-content: center;
-  position: relative;
-  margin-left: 35%;
+  flex-grow: 1;
 }
 
 header nav a {
@@ -79,6 +78,7 @@ header nav a:hover {
   color: #ffeaa4;
   transform: scale(1.05);
 }
+
 
 /* ======== PESQUISA ======== */
 .pesquisa {

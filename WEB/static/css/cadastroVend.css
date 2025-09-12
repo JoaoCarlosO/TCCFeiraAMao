@@ -178,7 +178,7 @@ body, html {
     height: 100%;
     border-radius: 50px;
     background: #425010;
-    transition: all 0.3s;
+    transition: all 0.5s;
   }
 
   .toggle-text {
@@ -192,7 +192,7 @@ body, html {
 
   .toggle-container.active .toggle-circle {
     left: 50%;
-    background: #d8bc19;
+    background: #f0d01c;
   }
 
   .toggle-container .toggle-text-left {
@@ -217,21 +217,21 @@ body.cnpj-mode .login-form {
 }
 
 body.cnpj-mode .login-form h2 {
-  color: #d8bc19; /* título amarelo */
+  color: #f0d01c; /* título amarelo */
 }
 
 body.cnpj-mode .login-form button {
-  background-color: #d8bc19; /* botão amarelo */
+  background-color: #f0d01c; /* botão amarelo */
   color: #425010; /* texto verde */
 }
 
 body.cnpj-mode .curve-shape a,
 body.cnpj-mode .curve-shape2 a {
-  color: #d8bc19; /* links laterais em amarelo */
+  color: #f0d01c; /* links laterais em amarelo */
 }
 
 body.cnpj-mode .toggle-circle {
-  background: #d8bc19; /* bolinha amarela */
+  background: #f0d01c; /* bolinha amarela */
 }
 
 
