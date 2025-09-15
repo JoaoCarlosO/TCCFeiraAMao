@@ -88,34 +88,32 @@
 
 <!-- Vendedor e Produtos -->
 <section class="vendedor-section">
-  <!-- Perfil do Vendedor e Produtos -->
-  <section class="perfil-vendedor-produtos">
-    <!-- Perfil do Vendedor -->
-    {% for v in vendedor %}
-    <section class="perfil-vendedor d-flex align-items-center mb-3">
-      <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
-      <span class="nome-vendedor ms-2">{{ v.nome }}</span>
-    </section>
+  <!-- Perfil do Vendedor -->
+  {% for v in vendedor %}
+  <section class="perfil-vendedor d-flex align-items-center mb-3">
+    <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
+    <span class="nome-vendedor ms-2">{{ v.nome }}</span>
+  </section>
 
-    <!-- Produtos do Vendedor -->
-    <div class="produtos-vendedor">
-      {% for produto in v.produtos %}
-        <div class="produto-item">
-          <img src="{{ url_for('static', filename=produto.img) }}" class="produto-img" alt="{{ produto.nome }}">
-          <div class="produto-info">
-            <p class="produto-nome">{{ produto.nome }}</p>
-            <p class="produto-preco">R${{ produto.preco }}</p>
-            <div class="produto-acoes">
-              <span class="btn-like">♡</span>
-              <span class="btn-add">➕</span>
-            </div>
+  <!-- Produtos do Vendedor -->
+  <div class="produtos-vendedor">
+    {% for produto in v.produtos %}
+      <div class="produto-item">
+        <img src="{{ url_for('static', filename=produto.img) }}" class="produto-img" alt="{{ produto.nome }}">
+        <div class="produto-info">
+          <p class="produto-nome">{{ produto.nome }}</p>
+          <p class="produto-preco">R${{ produto.preco }}</p>
+          <div class="produto-acoes">
+            <span class="btn-add">＋</span>
+            <span class="btn-like">❤</span>
           </div>
         </div>
-      {% endfor %}
-    </div>
+      </div>
     {% endfor %}
-  </section>
+  </div>
+  {% endfor %}
 </section>
+
 
 
     <!-- BOOTSTRAP + SCRIPT -->
