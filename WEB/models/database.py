@@ -26,3 +26,23 @@ class MensagemSuporte(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
     mensagem = db.Column(db.Text, nullable=False)
+
+class Vendedor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    cpf = db.Column(db.String(14), unique=True, nullable=False)
+    endereco = db.Column(db.String(200))
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    telefone = db.Column(db.String(20))
+    foto = db.Column(db.String(200))
+    bio = db.Column(db.Text)
+
+    feiras = db.relationship('Feira', backref='vendedor', lazy=True)
+
+
+class Feira(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    dia_semana = db.Column(db.String(20))
+    horario = db.Column(db.String(50))
+    vendedor_id = db.Column(db.Integer, db.ForeignKey('vendedor.id'), nullable=False)

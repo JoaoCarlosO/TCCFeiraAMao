@@ -87,13 +87,13 @@
     </section>
 
 <!-- Vendedor e Produtos -->
-<section class="vendedor-section">
-  <!-- Perfil do Vendedor -->
-  {% for v in vendedor %}
-  <section class="perfil-vendedor d-flex align-items-center mb-3">
-    <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
-    <span class="nome-vendedor ms-2">{{ v.nome }}</span>
-  </section>
+{% for v in vendedor %}
+<a href="{{ url_for('detalhes_vendedor', vendedor_id=v.id) }}" class="btn-perfil-vendedor d-flex align-items-center mb-3 text-decoration-none">
+  <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
+  <span class="nome-vendedor ms-2">{{ v.nome }}</span>
+</a>
+{% endfor %}
+
 
   <!-- Produtos do Vendedor -->
   <div class="produtos-vendedor">

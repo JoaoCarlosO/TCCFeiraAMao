@@ -196,7 +196,7 @@ def init_app(app):
     def homeCli():
         ofertas = [
             {"nome": "Bala de banana com coco 200g",
-                "preco": "12,00", "img": "imgs/imgCarrossel1.png"},
+                "preco": "12,00", "img": "imgs/produto12.png"},
             {"nome": "Bolsa de Palha ", "preco": "35,00", "img": "imgs/bolsaPalha.png"},
             {"nome": "Pão Caseiro 1kg", "preco": "20,00", "img": "imgs/paoCaseiro.png"},
         ]
@@ -253,3 +253,13 @@ def init_app(app):
     @app.route('/sobreVend')
     def sobreVend():
         return render_template('sobreVend.html')
+    
+    @app.route('/vendedor/<int:id>')
+    def vendedor(id):
+        vendedor_obj = vendedor.query.get_or_404(id)  
+
+        # exemplo: relacionamento vendedor.feiras (1:N)
+        feiras = vendedor_obj.feiras  
+
+        return render_template('vendedor.html', vendedor=vendedor_obj, feiras=feiras)
+
