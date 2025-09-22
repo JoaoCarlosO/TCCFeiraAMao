@@ -1,7 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
-from models.database import Cliente, MensagemSuporte, db
+from models.database import Cliente, MensagemSuporte, db, Vendedor, Feira
 from werkzeug.security import generate_password_hash, check_password_hash
-
 
 def init_app(app):
     @app.route('/')
@@ -195,29 +194,16 @@ def init_app(app):
     @app.route('/homeCli')
     def homeCli():
         ofertas = [
-            {"nome": "Bala de banana com coco 200g",
-                "preco": "12,00", "img": "imgs/produto12.png"},
+            {"nome": "Bala de banana com coco 200g", "preco": "12,00", "img": "imgs/produto12.png"},
             {"nome": "Bolsa de Palha ", "preco": "35,00", "img": "imgs/bolsaPalha.png"},
             {"nome": "Pão Caseiro 1kg", "preco": "20,00", "img": "imgs/paoCaseiro.png"},
         ]
 
-        vendedor = [
-            {
-                "nome": "Dona Marta",
-                "foto": "imgs/vendedor1.png",
-                "produtos": [
-                    {"nome": "Bolo de roda", "preco": "12,00",
-                        "img": "imgs/boloderoda.png"},
-                    {"nome": "Pão Caseiro", "preco": "10,00",
-                        "img": "imgs/paoCaseiro.png"},
-                    {"nome": "Bolsa de Palha", "preco": "20,00",
-                        "img": "imgs/bolsaPalha.png"},
-                ]
-            }
-         ]
-
-        return render_template("homeCli.html", ofertas=ofertas, vendedor=vendedor)
-
+        # Buscar vendedores do banco com seus produtos
+        vendedores = Vendedor.query.all()
+        
+        return render_template("homeCli.html", ofertas=ofertas, vendedor=vendedores)
+    
     @app.route('/homeVend')
     def homeVend():
         return render_template('homeVend.html')
@@ -256,10 +242,9 @@ def init_app(app):
     
     @app.route('/vendedor/<int:id>')
     def vendedor(id):
-        vendedor_obj = vendedor.query.get_or_404(id)  
-
-        # exemplo: relacionamento vendedor.feiras (1:N)
-        feiras = vendedor_obj.feiras  
-
-        return render_template('vendedor.html', vendedor=vendedor_obj, feiras=feiras)
-
+        try:
+            vendedor_obj = Vendedor.query.get_or_404(id)
+            return render_template('vendedor.html', vendedor=vendedor_obj)
+        except Exception as e:
+            flash(f'Erro ao carregar perfil do vendedor: {str(e)}', 'error')
+            return redirect(url_for('homeCli'))

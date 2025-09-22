@@ -86,32 +86,34 @@
       </div>
     </section>
 
-<!-- Vendedor e Produtos -->
 {% for v in vendedor %}
-<a href="{{ url_for('detalhes_vendedor', vendedor_id=v.id) }}" class="btn-perfil-vendedor d-flex align-items-center mb-3 text-decoration-none">
-  <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
-  <span class="nome-vendedor ms-2">{{ v.nome }}</span>
-</a>
+<section class="perfil-vendedor d-flex align-items-center mb-3">
+    <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
+    
+    <!-- link para a página do vendedor -->
+    <a href="{{ url_for('vendedor', id=v.id) }}" class="nome-vendedor ms-2">
+        {{ v.nome }}
+    </a>
+</section>
+
+<!-- Produtos do Vendedor -->
+<div class="produtos-vendedor">
+    {% for produto in v.produtos %}  <!-- Agora usando a relação real -->
+        <div class="produto-item">
+            <img src="{{ url_for('static', filename=produto.img) }}" class="produto-img" alt="{{ produto.nome }}">
+            <div class="produto-info">
+                <p class="produto-nome">{{ produto.nome }}</p>
+                <p class="produto-preco">R${{ produto.preco }}</p>
+                <div class="produto-acoes">
+                    <span class="btn-add">＋</span>
+                    <span class="btn-like">❤</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 {% endfor %}
 
-
-  <!-- Produtos do Vendedor -->
-  <div class="produtos-vendedor">
-    {% for produto in v.produtos %}
-      <div class="produto-item">
-        <img src="{{ url_for('static', filename=produto.img) }}" class="produto-img" alt="{{ produto.nome }}">
-        <div class="produto-info">
-          <p class="produto-nome">{{ produto.nome }}</p>
-          <p class="produto-preco">R${{ produto.preco }}</p>
-          <div class="produto-acoes">
-            <span class="btn-add">＋</span>
-            <span class="btn-like">❤</span>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-  {% endfor %}
 </section>
 
 
