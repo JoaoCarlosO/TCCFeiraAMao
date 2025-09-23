@@ -86,6 +86,7 @@
       </div>
     </section>
 
+<<<<<<< Updated upstream
 {% for v in vendedor %}
 <section class="perfil-vendedor d-flex align-items-center mb-3">
     <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
@@ -113,6 +114,14 @@
     {% endfor %}
 </div>
 {% endfor %}
+=======
+<!-- Vendedor e Produtos -->
+<a href="{{ url_for('detalhes_vendedor', vendedor_id=v.id) }}" class="btn-perfil-vendedor d-flex align-items-center mb-3 text-decoration-none">
+  <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
+  <span class="nome-vendedor ms-2">{{ v.nome }}</span>
+</a>
+
+>>>>>>> Stashed changes
 
 </section>
 
