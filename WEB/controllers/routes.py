@@ -24,31 +24,6 @@ def init_app(app):
 
         return render_template('login.html')
 
-    @app.route('/cadastro', methods=['GET', 'POST'])
-    def cadastro():
-        if request.method == 'POST':
-            nome = request.form.get('nome')
-            telefone = request.form.get('telefone')
-            email = request.form.get('email')
-            endereco = request.form.get('endereco')
-            nascimento = request.form.get('nascimento')
-            cpf = request.form.get('cpf')
-            senha = generate_password_hash(request.form.get('senha'))
-
-            novo_cliente = Cliente(
-                nome, telefone, nascimento, endereco, email, cpf, senha)
-
-            try:
-                db.session.add(novo_cliente)
-                db.session.commit()
-                flash('Cadastro realizado com sucesso!', 'success')
-            except Exception as e:
-                db.session.rollback()
-                flash(f'Erro no cadastro: {e}', 'error')
-
-            return redirect(url_for('homeCli'))
-
-        return render_template('cadastro.html')
 
     @app.route('/cadastro', methods=['GET', 'POST'])
     def cadastro():
@@ -276,3 +251,45 @@ def init_app(app):
         except Exception as e:
             flash(f'Erro ao carregar perfil do vendedor: {str(e)}', 'error')
             return redirect(url_for('homeCli'))
+
+    @app.route('/cadastroVend', methods=['GET', 'POST'])
+    def cadastroVend():
+        if request.method == 'POST':
+            nome = request.form.get('nome')
+            telefone = request.form.get('telefone')
+            email = request.form.get('email')
+            endereco = request.form.get('endereco')
+            nascimento = request.form.get('nascimento')
+            cpf = request.form.get('cpf')
+            senha = generate_password_hash(request.form.get('senha'))
+            
+            # Converter string para date
+            try:
+                nascimento_date = datetime.strptime(nascimento, '%Y-%m-%d').date()
+            except:
+                flash('Formato de data inválido. Use YYYY-MM-DD', 'error')
+                return render_template('cadastroVend.html')
+
+            novo_cliente = Cliente(
+                nome=nome, 
+                telefone=telefone, 
+                nascimento=nascimento_date, 
+                endereco=endereco, 
+                email=email, 
+                cpf=cpf, 
+                senha=senha
+            )
+
+            try:
+                db.session.add(novo_cliente)
+                db.session.commit()
+                flash('Cadastro realizado com sucesso!', 'success')
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro no cadastro: {e}', 'error')
+
+            return redirect(url_for('homeVend'))
+
+        return render_template('cadastroVend.html')
+
+
