@@ -5,7 +5,7 @@ from models.database import db
 
 app = Flask(__name__, template_folder='templates')
 
-DB_NAME = 'feiraamaoWeb'
+DB_NAME = 'feiraamao'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://root:@localhost/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DATABASE_NAME'] = DB_NAME
