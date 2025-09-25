@@ -198,12 +198,8 @@ def init_app(app):
             {"nome": "Bolsa de Palha ", "preco": "35,00", "img": "imgs/bolsaPalha.png"},
             {"nome": "Pão Caseiro 1kg", "preco": "20,00", "img": "imgs/paoCaseiro.png"},
         ]
-
-        # Buscar vendedores do banco com seus produtos
-        vendedores = Vendedor.query.all()
         
-        return render_template("homeCli.html", ofertas=ofertas, vendedor=vendedores)
-    
+        return render_template("homeCli.html", ofertas=ofertas)
     @app.route('/homeVend')
     def homeVend():
         return render_template('homeVend.html')
@@ -241,10 +237,14 @@ def init_app(app):
         return render_template('sobreVend.html')
     
     @app.route('/vendedor/<int:id>')
-    def vendedor(id):
+    def detalhes_vendedor(id):  # Mude o nome da função para evitar conflito
         try:
-            vendedor_obj = Vendedor.query.get_or_404(id)
-            return render_template('vendedor.html', vendedor=vendedor_obj)
+            vendedor = Vendedor.query.get_or_404(id)
+            return render_template('vendedor.html', vendedor=vendedor)
         except Exception as e:
             flash(f'Erro ao carregar perfil do vendedor: {str(e)}', 'error')
             return redirect(url_for('homeCli'))
+        
+    @app.route('/estoque')
+    def estoque():
+        return render_template('estoque.html')

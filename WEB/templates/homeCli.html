@@ -53,7 +53,6 @@
     </div>
   </header>
 
-
   <!-- PESQUISA -->
   <div class="pesquisa">
     <form method="POST">
@@ -86,51 +85,40 @@
       </div>
     </section>
 
-<<<<<<< Updated upstream
-{% for v in vendedor %}
-<section class="perfil-vendedor d-flex align-items-center mb-3">
-    <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
-    
-    <!-- link para a página do vendedor -->
-    <a href="{{ url_for('vendedor', id=v.id) }}" class="nome-vendedor ms-2">
-        {{ v.nome }}
-    </a>
-</section>
+    <!-- VENDEDORES E SEUS PRODUTOS -->
+    {% for v in vendedor %}
+    <section class="vendedor-section mb-5">
+      <!-- Perfil do Vendedor -->
+      <a href="{{ url_for('detalhes_vendedor', vendedor_id=v.id) }}" class="btn-perfil-vendedor d-flex align-items-center mb-3 text-decoration-none">
+        <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
+        <span class="nome-vendedor ms-2">{{ v.nome }}</span>
+      </a>
 
-<!-- Produtos do Vendedor -->
-<div class="produtos-vendedor">
-    {% for produto in v.produtos %}  <!-- Agora usando a relação real -->
+      <!-- Produtos do Vendedor -->
+      <div class="produtos-vendedor d-flex flex-wrap gap-3">
+        {% for produto in v.produtos %}
         <div class="produto-item">
-            <img src="{{ url_for('static', filename=produto.img) }}" class="produto-img" alt="{{ produto.nome }}">
-            <div class="produto-info">
-                <p class="produto-nome">{{ produto.nome }}</p>
-                <p class="produto-preco">R${{ produto.preco }}</p>
-                <div class="produto-acoes">
-                    <span class="btn-add">＋</span>
-                    <span class="btn-like">❤</span>
-                </div>
+          <img src="{{ url_for('static', filename=produto.img) }}" class="produto-img" alt="{{ produto.nome }}">
+          <div class="produto-info">
+            <p class="produto-nome">{{ produto.nome }}</p>
+            <p class="produto-preco">R${{ produto.preco }}</p>
+            <div class="produto-acoes">
+              <span class="btn-add">＋</span>
+              <span class="btn-like">❤</span>
             </div>
+          </div>
         </div>
+        {% endfor %}
+      </div>
+    </section>
     {% endfor %}
-</div>
-{% endfor %}
-=======
-<!-- Vendedor e Produtos -->
-<a href="{{ url_for('detalhes_vendedor', vendedor_id=v.id) }}" class="btn-perfil-vendedor d-flex align-items-center mb-3 text-decoration-none">
-  <img src="{{ url_for('static', filename=v.foto) }}" class="foto-vendedor" alt="Foto do vendedor">
-  <span class="nome-vendedor ms-2">{{ v.nome }}</span>
-</a>
 
->>>>>>> Stashed changes
+  </main>
 
-</section>
-
-
-
-    <!-- BOOTSTRAP + SCRIPT -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <!-- BOOTSTRAP + SCRIPT -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 
 </html>
