@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
-from models.database import Cliente, MensagemSuporte, db, Vendedor, Feira
+from models.database import Cliente, MensagemSuporte, db, Vendedor, Produto
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 def init_app(app):
     @app.route('/')
@@ -23,6 +24,7 @@ def init_app(app):
 
         return render_template('login.html')
 
+
     @app.route('/cadastro', methods=['GET', 'POST'])
     def cadastro():
         if request.method == 'POST':
@@ -33,9 +35,23 @@ def init_app(app):
             nascimento = request.form.get('nascimento')
             cpf = request.form.get('cpf')
             senha = generate_password_hash(request.form.get('senha'))
+            
+            # Converter string para date
+            try:
+                nascimento_date = datetime.strptime(nascimento, '%Y-%m-%d').date()
+            except:
+                flash('Formato de data inválido. Use YYYY-MM-DD', 'error')
+                return render_template('cadastro.html')
 
             novo_cliente = Cliente(
-                nome, telefone, nascimento, endereco, email, cpf, senha)
+                nome=nome, 
+                telefone=telefone, 
+                nascimento=nascimento_date, 
+                endereco=endereco, 
+                email=email, 
+                cpf=cpf, 
+                senha=senha
+            )
 
             try:
                 db.session.add(novo_cliente)
@@ -49,31 +65,6 @@ def init_app(app):
 
         return render_template('cadastro.html')
 
-    @app.route('/cadastroVend', methods=['GET', 'POST'])
-    def cadastroVend():
-        if request.method == 'POST':
-            nome = request.form.get('nome')
-            telefone = request.form.get('telefone')
-            email = request.form.get('email')
-            endereco = request.form.get('endereco')
-            nascimento = request.form.get('nascimento')
-            cpf = request.form.get('cpf')
-            senha = generate_password_hash(request.form.get('senha'))
-
-            novo_cliente = Cliente(
-                nome, telefone, nascimento, endereco, email, cpf, senha)
-
-            try:
-                db.session.add(novo_cliente)
-                db.session.commit()
-                flash('Cadastro realizado com sucesso!', 'success')
-            except Exception as e:
-                db.session.rollback()
-                flash(f'Erro no cadastro: {e}', 'error')
-
-            return redirect(url_for('homeVend'))
-
-        return render_template('cadastroVend.html')
 
     @app.route('/perfil', methods=['GET', 'POST'])
     def perfil():
@@ -191,15 +182,35 @@ def init_app(app):
 
         return render_template('suporte.html')
 
-    @app.route('/homeCli')
+    @app.route('/homeCli', methods=['GET', 'POST'])
     def homeCli():
         ofertas = [
             {"nome": "Bala de banana com coco 200g", "preco": "12,00", "img": "imgs/produto12.png"},
             {"nome": "Bolsa de Palha ", "preco": "35,00", "img": "imgs/bolsaPalha.png"},
             {"nome": "Pão Caseiro 1kg", "preco": "20,00", "img": "imgs/paoCaseiro.png"},
         ]
+<<<<<<< HEAD
         
         return render_template("homeCli.html", ofertas=ofertas)
+=======
+
+        search_query = ""
+        if request.method == 'POST':
+            search_query = request.form.get('search', '')
+            # Lógica de busca nos produtos
+            if search_query:
+                produtos_busca = Produto.query.filter(Produto.Nome.ilike(f'%{search_query}%')).all()
+                # Adaptar conforme necessário
+
+        # Buscar vendedores com seus produtos
+        vendedores = Vendedor.query.options(db.joinedload(Vendedor.produtos)).all()
+        
+        return render_template("homeCli.html", 
+                             ofertas=ofertas, 
+                             vendedor=vendedores, 
+                             search_query=search_query)
+    
+>>>>>>> 51a4515b1108e75979ca63e29bc31d8c1eccf9fd
     @app.route('/homeVend')
     def homeVend():
         return render_template('homeVend.html')
@@ -236,6 +247,7 @@ def init_app(app):
     def sobreVend():
         return render_template('sobreVend.html')
     
+<<<<<<< HEAD
     @app.route('/vendedor/<int:id>')
     def detalhes_vendedor(id):  # Mude o nome da função para evitar conflito
         try:
@@ -248,3 +260,56 @@ def init_app(app):
     @app.route('/estoque')
     def estoque():
         return render_template('estoque.html')
+=======
+    @app.route('/vendedor/<int:vendedor_id>')
+    def detalhes_vendedor(vendedor_id):
+        try:
+            vendedor_obj = Vendedor.query.options(db.joinedload(Vendedor.produtos))\
+                                        .get_or_404(vendedor_id)
+            return render_template('vendedor.html', vendedor=vendedor_obj)
+        except Exception as e:
+            flash(f'Erro ao carregar perfil do vendedor: {str(e)}', 'error')
+            return redirect(url_for('homeCli'))
+
+    @app.route('/cadastroVend', methods=['GET', 'POST'])
+    def cadastroVend():
+        if request.method == 'POST':
+            nome = request.form.get('nome')
+            telefone = request.form.get('telefone')
+            email = request.form.get('email')
+            endereco = request.form.get('endereco')
+            nascimento = request.form.get('nascimento')
+            cpf = request.form.get('cpf')
+            senha = generate_password_hash(request.form.get('senha'))
+            
+            # Converter string para date
+            try:
+                nascimento_date = datetime.strptime(nascimento, '%Y-%m-%d').date()
+            except:
+                flash('Formato de data inválido. Use YYYY-MM-DD', 'error')
+                return render_template('cadastroVend.html')
+
+            novo_cliente = Cliente(
+                nome=nome, 
+                telefone=telefone, 
+                nascimento=nascimento_date, 
+                endereco=endereco, 
+                email=email, 
+                cpf=cpf, 
+                senha=senha
+            )
+
+            try:
+                db.session.add(novo_cliente)
+                db.session.commit()
+                flash('Cadastro realizado com sucesso!', 'success')
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro no cadastro: {e}', 'error')
+
+            return redirect(url_for('homeVend'))
+
+        return render_template('cadastroVend.html')
+
+
+>>>>>>> 51a4515b1108e75979ca63e29bc31d8c1eccf9fd
