@@ -125,8 +125,15 @@ def init_app(app):
             try:
                 db.session.add(novo_vendedor)
                 db.session.commit()
-                flash('Cadastro de vendedor realizado! Faça login.', 'success')
-                return redirect(url_for('login'))
+                
+                # AUTOMATICAMENTE FAZ LOGIN DO VENDEDOR APÓS CADASTRO
+                session['user_id'] = novo_vendedor.IdVend
+                session['user_type'] = 'vendedor'
+                session['user_name'] = novo_vendedor.Nome
+                
+                flash('Cadastro de vendedor realizado com sucesso!', 'success')
+                return redirect(url_for('homeVend'))  # REDIRECIONA PARA HOME VENDEDOR
+                
             except Exception as e:
                 db.session.rollback()
                 flash(f'Erro no cadastro: {str(e)}', 'error')
@@ -213,6 +220,13 @@ def init_app(app):
     def homeCli():
         if 'user_id' not in session or session['user_type'] != 'cliente':
             return redirect(url_for('login'))
+        
+         # Dados de exemplo para testar o carrossel
+        ofertas = [
+            {'img': 'imgs/produto1.jpg', 'nome': 'Produto Oferta 1', 'preco': '29,90'},
+            {'img': 'imgs/produto2.jpg', 'nome': 'Produto Oferta 2', 'preco': '39,90'},
+            {'img': 'imgs/produto3.jpg', 'nome': 'Produto Oferta 3', 'preco': '19,90'}
+        ]
         
         # Buscar produtos em destaque
         produtos = Produtos.query.limit(8).all()
