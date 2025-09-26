@@ -1,125 +1,400 @@
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
-    @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap");
+/* ======== VARIÁVEIS DE CORES ======== */
+:root {
+    --primary-green: #4f6420;
+    --secondary-green: #3a4d18;
+    --accent-yellow: #f6c63f;
+    --accent-yellow-hover: #ffd95a;
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
+    --text-dark: #333333;
+    --text-muted: #6c757d;
+    --border-light: #e0e0e0;
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
 
-    /* ESTILOS TEMPORÁRIOS PARA TESTE */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url("{{ url_for('static', filename='imgs/fundoBg.png') }}");
-      background-size: cover;
-      background-position: center;
-      opacity: 0.7;
-      z-index: -1;
+/* ======== ESTILOS GERAIS ======== */
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+    background-color: #425010;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(10px);
+}
+
+#imgLogo {
+    height: 50px;
+    transition: transform 0.3s ease;
+}
+
+#imgLogo:hover {
+    transform: scale(1.05);
+}
+
+nav a {
+    color: #f5f5f5 !important;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+nav a:hover {
+    color: var(--secondary-green) !important;
+    background-color: var(--accent-yellow);
+    transform: translateY(-2px);
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--accent-yellow);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+nav a:hover::after {
+    width: 80%;
+}
+
+/* ======== PERFIL DO VENDEDOR ======== */
+.perfil-vendedor {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 40px;
+    border-left: 5px solid var(--accent-yellow);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.perfil-vendedor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(45deg, var(--accent-yellow), transparent);
+    border-radius: 0 0 0 100%;
+    opacity: 0.1;
+}
+
+.perfil-vendedor:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.foto-vendedor-grande {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--accent-yellow);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.foto-vendedor-grande:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-green);
+}
+
+.nome-vendedor {
+    color: var(--primary-green);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.descricao-vendedor {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.avaliacao-vendedor {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--accent-yellow);
+    background: rgba(246, 198, 63, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* ======== SEÇÃO DE PRODUTOS ======== */
+h2 {
+    color: var(--primary-green);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    position: relative;
+    padding-left: 20px;
+}
+
+h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 80%;
+    background: var(--accent-yellow);
+    border-radius: 4px;
+}
+
+.produtos-vendedor {
+    margin-top: 20px;
+}
+
+/* ======== CARDS DE PRODUTOS ======== */
+.produto-item {
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    background: var(--white);
+    position: relative;
+}
+
+.produto-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-green), var(--accent-yellow));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.produto-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+}
+
+.produto-item:hover::before {
+    opacity: 1;
+}
+
+.produto-img {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.produto-item:hover .produto-img {
+    transform: scale(1.05);
+}
+
+.card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.produto-nome {
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.produto-preco {
+    color: var(--secondary-green);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: auto;
+    margin-bottom: 15px;
+}
+
+/* ======== BOTÕES ======== */
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, var(--secondary-green), var(--primary-green));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(79, 100, 32, 0.3);
+}
+
+.btn-outline-danger {
+    border: 2px solid #dc3545;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    transform: scale(1.1);
+}
+
+.produto-acoes {
+    margin-top: auto;
+}
+
+/* ======== ESTADO VAZIO ======== */
+.alert-warning {
+    background: linear-gradient(45deg, #fff3cd, #ffecb5);
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-soft);
+    border-left: 5px solid #ffc107;
+}
+
+/* ======== ANIMAÇÕES ======== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-
-    .produtos-vendedor {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
 
-    .produto-item {
-      width: 200px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 15px;
-      background: white;
-      text-align: center;
-    }
+.perfil-vendedor {
+    animation: fadeInUp 0.6s ease-out;
+}
 
-    .produto-img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 5px;
-    }
+.produto-item {
+    animation: fadeInUp 0.6s ease-out;
+}
 
-    .produto-nome {
-      font-weight: bold;
-      margin: 10px 0;
-    }
+.produto-item:nth-child(1) { animation-delay: 0.1s; }
+.produto-item:nth-child(2) { animation-delay: 0.2s; }
+.produto-item:nth-child(3) { animation-delay: 0.3s; }
+.produto-item:nth-child(4) { animation-delay: 0.4s; }
 
-    .produto-preco {
-      color: #2e8b57;
-      font-size: 1.2em;
-      font-weight: bold;
-    }
-
-    .produto-acoes {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .btn-add, .btn-like {
-      cursor: pointer;
-      padding: 5px 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 768px) {
     .perfil-vendedor {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 15px;
-      border-radius: 10px;
-      margin: 20px 0;
+        padding: 25px;
+        text-align: center;
+        flex-direction: column;
     }
-
-    .foto-vendedor {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      object-fit: cover;
+    
+    .foto-vendedor-grande {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
     }
-
+    
     .nome-vendedor {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #333;
-      text-decoration: none;
+        font-size: 2rem;
     }
+    
+    h2 {
+        font-size: 1.6rem;
+        text-align: center;
+        padding-left: 0;
+    }
+    
+    h2::before {
+        display: none;
+    }
+    
+    nav {
+        flex-direction: column;
+        gap: 10px !important;
+    }
+    
+    #imgLogo {
+        margin-bottom: 15px;
+    }
+}
 
-    .nome-vendedor:hover {
-      color: #2e8b57;
-    }
+/* ======== SCROLL PERSONALIZADO ======== */
+::-webkit-scrollbar {
+    width: 8px;
+}
 
-    .pesquisa {
-      text-align: center;
-      margin: 20px 0;
-    }
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
 
-    .pesquisa input {
-      padding: 10px;
-      width: 300px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, var(--primary-green), var(--accent-yellow));
+    border-radius: 10px;
+}
 
-    .pesquisa button {
-      padding: 10px;
-      background: #2e8b57;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      margin-left: 10px;
-    }
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, var(--secondary-green), var(--accent-yellow-hover));
+}
 
-    .carousel-item {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      border-radius: 10px;
-    }
+/* ======== EFEITOS ESPECIAIS ======== */
+.produto-item {
+    position: relative;
+}
 
-    .oferta-img {
-      width: 200px;
-      height: 200px;
-    }
+.produto-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(246, 198, 63, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.produto-item:hover::after {
+    opacity: 1;
+}
+
+/* Estilos específicos para a página do vendedor */
+.sobre-vendedor {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 4px solid #f6c63f;
+}
+
+.sobre-vendedor h3 {
+    color: #4f6420;
+    margin-bottom: 15px;
+}
+
+.sobre-vendedor p {
+    color: #555;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* Manter os outros estilos que já criamos anteriormente */

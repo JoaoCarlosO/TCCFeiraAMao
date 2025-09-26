@@ -154,6 +154,29 @@ body, html {
   border-radius: 10%;
 }
 
+/* Estilizando o link para ter aparência de botão */
+.btn-cadastrar {
+  width: 75%;
+  height: 40px;
+  padding: 10px;
+  background-color: #425010; /* Cor de fundo do botão */
+  color: #F7F0CE; /* Cor do texto */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 25px;
+  text-align: center;
+  display: inline-block; /* Garantir que seja tratado como um bloco */
+  text-decoration: none; /* Remover underline */
+  font-size: 18px;
+}
+
+.btn-cadastrar:hover {
+  text-decoration: underline; /* Sublinhar no hover */
+  background-color: #365e02; /* Mudança de cor no hover */
+}
+
+
 .btn_voltar img {
   width: 100%;
   height: 100%;

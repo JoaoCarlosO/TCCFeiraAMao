@@ -90,67 +90,65 @@ def init_app(app):
 
         return render_template('cadastro.html')
 
+    # @app.route('/cadastroVend', methods=['GET', 'POST'])
+    # def cadastroVend():
+    #     if request.method == 'POST':
+    #         nome = request.form.get('nome')
+    #         telefone = request.form.get('telefone')
+    #         email = request.form.get('email')
+    #         cpf_cnpj = request.form.get('cpf_cnpj')
+    #         senha = request.form.get('senha')
+            
+    #         # Verificar se email já existe
+    #         if Vendedor.query.filter_by(Email=email).first():
+    #             flash('Email já cadastrado!', 'error')
+    #             return render_template('homeVend.html')
+            
+    #         if Vendedor.query.filter_by(CPFCNPJ=cpf_cnpj).first():
+    #             flash('CPF/CNPJ já cadastrado!', 'error')
+    #             return render_template('homeVend.html')
+
+    #         novo_vendedor = Vendedor(
+    #             Nome=nome,
+    #             Telefone=telefone,
+    #             Email=email,
+    #             CPFCNPJ=cpf_cnpj,
+    #             Senha=generate_password_hash(senha),
+    #         )
+
+    #         try:
+    #             db.session.add(novo_vendedor)
+    #             db.session.commit()
+                
+    #             # AUTOMATICAMENTE FAZ LOGIN DO VENDEDOR APÓS CADASTRO
+    #             session['user_id'] = novo_vendedor
+    #             session['user_type'] = 'vendedor'
+    #             session['user_name'] = novo_vendedor
+                
+    #             flash('Cadastro de vendedor realizado com sucesso!', 'success')
+    #             return redirect(url_for('homeVend'))  # REDIRECIONA PARA HOME VENDEDOR
+                
+    #         except Exception as e:
+    #             db.session.rollback()
+    #             flash(f'Erro no cadastro: {str(e)}', 'error')
+
+    #     return render_template('cadastroVend.html')
+    
     @app.route('/cadastroVend', methods=['GET', 'POST'])
     def cadastroVend():
-        if request.method == 'POST':
-            nome = request.form.get('nome')
-            barraca = request.form.get('barraca')
-            telefone = request.form.get('telefone')
-            email = request.form.get('email')
-            cpf_cnpj = request.form.get('cpf_cnpj')
-            documento = request.form.get('documento')
-            senha = request.form.get('senha')
-            descricao = request.form.get('descricao', '')
-            
-            # Verificar se email já existe
-            if Vendedor.query.filter_by(Email=email).first():
-                flash('Email já cadastrado!', 'error')
-                return render_template('cadastroVend.html')
-            
-            if Vendedor.query.filter_by(CPFCNPJ=cpf_cnpj).first():
-                flash('CPF/CNPJ já cadastrado!', 'error')
-                return render_template('cadastroVend.html')
-
-            novo_vendedor = Vendedor(
-                Nome=nome,
-                Barraca=barraca,
-                Telefone=telefone,
-                Email=email,
-                CPFCNPJ=cpf_cnpj,
-                Documento=documento,
-                Senha=generate_password_hash(senha),
-                vendedor_descricao=descricao
-            )
-
-            try:
-                db.session.add(novo_vendedor)
-                db.session.commit()
-                
-                # AUTOMATICAMENTE FAZ LOGIN DO VENDEDOR APÓS CADASTRO
-                session['user_id'] = novo_vendedor.IdVend
-                session['user_type'] = 'vendedor'
-                session['user_name'] = novo_vendedor.Nome
-                
-                flash('Cadastro de vendedor realizado com sucesso!', 'success')
-                return redirect(url_for('homeVend'))  # REDIRECIONA PARA HOME VENDEDOR
-                
-            except Exception as e:
-                db.session.rollback()
-                flash(f'Erro no cadastro: {str(e)}', 'error')
-
         return render_template('cadastroVend.html')
 
     @app.route('/perfilCli', methods=['GET', 'POST'])
     def perfilCli():
         if 'user_id' not in session or session['user_type'] != 'cliente':
             flash('Faça login para acessar esta página.', 'error')
-            return redirect(url_for('login'))
+            return redirect(url_for('homeVend'))
         
         cliente = Clientes.query.get(session['user_id'])
         
         if not cliente:
             flash('Cliente não encontrado.', 'error')
-            return redirect(url_for('login'))
+            return redirect(url_for('homeVend'))
 
         if request.method == 'POST':
             cliente.NomeCli = request.form.get('nome', cliente.NomeCli)
@@ -223,7 +221,7 @@ def init_app(app):
         
          # Dados de exemplo para testar o carrossel
         ofertas = [
-            {'img': 'imgs/produto1.jpg', 'nome': 'Produto Oferta 1', 'preco': '29,90'},
+            {'img': 'imgs/boloderoda.png', 'nome': 'Produto Oferta 1', 'preco': '29,90'},
             {'img': 'imgs/produto2.jpg', 'nome': 'Produto Oferta 2', 'preco': '39,90'},
             {'img': 'imgs/produto3.jpg', 'nome': 'Produto Oferta 3', 'preco': '19,90'}
         ]
@@ -236,23 +234,32 @@ def init_app(app):
         
         return render_template("homeCli.html", produtos=produtos, vendedores=vendedores)
 
-    @app.route('/homeVend')
+    @app.route('/homeVend', methods=['GET', 'POST'])
     def homeVend():
         if 'user_id' not in session or session['user_type'] != 'vendedor':
             return redirect(url_for('login'))
-        
+
+        search_query = request.form.get('search', '').strip()
+
         vendedor = Vendedor.query.get(session['user_id'])
-        produtos = Produtos.query.filter_by(IdVend=session['user_id']).all()
-        
-        # Estatísticas básicas
+
+        if search_query:
+            produtos = Produtos.query.filter(
+                Produtos.Nome.ilike(f"%{search_query}%"),
+                Produtos.IdVend == session['user_id']
+            ).all()
+        else:
+            produtos = Produtos.query.filter_by(IdVend=session['user_id']).all()
+
         total_produtos = len(produtos)
         produtos_estoque_baixo = [p for p in produtos if p.Estoque and p.Estoque < 10]
-        
-        return render_template('homeVend.html', 
-                             vendedor=vendedor, 
-                             produtos=produtos,
-                             total_produtos=total_produtos,
-                             estoque_baixo=len(produtos_estoque_baixo))
+
+        return render_template('homeVend.html',
+                            vendedor=vendedor,
+                            produtos=produtos,
+                            total_produtos=total_produtos,
+                            estoque_baixo=len(produtos_estoque_baixo),
+                            search_query=search_query)
 
     @app.route('/vendedor/<int:vendedor_id>')
     def detalhes_vendedor(vendedor_id):
@@ -428,3 +435,42 @@ def init_app(app):
         
         encomendas = Encomendas.query.filter_by(IdVend=session['user_id']).all()
         return render_template('encomendasVend.html', encomendas=encomendas)
+    
+    @app.route('/vendedor/<int:vendedor_id>')
+    def vendedor(vendedor_id):
+        # Dados pré-estabelecidos dos vendedores
+        vendedores = {
+            1: {
+                'id': 1,
+                'nome': 'Dona Marta',
+                'foto': 'imgs/vendedor1.png',
+                'descricao': 'Vendedora de produtos caseiros há mais de 10 anos',
+                'avaliacao': 4.8,
+                'sobre': 'Especializada em bolos e doces caseiros. Todos os produtos feitos com ingredientes frescos e amor.',
+                'produtos': [
+                    {'nome': 'Bolo de Roda', 'img': 'imgs/boloderoda.png', 'preco': 12.00},
+                    {'nome': 'Pão Caseiro', 'img': 'imgs/paoCaseiro.png', 'preco': 10.00},
+                    {'nome': 'Bala de Banana', 'img': 'imgs/imgCarrossel1.png', 'preco': 12.00},
+                    {'nome': 'Bolo de Fubá', 'img': 'imgs/boloOferta.png', 'preco': 20.00}
+                ]
+            },
+            2: {
+                'id': 2,
+                'nome': 'João Gomes', 
+                'foto': 'imgs/vendedor2.png',
+                'descricao': 'Artesão especializado em palha e madeira',
+                'avaliacao': 4.5,
+                'sobre': 'Criando artesanato sustentável há 5 anos. Todos os produtos feitos manualmente.',
+                'produtos': [
+                    {'nome': 'Bolsa de Palha', 'img': 'imgs/bolsaPalha.png', 'preco': 20.00},
+                    {'nome': 'Coruja de Madeira', 'img': 'imgs/coruja.png', 'preco': 12.99},
+                    {'nome': 'Descanso de Panela', 'img': 'imgs/descansoPanela.png', 'preco': 9.99},
+                    {'nome': 'Bandeja de Sushi', 'img': 'imgs/sushi.png', 'preco': 14.99}
+                ]
+            }
+        }
+        
+        # Buscar o vendedor pelo ID
+        vendedor = vendedores.get(vendedor_id)
+        
+        return render_template('vendedor.html', vendedor=vendedor)

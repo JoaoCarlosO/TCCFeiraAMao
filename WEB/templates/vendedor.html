@@ -1,56 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Vendedor - {{ vendedor.nome }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <title>Perfil do Vendedor - {% if vendedor %}{{ vendedor.nome }}{% else %}Vendedor{% endif %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/vendedor.css') }}">
 </head>
+
 <body>
     <header class="py-3">
         <div class="container-fluid d-flex align-items-center justify-content-center">
-            <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" class="me-5">
+            <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo"
+                class="me-5">
             <nav class="d-flex gap-5">
                 <a href="{{ url_for('homeCli')}}" class="text-decoration-none">Home</a>
                 <a href="{{ url_for('carrinhoCli')}}" class="text-decoration-none">Carrinho</a>
                 <a href="{{ url_for('perfilCli')}}" class="text-decoration-none">Perfil</a>
+                <a href="{{ url_for('notificacoesCli')}}" class="text-decoration-none">Notificações</a>
+                <a href="{{ url_for('encomendasCli')}}" class="text-decoration-none">Encomendas</a>
             </nav>
         </div>
     </header>
 
     <main class="container py-4">
+        {% if vendedor %}
         <!-- Perfil do Vendedor -->
         <section class="perfil-vendedor d-flex align-items-center mb-4">
-            <img src="{{ url_for('static', filename=vendedor.foto) }}" class="foto-vendedor-grande" alt="Foto do vendedor">
+            <img src="{{ url_for('static', filename='imgs/vendedor1.png') }}" class="foto-vendedor-grande"
+                alt="Foto de {{ vendedor.nome }}">
             <div class="ms-3">
-                <h1 class="nome-vendedor">{{ vendedor.nome }}</h1>
-                <p class="descricao-vendedor">{{ vendedor.descricao }}</p>
-                <p class="avaliacao-vendedor">⭐ {{ vendedor.avaliacao }}/5.0</p>
+                <h1 class="nome-vendedor">Dona Marta</h1>
+                <p class="descricao-vendedor">Vendedora de produtos caseiros há mais de 10 anos</p>
+                <p class="avaliacao-vendedor">⭐ 5.0</p>
             </div>
         </section>
 
+        <!-- Sobre o vendedor -->
+        <div class="sobre-vendedor mb-5">
+            <h3>Sobre Dona Marta</h3>
+            <p>Especializada em bolos e doces caseiros. Todos os produtos feitos com ingredientes frescos e amor.</p>
+        </div>
+
         <!-- Produtos do Vendedor -->
-        <h2 class="mb-3">Produtos deste vendedor</h2>
-        <div class="produtos-vendedor row">
-            {% for produto in vendedor.produtos %}
-            <div class="col-md-4 col-lg-3 mb-4">
-                <div class="produto-item card h-100">
-                    <img src="{{ url_for('static', filename=produto.img) }}" class="card-img-top produto-img" alt="{{ produto.nome }}">
-                    <div class="card-body">
-                        <h5 class="produto-nome card-title">{{ produto.nome }}</h5>
-                        <p class="produto-preco card-text">R${{ produto.preco }}</p>
-                        <div class="produto-acoes d-flex justify-content-between">
-                            <button class="btn btn-primary btn-add">Adicionar ao Carrinho</button>
-                            <button class="btn btn-outline-danger btn-like">❤</button>
+        <h2 class="mb-3">Produtos de Dona Marta</h2>
+            <h3 class="section-title mb-3">Produtos</h3>
+            <div class="scroll-container">
+                <div class="produto-item">
+                    <img src="{{ url_for('static', filename='imgs/boloderoda.png') }}" class="produto-img"
+                        alt="Bolo de roda">
+                    <div class="produto-info p-2">
+                        <p class="produto-nome">Bolo de roda</p>
+                        <p class="produto-preco">R$12,00</p>
+                        <div class="produto-acoes">
+                            <span class="favorito">♡</span>
+                            <span class="adicionar">➕</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        </div>
+                {% else %}
+                <!-- Vendedor não encontrado -->
+                <div class="alert alert-warning text-center">
+                    <h3>Vendedor não encontrado</h3>
+                    <p>O vendedor que você está procurando não existe.</p>
+                    <a href="{{ url_for('homeCli') }}" class="btn btn-primary">Voltar à página inicial</a>
+                </div>
+                {% endif %}
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

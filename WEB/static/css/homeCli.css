@@ -113,173 +113,284 @@ header nav a:hover {
 #carouselOfertas {
   border-radius: 20px;
   overflow: hidden;
-  margin: auto;
+  margin: 0 auto 30px auto;
   max-width: 1100px;
   width: 100%;
-  padding-bottom: 20px;
 }
 
 .oferta-card {
   background-color: #4f6420;
   border-radius: 20px;
-  padding: 30px;
+  padding: 40px 30px;
   color: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 350px;
+  gap: 80px;
 }
 
-/* Ofert IMG Placeholder (Ajuste para o HTML estático) */
-.oferta-card > div:first-child { 
+.oferta-img {
   width: 300px;
   height: 300px;
   object-fit: cover;
-  margin: 0 auto;
-  margin-left: 80px;
-  margin-top: -20px;
+  border-radius: 15px;
+  flex-shrink: 0;
 }
 
-#oferta-textos {
-  max-width: 500px;
+.oferta-textos {
   text-align: center;
-  margin: 0 auto;
+  max-width: 400px;
+  margin-left: 30px;
 }
 
 .oferta-titulo {
-  font-size: 70px;
+  font-size: 3.5rem;
   font-weight: 700;
   font-family: "Mouse Memoirs", sans-serif;
-  margin-bottom: 5px;
-  letter-spacing: 5px;
+  margin-bottom: 10px;
+  letter-spacing: 3px;
+  line-height: 1;
 }
 
 .oferta-desc {
-  font-size: 22px;
-  margin-bottom: 8px;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
   font-family: 'PT Sans', sans-serif;
+  opacity: 0.9;
 }
 
 .oferta-preco {
-  font-size: 40px;
+  font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
+  color: #f6c63f;
 }
 
 .btn-comprar {
   background-color: #f6c63f;
   border: none;
-  padding: 8px 18px;
-  border-radius: 20px;
+  padding: 12px 30px;
+  border-radius: 25px;
   font-weight: 600;
   color: #333;
   cursor: pointer;
-  font-size: 15px;
-  transition: background-color 0.3s ease;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn-comprar:hover {
   background-color: #ffd95a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(246, 198, 63, 0.3);
 }
 
-/* ======== SEÇÃO VENDEDOR ======== */
-.btn-perfil-vendedor {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  /* Cor ajustada para consistência com o tema */
-  background-color: #425010; 
-  color: white;
-  border-radius: 8px;
-  transition: background-color 0.3s;
+/* ======== PERFIL DO VENDEDOR ======== */
+.perfil-vendedor {
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  max-width: 1100px;
+  margin: 0 auto 25px auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.btn-perfil-vendedor:hover {
-  background-color: #4f6420;
-}
-
-/* Placeholder para a Foto do Vendedor */
-a.btn-perfil-vendedor > div {
-  width: 50px;
-  height: 50px;
+.foto-vendedor {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  margin-right: 8px; /* Adiciona um pequeno espaço à direita do placeholder */
-  /* Propriedades do seu .foto-vendedor original */
-  border: 1px solid #fff; 
-  background-color: #f0f0f0; 
+  object-fit: cover;
+  border: 3px solid #4f6420;
+}
+
+.nome-vendedor {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #4f6420;
+}
+
+/* ======== SEÇÃO DE PRODUTOS ======== */
+.produtos-section {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
   color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+  padding-left: 10px;
+  border-left: 4px solid #f6c63f;
 }
 
-
-/* ======== PRODUTOS ======== */
-.produtos-vendedor {
+.scroll-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
   gap: 20px;
-  margin-top: 20px;
+  padding: 15px 5px 25px 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #f6c63f #f1f1f1;
 }
+
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+
 
 .produto-item {
   background-color: #fff;
   border-radius: 15px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 180px;
+  width: 200px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Placeholder para a Imagem do Produto */
-.produto-item > div:first-child { 
+.produto-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.produto-img {
   width: 100%;
-  height: 140px;
+  height: 160px;
   object-fit: cover;
-  /* Propriedades do seu .produto-img original */
-  background-color: #ddd; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
+  border-bottom: 2px solid #f6c63f;
 }
 
 .produto-info {
-  padding: 10px;
+  padding: 15px;
 }
 
 .produto-nome {
-  font-size: 14px;
-  margin: 0;
+  font-size: 1rem;
   font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #333;
+  line-height: 1.3;
 }
 
 .produto-preco {
-  font-size: 16px;
+  font-size: 1.2rem;
   font-weight: bold;
-  /* Cor ajustada para a cor amarela principal */
-  color: #f6c63f; 
-  margin: 5px 0;
+  color: #4f6420;
+  margin: 0 0 12px 0;
 }
 
 .produto-acoes {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  font-size: 18px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .produto-acoes span {
   cursor: pointer;
-  transition: transform 0.2s ease;
+  font-size: 1.3rem;
+  padding: 5px;
+  transition: all 0.2s ease;
+  border-radius: 50%;
 }
 
 .produto-acoes span:hover {
   transform: scale(1.2);
-  color: #f6c63f;
+  background-color: #f8f9fa;
 }
 
+.produto-acoes .favorito:hover {
+  color: #e74c3c;
+}
+
+.produto-acoes .adicionar:hover {
+  color: #27ae60;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .oferta-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  
+  .oferta-img {
+    margin-bottom: 20px;
+    margin-left: 0;
+  }
+  
+  .oferta-textos {
+    margin-left: 0;
+  }
+  
+  .oferta-titulo {
+    font-size: 2.5rem;
+  }
+  
+  .produto-item {
+    width: 180px;
+  }
+}
+
+
+/* ======== CONTAINER VENDEDOR + PRODUTOS ======== */
+.vendedor-produtos-container {
+  background: #F3F4E5;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  max-width: 1100px;
+  margin: 0 auto;
+  border: 1px solid #e0e0e0;
+}
+
+/* Ajustes para os elementos dentro do container */
+.vendedor-produtos-container .perfil-vendedor {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin: 0 auto 25px auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: none; /* Remove a limitação de largura */
+}
+
+.vendedor-produtos-container .produtos-section {
+  max-width: none; /* Remove a limitação de largura */
+  margin: 0;
+}
+
+.btn-ver-perfil {
+    background-color: #f6c63f;
+    color: #333;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    margin-left: auto;
+}
+
+.btn-ver-perfil:hover {
+    background-color: #ffd95a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(246, 198, 63, 0.3);
+    color: #333;
+    text-decoration: none;
+}
+
+/* Mantenha o resto do CSS anterior igual */
 
 /* ======== RESPONSIVO ======== */
 @media (max-width: 768px) {
