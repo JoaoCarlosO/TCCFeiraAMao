@@ -1,50 +1,59 @@
 <?php
-require_once('conexao.php'); // importa a conexão
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Recebe os dados enviados via POST (JSON)
+require_once "cors.php";
+
+date_default_timezone_set("America/Sao_Paulo");
+
+$usuario = "root";
+$senha = "";
+$host = "localhost";
+$banco = "feiraamao";
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$banco;charset=utf8", $usuario, $senha, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
+} catch (Exception $e) {
+    echo json_encode(["erro" => true, "mensagem" => "Erro ao conectar com o banco: " . $e->getMessage()]);
+    exit();
+}
+
 $dados = json_decode(file_get_contents("php://input"), true);
 
-// Pega os campos
-$nome = $dados['nome'] ?? '';
-$telefone = $dados['telefone'] ?? '';
-$datanasc = $dados['datanasc'] ?? '';
-$localBusca = $dados['localBusca'] ?? '';
-$email = $dados['email'] ?? '';
-$cpf = $dados['cpf'] ?? '';
-$senha = $dados['senha'] ?? '';
 
-// Validação simples
-if ($nome == '' || $email == '' || $cpf == '' || $senha == '' || $datanasc == '') {
-    echo json_encode(['erro' => true, 'mensagem' => 'Preencha todos os campos obrigatórios.']);
+
+$nome = $dados["NomeCli"] ?? "";
+$telefone = $dados["Telefone"] ?? "";
+$datanasc = $dados["datanasc"] ?? "";
+$email = $dados["Email"] ?? "";
+$cpf = $dados["CPF"] ?? "";
+$senha = $dados["Senha"] ?? "";
+
+if ($nome == "" || $telefone == "" || $datanasc == "" || $email == "" || $cpf == "" || $senha == "") {
+    echo json_encode(["erro" => true, "mensagem" => "Preencha todos os campos obrigatórios."]);
     exit();
 }
 
-// Verifica se já existe CPF ou email
-$sql = $pdo->prepare("SELECT * FROM clientes WHERE Email = :email OR CPF = :cpf");
-$sql->bindParam(':email', $email);
-$sql->bindParam(':cpf', $cpf);
-$sql->execute();
+$senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-if ($sql->rowCount() > 0) {
-    echo json_encode(['erro' => true, 'mensagem' => 'E-mail ou CPF já cadastrados.']);
-    exit();
+try {
+    $res = $pdo->prepare("INSERT INTO clientes (NomeCli, Telefone, datanasc, Email, CPF, Senha) VALUES (:nome, :telefone, :datanasc, :email, :cpf, :senha)");
+    $res->bindValue(":nome", $nome);
+    $res->bindValue(":telefone", $telefone);
+    $res->bindValue(":datanasc", $datanasc);
+    $res->bindValue(":email", $email);
+    $res->bindValue(":cpf", $cpf);
+    $res->bindValue(":senha", $senhaHash);
+
+    if ($res->execute()) {
+        echo json_encode(["sucesso" => true, "mensagem" => "Cadastro realizado com sucesso!"]);
+    } else {
+        $erro = $res->errorInfo();
+        echo json_encode(["erro" => true, "mensagem" => "Erro ao salvar", "detalhe" => $erro]);
+    }
+} catch (Exception $e) {
+    echo json_encode(["erro" => true, "mensagem" => "Erro ao cadastrar: " . $e->getMessage()]);
 }
-
-// Insere no banco
-$stmt = $pdo->prepare("INSERT INTO clientes (NomeCli, Telefone, datanasc, LocalBusca, Email, CPF, Senha)
-VALUES (:nome, :telefone, :datanasc, :localBusca, :email, :cpf, :senha)");
-
-$stmt->bindParam(':nome', $nome);
-$stmt->bindParam(':telefone', $telefone);
-$stmt->bindParam(':datanasc', $datanasc);
-$stmt->bindParam(':localBusca', $localBusca);
-$stmt->bindParam(':email', $email);
-$stmt->bindParam(':cpf', $cpf);
-$stmt->bindParam(':senha', $senha); // você pode criptografar depois com password_hash()
-
-if ($stmt->execute()) {
-    echo json_encode(['erro' => false, 'mensagem' => 'Cliente cadastrado com sucesso!']);
-} else {
-    echo json_encode(['erro' => true, 'mensagem' => 'Erro ao cadastrar cliente.']);
-}
-?>

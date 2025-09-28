@@ -14,7 +14,7 @@ export default function Carrinho({ route, navigation }) {
   if (!produto) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text> Seu carrinho está vazio 😢</Text>
+        <Text> Seu carrinho está vazio, que pena 😢</Text>
       </View>
     );
   }

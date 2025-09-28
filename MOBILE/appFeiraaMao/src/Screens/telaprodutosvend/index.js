@@ -133,7 +133,7 @@ const Telaprodutosvend = () => {
 
     try {
       const apiUrl = Platform.OS === 'android'
-        ? 'http://10.0.2.2/BDTCC/listarProdutos.php'
+        ? 'http://10.239.20.142/BDTCC/listarProdutos.php'
         : 'http://localhost/BDTCC/listarProdutos.php';
 
       const response = await fetch(apiUrl);

@@ -4,7 +4,7 @@
 // Substitua 'http://localhost:8081' pela origem exata do seu frontend em desenvolvimento.
 // Se estiver usando Expo Go no celular, use o IP da sua máquina local seguido da porta do Expo.
 // Para fins de desenvolvimento, '*' pode ser usado, mas NÃO É SEGURO para produção.
-header("Access-Control-Allow-Origin: http://localhost:8081");
+header("Access-Control-Allow-Origin: http://localhost:8081");//alterar isso quando for no tcc
 header("Access-Control-Allow-Methods: GET, OPTIONS"); // Permite os métodos HTTP GET e OPTIONS
 header("Access-Control-Allow-Headers: Content-Type"); // Permite o cabeçalho Content-Type
 

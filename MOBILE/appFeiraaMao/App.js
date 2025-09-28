@@ -1,4 +1,5 @@
 import "react-native-gesture-handler";
+import "react-native-reanimated";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
@@ -8,9 +9,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 
+// Screens
 import Home from "./src/Screens/Home";
 import Notificacao from "./src/Screens/Notificacao";
 import Cadastro from "./src/Screens/Cadastro";
@@ -35,6 +36,12 @@ import AlterarVend from "./src/Screens/PerfilVend/AlterarVend";
 import BarracaAlterar from "./src/Screens/PerfilVend/BarracaAlterar";
 import NotificacaoVend from "./src/Screens/NotificacaoVend";
 import EncomendaVend from "./src/Screens/EncomendaVend";
+import Pagamentos from "./src/Screens/Pagamentos";
+import Controle from "./src/Screens/Controle";
+import Estoque from "./src/Screens/Controle/Estoque";
+import Vendas from "./src/Screens/Controle/Vendas";
+import Mapa from "./src/Screens/Mapa";
+import Routes from "./src/Routes/routes";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -156,11 +163,43 @@ function VendedorTabs() {
 
 function DrawerRoutes() {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: false }}>
-      <Drawer.Screen name="ClienteTabs" component={ClienteTabs} />
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: false, // 👈 desliga o header do Drawer
+        drawerStyle: {
+          backgroundColor: "#F4C542",
+        },
+        drawerLabelStyle: {
+          fontSize: 15,
+          fontWeight: "bold",
+        },
+        drawerActiveTintColor: "#333",
+        drawerInactiveTintColor: "white",
+      }}
+    >
+      {/* Aqui o Drawer vai chamar o BottomTabs */}
+      <Drawer.Screen
+        name="Cliente"
+        component={ClienteTabs}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Meu Perfil"
+        component={Perfil}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 }
+
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -288,7 +327,36 @@ export default function App() {
               name="Encomenda"
               component={Encomenda}
               options={{ headerShown: false }}
+            /> 
+            <Stack.Screen
+              name="Pagamentos"
+              component={Pagamentos}
+              options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="Controle"
+              component={Controle} 
+              options={{ headerShown: false }}
+            />
+
+              <Stack.Screen
+              name="Estoque"
+              component={Estoque} 
+              options={{ headerShown: false }}
+            />
+
+
+              <Stack.Screen
+              name="Vendas"
+              component={Vendas} 
+              options={{ headerShown: false }}
+            />
+ <Stack.Screen
+              name="Mapa"
+              component={Mapa}
+              options={{ headerShown: false }}
+            />
+
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
@@ -298,7 +366,7 @@ export default function App() {
 
 const headerConfig = {
   headerShown: true,
-  hearderTitle: "",
+  headerTitle: "", // corrigido
   headerTintColor: "#FFFFFF",
   headerStyle: {
     backgroundColor: "#425010",

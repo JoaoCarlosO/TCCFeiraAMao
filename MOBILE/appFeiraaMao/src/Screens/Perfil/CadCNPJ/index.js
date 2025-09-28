@@ -100,8 +100,8 @@ const CadastroCNPJ = () => {
       onPress={() => setSelectedOption(value)}
       disabled={loading}
     >
-      <View style={[styles.checkbox, selectedOption === value && styles.checkedBox]} />
-      <Text style={styles.label}>{label}</Text>
+      <View style={[styles.checkbox, selectedOption === value && styles.checkedBox, loading && styles.disabled]} />
+      <Text style={[styles.label, loading && styles.disabledText]}>{label}</Text>
     </TouchableOpacity>
   );
 
@@ -109,51 +109,49 @@ const CadastroCNPJ = () => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-          <View style={styles.containerPrincipal}>
-            <ImageBackground
-              source={require("../../../../assets/img/fundo-perfil.png")}
-              style={styles.imageBackground}
-              imageStyle={styles.imageStyle}
-            >
-              <View style={styles.containerInterno}>
-                <Text style={styles.textForm}>Razão Social *</Text>
-                <TextInput style={styles.input} value={razaoSocial} onChangeText={setRazaoSocial} placeholder="Digite a razão social" placeholderTextColor="#999" editable={!loading} />
+          <ImageBackground
+            source={require("../../../../assets/img/fundo-perfil.png")}
+            style={styles.containerPrincipal}
+            imageStyle={styles.imageStyle}
+          >
+            <View style={styles.containerInterno}>
+              <Text style={styles.textForm}>Razão Social (Nome oficial e jurídico da empresa) *</Text>
+              <TextInput style={styles.input} value={razaoSocial} onChangeText={setRazaoSocial} placeholder="Digite a razão social" placeholderTextColor="#999" editable={!loading} />
 
-                <Text style={styles.textForm}>Nome da barraca</Text>
-                <TextInput style={styles.input} value={barraca} onChangeText={setBarraca} placeholder="Digite o nome da barraca" placeholderTextColor="#999" editable={!loading} />
+              <Text style={styles.textForm}>Nome da barraca</Text>
+              <TextInput style={styles.input} value={barraca} onChangeText={setBarraca} placeholder="Digite o nome da barraca" placeholderTextColor="#999" editable={!loading} />
 
-                <Text style={styles.textForm}>Telefone *</Text>
-                <TextInput style={styles.input} value={telefone} onChangeText={setTelefone} placeholder="(00) 00000-0000" placeholderTextColor="#999" keyboardType="phone-pad" editable={!loading} />
+              <Text style={styles.textForm}>Telefone *</Text>
+              <TextInput style={styles.input} value={telefone} onChangeText={setTelefone} placeholder="(00) 00000-0000" placeholderTextColor="#999" keyboardType="phone-pad" editable={!loading} />
 
-                <Text style={styles.textForm}>CNPJ *</Text>
-                <TextInput style={styles.input} value={cnpj} onChangeText={setCnpj} placeholder="Digite o CNPJ" placeholderTextColor="#999" keyboardType="numeric" editable={!loading} />
+              <Text style={styles.textForm}>CNPJ *</Text>
+              <TextInput style={styles.input} value={cnpj} onChangeText={setCnpj} placeholder="Digite o CNPJ" placeholderTextColor="#999" keyboardType="numeric" editable={!loading} />
 
-                <Text style={styles.textForm}>Email *</Text>
-                <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="empresa@email.com" placeholderTextColor="#999" keyboardType="email-address" autoCapitalize="none" editable={!loading} />
+              <Text style={styles.textForm}>Email *</Text>
+              <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="empresa@email.com" placeholderTextColor="#999" keyboardType="email-address" autoCapitalize="none" editable={!loading} />
 
-                <Text style={styles.textForm}>Senha *</Text>
-                <TextInput style={styles.input} value={senha} onChangeText={setSenha} placeholder="Digite sua senha" placeholderTextColor="#999" secureTextEntry={true} editable={!loading} />
+              <Text style={styles.textForm}>Senha *</Text>
+              <TextInput style={styles.input} value={senha} onChangeText={setSenha} placeholder="Digite sua senha" placeholderTextColor="#999" secureTextEntry={true} editable={!loading} />
 
-                <Text style={styles.termos}>
-                  Eu li e concordo com os Termos de serviço, política de privacidade do app e os termos.
-                </Text>
+              <Text style={styles.termos}>
+                Eu li e concordo com os Termos de serviço, política de privacidade do app e os termos.
+              </Text>
 
-                <View style={styles.radiosconter}>
-                  <CustomCheckbox label="Aceito os termos" value="aceito" />
-                </View>
-
-                <View style={styles.buttonsContainer}>
-                  <TouchableOpacity
-                    style={[styles.button, loading && styles.disabledButton]}
-                    onPress={handleSubmit}
-                    disabled={loading}
-                  >
-                    <Text style={styles.buttonText}>{loading ? "Enviando..." : "Confirmar"}</Text>
-                  </TouchableOpacity>
-                </View>
+              <View style={styles.radiosconter}>
+                <CustomCheckbox label="Aceito os termos" value="aceito" />
               </View>
-            </ImageBackground>
-          </View>
+
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={[styles.button, loading && styles.disabledButton]}
+                  onPress={handleSubmit}
+                  disabled={loading}
+                >
+                  <Text style={styles.buttonText}>{loading ? "Processando..." : "Confirmar"}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ImageBackground>
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -164,9 +162,8 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollContent: { paddingBottom: 20, paddingHorizontal: 20 },
   containerPrincipal: { padding: 20, borderRadius: 10, width: "100%", maxWidth: 500, alignItems: "center" },
-  imageBackground: { flex: 1, width: "100%", padding: 20, borderRadius: 10, overflow: "hidden" },
-  imageStyle: { borderRadius: 10 },
-  containerInterno: { backgroundColor: "rgba(64, 74, 34, 0.9)", padding: 20, borderRadius: 8, marginBottom: 10, width: "100%" },
+  imageStyle: { resizeMode: "cover", borderRadius: 10 },
+  containerInterno: { backgroundColor: "#404A22", padding: 20, borderRadius: 8, width: "100%" },
   textForm: { color: "#fff", fontSize: 16, marginTop: 10 },
   input: { backgroundColor: "#fff", padding: 10, borderRadius: 5, marginTop: 5, marginBottom: 10 },
   termos: { color: "#fff", fontSize: 14, marginTop: 10 },
@@ -176,9 +173,11 @@ const styles = StyleSheet.create({
   checkedBox: { backgroundColor: "#fff" },
   label: { color: "#fff" },
   buttonsContainer: { marginTop: 20, width: "100%", alignItems: "center" },
-  button: { backgroundColor: "#404A22", paddingVertical: 15, paddingHorizontal: 40, borderRadius: 8, alignItems: "center" },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
+  button: { backgroundColor: "#fff", paddingVertical: 15, paddingHorizontal: 40, borderRadius: 8, alignItems: "center" },
+  buttonText: { color: "#404A22", fontWeight: "bold", fontSize: 16 },
+  disabled: { opacity: 0.5 },
   disabledButton: { backgroundColor: "#ccc" },
+  disabledText: { color: "#ccc" }
 });
 
 export default CadastroCNPJ;

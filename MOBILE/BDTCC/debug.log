@@ -1,0 +1,8 @@
+2025-09-22 19:28:46 - Requisição recebida
+2025-09-22 14:28:46 - Buscando usuário ID: 1
+2025-09-22 14:28:46 - ERRO: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'endereco' in 'field list'
+GET: Array
+(
+    [IdCli] => 1
+)
+

@@ -74,7 +74,7 @@ export default function AdicionarEditarProdutoScreen() {
         setIsLoading(true);
 
         try {
-            const localIp = '192.168.3.114';
+            const localIp = '10.239.20.142';
             const apiUrl = Platform.OS === 'web'
                 ? `http://localhost/BDTCC/${isEditing ? 'editar.php' : 'salvar.php'}`
                 : `http://${localIp}/BDTCC/${isEditing ? 'editar.php' : 'salvar.php'}`;

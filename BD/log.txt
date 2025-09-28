@@ -1,0 +1,199 @@
+clientesCREATE DATABASE IF NOT EXISTS feiraamao
+    /*!40100 DEFAULT CHARACTER SET latin1 COLLATE=latin1_swedish_ci */;
+USE feiraamao;
+
+-- ==============================
+-- Tabela clientes
+-- ==============================
+CREATE TABLE IF NOT EXISTS clientes (
+  IdCli int(11) NOT NULL AUTO_INCREMENT,
+  NomeCli varchar(150) NOT NULL,
+  Telefone varchar(20) DEFAULT NULL,
+  datanasc date NOT NULL,
+  LocalBusca varchar(500) DEFAULT NULL,
+  Email varchar(300) NOT NULL,
+  CPF varchar(14) NOT NULL,
+  Senha varchar(255) NOT NULL,
+  Image 
+  PRIMARY KEY (IdCli),
+  UNIQUE KEY Email (Email),
+  UNIQUE KEY CPF (CPF)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela vendedor
+-- ==============================
+CREATE TABLE IF NOT EXISTS vendedor (
+  IdVend int(11) NOT NULL AUTO_INCREMENT,
+  Nome varchar(150) NOT NULL,
+  Barraca varchar(175) DEFAULT NULL,
+  Email varchar(300) NOT NULL,
+  CPFCNPJ varchar(20) NOT NULL,
+  Telefone varchar(20) DEFAULT NULL,
+  Documento varchar(500) DEFAULT NULL,
+  Senha varchar(255) NOT NULL,
+  PRIMARY KEY (IdVend),
+  UNIQUE KEY Email (Email),
+  UNIQUE KEY CPFCNPJ (CPFCNPJ)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela pedidos
+-- ==============================
+CREATE TABLE IF NOT EXISTS pedidos (
+  IdPed int(11) NOT NULL AUTO_INCREMENT,
+  IdCli int(11) DEFAULT NULL,
+  IdVend int(11) DEFAULT NULL,
+  DataPed date DEFAULT NULL,
+  StatusCli varchar(200) DEFAULT NULL,
+  Subtotal float DEFAULT NULL,
+  PRIMARY KEY (IdPed),
+  KEY IdCli (IdCli),
+  KEY IdVend (IdVend),
+  CONSTRAINT pedidos_ibfk_1 FOREIGN KEY (IdCli) REFERENCES clientes (IdCli) ON DELETE SET NULL,
+  CONSTRAINT pedidos_ibfk_2 FOREIGN KEY (IdVend) REFERENCES vendedor (IdVend) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela pagamento
+-- ==============================
+CREATE TABLE IF NOT EXISTS pagamento (
+  IdPag int(11) NOT NULL AUTO_INCREMENT,
+  IdPed int(11) DEFAULT NULL,
+  Metodo varchar(250) DEFAULT NULL,
+  Valor float DEFAULT NULL,
+  StatusPag varchar(250) DEFAULT NULL,
+  DataPag date DEFAULT NULL,
+  PRIMARY KEY (IdPag),
+  KEY IdPed (IdPed),
+  CONSTRAINT pagamento_ibfk_1 FOREIGN KEY (IdPed) REFERENCES pedidos (IdPed) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela produtos
+-- ==============================
+CREATE TABLE IF NOT EXISTS produtos (
+  IdPro int(11) NOT NULL AUTO_INCREMENT,
+  Nome varchar(255) NOT NULL,
+  Preco decimal(10,2) DEFAULT NULL,
+  Quant int(11) DEFAULT NULL,
+  Cat varchar(260) DEFAULT NULL,
+  Estoque int(11) DEFAULT NULL,
+  Descricao text DEFAULT NULL,
+  PesoQuant varchar(50) DEFAULT NULL,
+  IdVend int(11) DEFAULT NULL,
+  Imagem varchar(500) DEFAULT NULL,
+  PRIMARY KEY (IdPro),
+  KEY IdVend (IdVend),
+  CONSTRAINT produtos_ibfk_1 FOREIGN KEY (IdVend) REFERENCES vendedor (IdVend) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela encomendas
+-- ==============================
+CREATE TABLE IF NOT EXISTS encomendas (
+  IdEnc int(11) NOT NULL AUTO_INCREMENT,
+  NomeCliente varchar(150) NOT NULL,
+  Status varchar(100) DEFAULT NULL,
+  IdVend int(11) DEFAULT NULL,
+  PRIMARY KEY (IdEnc),
+  KEY IdVend (IdVend),
+  CONSTRAINT encomendas_ibfk_1 FOREIGN KEY (IdVend) REFERENCES vendedor (IdVend) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela notificacao
+-- ==============================
+CREATE TABLE IF NOT EXISTS notificacao (
+  IdNot int(11) NOT NULL AUTO_INCREMENT,
+  IdVend int(11) DEFAULT NULL,
+  IdCli int(11) DEFAULT NULL,
+  Mensagem text DEFAULT NULL,
+  Status varchar(100) DEFAULT NULL,
+  DataEnvio datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (IdNot),
+  KEY IdVend (IdVend),
+  KEY IdCli (IdCli),
+  CONSTRAINT notificacao_ibfk_1 FOREIGN KEY (IdVend) REFERENCES vendedor (IdVend) ON DELETE SET NULL,
+  CONSTRAINT notificacao_ibfk_2 FOREIGN KEY (IdCli) REFERENCES clientes (IdCli) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela carrinho
+-- ==============================
+CREATE TABLE IF NOT EXISTS carrinho (
+  IdCarrinho int(11) NOT NULL AUTO_INCREMENT,
+  IdCli int(11) DEFAULT NULL,
+  IdPro int(11) DEFAULT NULL,
+  Quantidade int(11) DEFAULT 1,
+  PRIMARY KEY (IdCarrinho),
+  KEY IdCli (IdCli),
+  KEY IdPro (IdPro),
+  CONSTRAINT carrinho_ibfk_1 FOREIGN KEY (IdCli) REFERENCES clientes (IdCli) ON DELETE CASCADE,
+  CONSTRAINT carrinho_ibfk_2 FOREIGN KEY (IdPro) REFERENCES produtos (IdPro) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela usuarioperfil
+-- ==============================
+CREATE TABLE IF NOT EXISTS usuarioperfil (
+  IdPerfil int(11) NOT NULL AUTO_INCREMENT,
+  Nome varchar(150) NOT NULL,
+  DataNasc date DEFAULT NULL,
+  Telefone varchar(20) DEFAULT NULL,
+  CPF varchar(14) DEFAULT NULL,
+  Email varchar(300) NOT NULL,
+  Endereco varchar(500) DEFAULT NULL,
+  Senha varchar(255) NOT NULL,
+  FotoPerfil varchar(500) DEFAULT NULL,
+  PRIMARY KEY (IdPerfil),
+  UNIQUE KEY Email (Email),
+  UNIQUE KEY CPF (CPF)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela tipodeloja (corrigida)
+-- ==============================
+CREATE TABLE IF NOT EXISTS tipodeloja (
+  IdTipo int(11) NOT NULL AUTO_INCREMENT,
+  NomeTipo varchar(150) NOT NULL,
+  PRIMARY KEY (IdTipo)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
+-- ==============================
+-- Tabela barracavend
+-- ==============================
+CREATE TABLE IF NOT EXISTS barracavend (
+  IdBarraca int(11) NOT NULL AUTO_INCREMENT,
+  IdVend int(11) DEFAULT NULL,
+  Nome varchar(150) NOT NULL,
+  Endereco varchar(300) DEFAULT NULL,
+  Biografia text DEFAULT NULL,
+  Local varchar(200) DEFAULT NULL,
+  Integrantes int(11) DEFAULT NULL,
+  Categoria varchar(150) DEFAULT NULL,
+  PRIMARY KEY (IdBarraca),
+  KEY IdVend (IdVend),
+  CONSTRAINT barracavend_ibfk_1 FOREIGN KEY (IdVend) REFERENCES vendedor (IdVend) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=LATIN1_SWEDISH_CI
+
+
+CREATE TABLE IF NOT EXISTS estoque (
+  IdEstoque INT(11) NOT NULL AUTO_INCREMENT,
+  IdPro INT(11) NOT NULL,
+  Quantidade INT(11) NOT NULL DEFAULT 0,
+  Validade DATE DEFAULT NULL,
+  Preco DECIMAL(10,2) DEFAULT 0,
+  PRIMARY KEY (IdEstoque),
+  FOREIGN KEY (IdPro) REFERENCES produtos(IdPro) ON DELETE CASCADE
+);

@@ -1,136 +1,121 @@
 <?php
 // Define os cabeçalhos para permitir requisições de outras origens (CORS)
-header("Access-Control-Allow-Origin: http://localhost:8081"); // AJUSTE ESTA URL SE NECESSÁRIO
+header("Access-Control-Allow-Origin: http://localhost:8081");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json; charset=UTF-8");
 
+// Se for uma requisição OPTIONS (pré-voo do CORS), apenas envia os cabeçalhos e sai.
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit();
+    exit(0);
 }
 
-require_once("conexao.php");
+// Inclui o arquivo de conexão com o banco de dados (certifique-se de que este caminho está correto)
+require_once 'conexao.php'; // Altere para o caminho real do seu arquivo de conexão
 
-// Configura o PHP para exibir e logar erros, útil para depuração
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+$response = [
+    'sucesso' => false,
+    'mensagem' => 'Ocorreu um erro desconhecido.',
+    'imagem_url' => null // Adiciona um campo para a URL da imagem salva
+];
 
-// Define o nome da pasta de uploads
-$nomePasta = 'uploads/';
+try {
+    // Inicia uma transação para garantir a integridade dos dados
+    $pdo->beginTransaction();
 
-// Tenta criar a pasta se não existir
-if (!file_exists($nomePasta)) {
-    if (!mkdir($nomePasta, 0777, true)) {
-        error_log("Erro: Falha ao criar o diretório de uploads: " . $nomePasta);
-        echo json_encode([
-            'mensagem' => 'Erro interno do servidor: Falha ao preparar o diretório de imagens.',
-            'sucesso' => false
-        ]);
-        exit();
+    $nome = $_POST['nome'] ?? '';
+    $preco = $_POST['preco'] ?? '';
+    $quantidade = $_POST['quantidade'] ?? '';
+    $categoria = $_POST['categoria'] ?? ''; // Mapeia 'descricao' do app para 'categoria' no PHP
+    $id_vendedor = $_POST['id_vendedor'] ?? '1'; // Valor padrão '1' se não for enviado
+    $estoque = $_POST['estoque'] ?? '';
+
+    // Validação básica dos campos obrigatórios (a imagem não é mais obrigatória aqui)
+    if (empty($nome) || empty($preco) || empty($quantidade) || empty($categoria) || empty($estoque)) {
+        throw new Exception("Por favor, preencha todos os campos obrigatórios (exceto a imagem, que é opcional).");
     }
-}
 
-// Obtém os dados do produto
-$nome = $_POST['nome'] ?? '';
-$preco = $_POST['preco'] ?? '';
-$quant = $_POST['quantidade'] ?? '';
-$cat = $_POST['categoria'] ?? '';
-$idvend = $_POST['id_vendedor'] ?? '';
-$estoque = $quant;
+    // Validação e processamento da imagem
+    $imagem_path = null; // Inicializa o caminho da imagem como nulo
+    $diretorio_destino = 'uploads/imagens/'; // Diretório onde as imagens serão salvas
 
-$caminhoImagem = ''; // Inicializa a variável para o caminho da imagem no banco
-
-// --- DEBUGGING DA IMAGEM ---
-error_log("Recebido POST: " . print_r($_POST, true)); // Loga todos os dados POST
-error_log("Recebido FILES: " . print_r($_FILES, true)); // Loga todos os dados FILES
-
-// Verifica se um arquivo de imagem foi enviado e se não houve erros de upload
-if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
-    $fileTmpPath = $_FILES['imagem']['tmp_name'];
-    $fileName = $_FILES['imagem']['name'];
-    $fileSize = $_FILES['imagem']['size'];
-    $fileType = $_FILES['imagem']['type'];
-    $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-    $nomeImagemUnico = uniqid() . '.' . $ext;
-    $caminhoCompletoImagem = $nomePasta . $nomeImagemUnico;
-
-    error_log("Tentando mover arquivo: " . $fileTmpPath . " para " . $caminhoCompletoImagem);
-
-    // Tenta mover o arquivo temporário para o destino final
-    if (move_uploaded_file($fileTmpPath, $caminhoCompletoImagem)) {
-        $caminhoImagem = $caminhoCompletoImagem;
-        error_log("Imagem movida com sucesso. Caminho salvo: " . $caminhoImagem);
-    } else {
-        // Se houver falha ao mover, registra o erro e envia resposta de falha
-        $phpFileUploadErrors = array(
-            UPLOAD_ERR_INI_SIZE => 'O arquivo enviado excede o limite definido na diretiva upload_max_filesize do php.ini.',
-            UPLOAD_ERR_FORM_SIZE => 'O arquivo enviado excede o limite definido na diretiva MAX_FILE_SIZE do formulário HTML.',
-            UPLOAD_ERR_PARTIAL => 'O upload do arquivo foi feito apenas parcialmente.',
-            UPLOAD_ERR_NO_FILE => 'Nenhum arquivo foi enviado.',
-            UPLOAD_ERR_NO_TMP_DIR => 'Faltando uma pasta temporária.',
-            UPLOAD_ERR_CANT_WRITE => 'Falha ao escrever o arquivo em disco.',
-            UPLOAD_ERR_EXTENSION => 'Uma extensão do PHP interrompeu o upload do arquivo.'
-        );
-        $errorMessage = $phpFileUploadErrors[$_FILES['imagem']['error']] ?? 'Erro desconhecido ao mover o arquivo.';
-        error_log("Erro ao mover imagem: " . $errorMessage . " (Código: " . $_FILES['imagem']['error'] . ")");
-        echo json_encode([
-            'mensagem' => 'Erro ao salvar a imagem do produto no servidor: ' . $errorMessage,
-            'sucesso' => false
-        ]);
-        exit();
+    // Verifica se o diretório de destino existe, senão, tenta criá-lo
+    if (!is_dir($diretorio_destino)) {
+        // O 0755 é uma permissão comum para diretórios, pode variar dependendo do seu servidor
+        if (!mkdir($diretorio_destino, 0755, true)) {
+            throw new Exception("Erro: Não foi possível criar o diretório de uploads. Verifique as permissões.");
+        }
     }
-} else if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] !== UPLOAD_ERR_NO_FILE) {
-    // Trata erros de upload que não sejam "nenhum arquivo enviado"
-    $phpFileUploadErrors = array(
-        UPLOAD_ERR_INI_SIZE => 'O arquivo enviado excede o limite definido na diretiva upload_max_filesize do php.ini.',
-        UPLOAD_ERR_FORM_SIZE => 'O arquivo enviado excede o limite definido na diretiva MAX_FILE_SIZE do formulário HTML.',
-        UPLOAD_ERR_PARTIAL => 'O upload do arquivo foi feito apenas parcialmente.',
-        UPLOAD_ERR_NO_TMP_DIR => 'Faltando uma pasta temporária.',
-        UPLOAD_ERR_CANT_WRITE => 'Falha ao escrever o arquivo em disco.',
-        UPLOAD_ERR_EXTENSION => 'Uma extensão do PHP interrompeu o upload do arquivo.'
+
+    // --- Início da seção de tratamento de upload de imagem mais detalhada (agora opcional) ---
+    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+        $arquivo_tmp = $_FILES['imagem']['tmp_name'];
+        $nome_original = basename($_FILES['imagem']['name']);
+        $tipo_arquivo = strtolower(pathinfo($nome_original, PATHINFO_EXTENSION));
+
+        // Gera um nome único para o arquivo para evitar conflitos
+        $nome_novo_arquivo = uniqid('prod_') . '.' . $tipo_arquivo;
+        $caminho_completo_imagem = $diretorio_destino . $nome_novo_arquivo;
+
+        // Move o arquivo temporário para o diretório de destino permanente
+        if (move_uploaded_file($arquivo_tmp, $caminho_completo_imagem)) {
+            $imagem_path = $caminho_completo_imagem; // Imagem salva, armazena o caminho
+        } else {
+            throw new Exception("Erro: Não foi possível mover a imagem para o diretório final. Verifique as permissões de escrita em '{$diretorio_destino}'.");
+        }
+    } else if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] !== UPLOAD_ERR_NO_FILE) {
+        // Houve um erro no upload (diferente de "nenhum arquivo enviado")
+        throw new Exception("Erro no upload da imagem: Código " . $_FILES['imagem']['error'] . ". Verifique o tamanho do arquivo.");
+    } else if (isset($_POST['imagem_url_existente'])) {
+        // Se for edição e a imagem existente não foi alterada, usa a URL existente.
+        $imagem_path = $_POST['imagem_url_existente'];
+    }
+    // Não lançamos mais um erro se nenhuma imagem for selecionada no caso de adição,
+    // pois agora a imagem é opcional. $imagem_path permanecerá null neste caso.
+    // --- Fim da seção de tratamento de upload de imagem ---
+
+
+    // Converte preço e quantidade para tipos numéricos apropriados
+    $preco_float = (float) str_replace(',', '.', $preco); // Garante ponto para float
+    $quantidade_int = (int) $quantidade;
+    $estoque_int = (int) $estoque;
+
+    // Prepara a query SQL para inserção
+    // Certifique-se de que 'Cat' e 'ImagemURL' são os nomes corretos das suas colunas no DB
+    $stmt = $pdo->prepare(
+        "INSERT INTO produtos (Nome, Preco, Quant, Cat, IdVend, Estoque, ImagemURL)
+         VALUES (:nome, :preco, :quantidade, :categoria, :id_vendedor, :estoque, :imagem_url)"
     );
-    $errorMessage = $phpFileUploadErrors[$_FILES['imagem']['error']] ?? 'Erro desconhecido durante o upload do arquivo.';
-    error_log("Erro no upload da imagem antes de mover: " . $errorMessage . " (Código: " . $_FILES['imagem']['error'] . ")");
-    echo json_encode([
-        'mensagem' => 'Erro no upload da imagem: ' . $errorMessage,
-        'sucesso' => false
-    ]);
-    exit();
-} else {
-    error_log("Nenhuma imagem foi enviada ou UPLOAD_ERR_NO_FILE ocorreu.");
-    // Se não houver imagem ou se UPLOAD_ERR_NO_FILE, $caminhoImagem permanece vazio, o que é OK se a imagem for opcional.
-    // Se a imagem for obrigatória, esta parte precisaria retornar um erro.
-}
 
+    // Binde os parâmetros
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':preco', $preco_float);
+    $stmt->bindParam(':quantidade', $quantidade_int);
+    $stmt->bindParam(':categoria', $categoria);
+    $stmt->bindParam(':id_vendedor', $id_vendedor);
+    $stmt->bindParam(':estoque', $estoque_int);
+    $stmt->bindParam(':imagem_url', $imagem_path); // Salva o caminho da imagem (pode ser NULL)
 
-// Inserção dos dados no banco de dados
-$sql = "INSERT INTO produtos (Nome, Preco, Quant, Cat, Estoque, IdVend, Imagem) 
-        VALUES (:nome, :preco, :quant, :cat, :estoque, :idvend, :imagem)";
-$stmt = $pdo->prepare($sql);
+    // Executa a query
+    if ($stmt->execute()) {
+        $response['sucesso'] = true;
+        $response['mensagem'] = "Produto salvo com sucesso!";
+        $response['imagem_url'] = $imagem_path; // Retorna o caminho da imagem salva
+        $pdo->commit(); // Confirma a transação
+    } else {
+        throw new Exception("Erro ao inserir o produto no banco de dados.");
+    }
 
-$stmt->bindValue(":nome", $nome);
-$stmt->bindValue(":preco", $preco);
-$stmt->bindValue(":quant", $quant);
-$stmt->bindValue(":cat", $cat);
-$stmt->bindValue(":estoque", $estoque);
-$stmt->bindValue(":idvend", $idvend);
-$stmt->bindValue(":imagem", $caminhoImagem); // Vincula o caminho da imagem (pode ser vazio)
-
-error_log("SQL Executando. Caminho da Imagem para DB: " . $caminhoImagem);
-
-if ($stmt->execute()) {
-    error_log("Produto cadastrado com sucesso. ID: " . $pdo->lastInsertId());
-    echo json_encode([
-        'mensagem' => 'Produto cadastrado com sucesso!',
-        'sucesso' => true,
-        'idProduto' => $pdo->lastInsertId()
-    ]);
-} else {
-    $errorInfo = $stmt->errorInfo();
-    error_log("Erro ao cadastrar produto no banco de dados: " . implode(" - ", $errorInfo));
-    echo json_encode([
-        'mensagem' => 'Erro ao cadastrar o produto no banco de dados: ' . $errorInfo[2],
-        'sucesso' => false
-    ]);
+} catch (Exception $e) {
+    // Em caso de erro, desfaz a transação
+    if (isset($pdo) && $pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    $response['mensagem'] = "Erro: " . $e->getMessage();
+    error_log("Erro em salvar.php: " . $e->getMessage()); // Para logs do servidor
+} finally {
+    // Fecha a conexão com o banco de dados se necessário (depende de como 'conexao.php' lida com isso)
+    $pdo = null;
+    echo json_encode($response); // Sempre retorna uma resposta JSON
 }
 ?>

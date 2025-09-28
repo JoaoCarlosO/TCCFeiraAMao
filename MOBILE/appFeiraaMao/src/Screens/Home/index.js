@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   StyleSheet,
   View,
@@ -8,6 +8,7 @@ import {
   Text,
   FlatList,
   Image,
+  TextInput 
 } from "react-native";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -18,6 +19,8 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const normalize = (size) => (screenWidth / 375) * size;
 
 const data = [
+
+  
   {
     title: "OFERTA ESPECIAL",
     descricao: "Bala de Banana com Coco 200g",
@@ -41,19 +44,22 @@ const data = [
 const CardOfertaEspecial = ({ item, navigation }) => (
   <View style={styles.cardOferta}>
     <Image source={item.imagem} style={styles.imagemOferta} />
-    <Text style={styles.tituloOferta}>{item.title}</Text>
-    <View style={styles.infoOferta}>
-      <Text style={{color: "#fff"}}>{item.descricao}</Text>
-      <Text style={styles.precoOferta}>{item.preco}</Text>
-      <TouchableOpacity
-        style={styles.botaoComprar}
-        onPress={() => navigation.navigate("Encomenda", { produto: item })}
-      >
-        <Text style={styles.textoBotao}>Comprar</Text>
-      </TouchableOpacity>
+    <View style={styles.infoOfertaContainer}>
+      <Text style={styles.tituloOferta}>{item.title}</Text>
+      <View style={styles.infoOferta}>
+        <Text style={styles.descricaoOferta}>{item.descricao}</Text>
+        <Text style={styles.precoOferta}>{item.preco}</Text>
+        <TouchableOpacity
+          style={styles.botaoComprar}
+          onPress={() => navigation.navigate("Encomenda", { produto: item })}
+        >
+          <Text style={styles.textoBotao}>Comprar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   </View>
 );
+
 
 const produtos = [
   {
@@ -271,40 +277,44 @@ const produtos2 = [
   },
 ];
 
-const CARD_WIDTH = normalize(262);
-const CARD_HEIGHT = normalize(150);
-
 const CardProduto = ({ item, navigation }) => (
   <View style={styles.card2}>
     <Image source={item.imagem} style={styles.imagem} />
-    <Text style={styles.nome}>{item.nome}</Text>
-    <Text style={styles.descricao}>{item.descricao}</Text>
-    <View style={styles.linha}>
-      <View style={styles.icones}>
+    <View style={styles.contentContainer}>
+      <Text style={styles.nome} numberOfLines={1}>{item.nome}</Text>
+      <Text style={styles.descricao} numberOfLines={2}>{item.descricao}</Text>
+      <View style={styles.linha}>
         <Text style={styles.preco}>{item.preco}</Text>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Encomenda", { produto: item })}
-        >
-          <Image
-            source={require("../../../assets/img/adicionar-icon.png")}
-            style={styles.icone}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Carrinho", {produto: item})}>
-          <Image
-            source={require("../../../assets/img/carrinho.png")}
-            style={styles.icone}
-          />
-        </TouchableOpacity>
+        <View style={styles.icones}>
+          <TouchableOpacity
+            style={styles.iconeContainer}
+            onPress={() => navigation.navigate("Encomenda", { produto: item })}
+          >
+            <Image
+              source={require("../../../assets/img/adicionar-icon.png")}
+              style={styles.icone}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.iconeContainer}
+            onPress={() => navigation.navigate("Carrinho", {produto: item})}
+          >
+            <Image
+              source={require("../../../assets/img/carrinho.png")}
+              style={styles.icone}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   </View>
 );
 
 export default function Home({ navigation }) {
+  const [pesquisa, setPesquisa] = useState("");
+
   return (
-    <ScrollView showsVerticalScrollIndicator={true}>
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.containerHeader}>
@@ -318,19 +328,24 @@ export default function Home({ navigation }) {
         </View>
 
         <View style={styles.searchContainer}>
-          <TouchableOpacity>
-            <MaterialIcons
-              name="search"
-              size={35}
-              color="white"
-              style={{ marginRight: 8 }}
-            />
-          </TouchableOpacity>
+          <MaterialIcons
+            name="search"
+            size={25}
+            color="#143517"
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Pesquisar produtos..."
+            placeholderTextColor="#143517"
+            value={pesquisa}
+            onChangeText={setPesquisa}
+          />
         </View>
 
-        <View>
+        <View style={styles.carouselContainer}>
           <Carousel
-            width={normalize(375)}
+            width={screenWidth}
             height={normalize(200)}
             data={data}
             mode="parallax"
@@ -341,8 +356,9 @@ export default function Home({ navigation }) {
             )}
           />
         </View>
+
         <View style={styles.containerPerfil}>
-          <View style={{ flexDirection: "row" }}>
+          <View style={styles.perfilHeader}>
             <Image
               source={require("../../../assets/img/imgPerfil.png")}
               style={styles.imgPerfil}
@@ -367,10 +383,12 @@ export default function Home({ navigation }) {
             )}
             horizontal
             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.flatListContent}
           />
         </View>
+
         <View style={styles.containerPerfil}>
-          <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+          <View style={styles.perfilHeader}>
             <Image
               source={require("../../../assets/img/seujo.png")}
               style={styles.imgPerfil}
@@ -395,6 +413,7 @@ export default function Home({ navigation }) {
             )}
             horizontal
             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.flatListContent}
           />
         </View>
       </View>
@@ -403,9 +422,13 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: "#fff",
+  },
   container: {
     backgroundColor: "#fff",
-    paddingBottom: normalize(100),
+    paddingBottom: normalize(20),
+    minHeight: screenHeight,
   },
   header: {
     backgroundColor: "#425010",
@@ -427,142 +450,168 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     backgroundColor: "#F2C844",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    marginTop: normalize(20),
-    marginLeft: normalize(20),
-    marginBottom: normalize(5),
-    width: "90%",
-    height: normalize(40),
-    borderRadius: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    margin: normalize(20),
+    height: normalize(45),
+    borderRadius: 25,
+    elevation: 3,
+    paddingHorizontal: 15,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: normalize(16),
+    color: "#143517",
+  },
+  carouselContainer: {
+    height: normalize(200),
+    marginBottom: normalize(10),
   },
   cardOferta: {
     flexDirection: "row",
     backgroundColor: "#425010",
     borderRadius: 20,
-    padding: normalize(10),
+    padding: normalize(15),
     alignItems: "center",
     marginHorizontal: normalize(10),
-    marginVertical: normalize(5),
-    height: "100%",
+    height: "90%",
+    elevation: 4,
   },
   imagemOferta: {
-    width: normalize(170),
-    height: normalize(170),
+    width: normalize(120),
+    height: normalize(120),
     resizeMode: "contain",
-    marginRight: normalize(10),
-    marginBottom: normalize(20),
+  },
+  infoOfertaContainer: {
+    flex: 1,
+    marginLeft: normalize(10),
+  },
+  tituloOferta: {
+    color: "#F7F0CE",
+    fontSize: normalize(30),
+    fontFamily: "MouseMemoirs",
+    marginBottom: normalize(5),
   },
   infoOferta: {
     flex: 1,
     justifyContent: "center",
   },
-  tituloOferta: {
-    color: "#F7F0CE",
-    fontSize: normalize(46),
-    fontFamily: "MouseMemoirs",
-    position: "absolute",
-    marginLeft: screenWidth * 0.37,
-    alignSelf: "flex-start",
-    marginTop: normalize(10),
-  },
-  descricao: {
-    color: "#000",
-    fontSize: normalize(12),
+  descricaoOferta: {
+    color: "#fff",
+    fontSize: normalize(17),
     fontFamily: "PTSans",
+    marginBottom: normalize(5),
   },
   precoOferta: {
-    color: "#fff",
-    fontSize: normalize(40),
+    color: "#F2C844",
+    fontSize: normalize(22),
+    fontWeight: "bold",
     marginVertical: normalize(5),
-    textAlign: "center",
     fontFamily: "PTSans",
   },
   botaoComprar: {
     backgroundColor: "#F2C844",
-    paddingVertical: normalize(4),
-    paddingHorizontal: normalize(12),
+    paddingVertical: normalize(8),
+    paddingHorizontal: normalize(15),
     borderRadius: 15,
-    alignSelf: "flex-end",
-    marginTop: normalize(150),
-    position: "absolute",
+    alignSelf: "flex-start",
+    marginTop: normalize(5),
   },
   textoBotao: {
-    color: "#fff",
+    color: "#425010",
     fontWeight: "bold",
+    fontSize: normalize(16),
+  },
+  containerPerfil: {
+    backgroundColor: "#EFE7C5",
+    marginTop: normalize(20),
+    paddingVertical: normalize(15),
+    minHeight: normalize(300),
+  },
+  perfilHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: normalize(15),
+    paddingHorizontal: normalize(15),
+  },
+  imgPerfil: {
+    width: normalize(45),
+    height: normalize(45),
+    borderRadius: 25,
+    marginRight: normalize(10),
+  },
+  titulo: {
     fontSize: normalize(20),
+    fontFamily: "ABeeZee",
+    fontWeight: "bold",
+    color: "#425010",
+  },
+  flatListContent: {
+    paddingHorizontal: normalize(10),
   },
   card2: {
-    backgroundColor: "#F5F5F5",
-    borderRadius: 10,
-    marginRight: normalize(10),
-    width: normalize(150),
+    backgroundColor: "#FFF",
+    borderRadius: 12,
+    marginHorizontal: normalize(5),
+    width: normalize(160),
     height: normalize(230),
-    justifyContent: "flex-start",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    overflow: "hidden",
   },
   imagem: {
     width: "100%",
-    height: "60%",
-    borderTopRightRadius: 8,
-    borderTopLeftRadius: 8,
-    position: "absolute",
+    height: normalize(120),
     resizeMode: "cover",
   },
+  contentContainer: {
+    padding: normalize(10),
+    flex: 1,
+    justifyContent: "space-between",
+  },
   nome: {
-    marginTop: normalize(160),
     fontFamily: "ABeeZee",
     fontSize: normalize(16),
+    fontWeight: "bold",
+    marginBottom: normalize(5),
+    color: "#333",
+  },
+  descricao: {
+    fontFamily: "PTSans",
+    fontSize: normalize(12),
+    color: "#666",
+    marginBottom: normalize(8),
+    lineHeight: normalize(14),
   },
   preco: {
     color: "#f39c12",
     fontWeight: "bold",
-    marginTop: normalize(7),
-    fontSize: normalize(18),
+    fontSize: normalize(16),
   },
   linha: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "100%",
-    marginTop: normalize(9),
-    marginLeft: normalize(5),
+    marginTop: "auto",
   },
   icones: {
-    position: "absolute",
     flexDirection: "row",
+    alignItems: "center",
+  },
+  iconeContainer: {
+    padding: normalize(5),
+    marginLeft: normalize(5),
   },
   icone: {
     width: normalize(20),
     height: normalize(20),
-    marginTop: normalize(7),
-    marginLeft: normalize(15),
-  },
-  text: {
-    fontSize: normalize(24),
-    color: "#333",
-    fontWeight: "bold",
-  },
-  titulo: {
-    fontSize: normalize(22),
-    fontFamily: "ABeeZee",
-    alignSelf: "flex-start",
-    marginTop: normalize(10),
-    marginLeft: normalize(10),
-  },
-  imgPerfil: {
-    width: normalize(45),
-    height: normalize(45),
-    alignSelf: "flex-start",
-    marginLeft: normalize(10),
-    marginBottom: normalize(10),
-    borderRadius: 50,
-  },
-  containerPerfil: {
-    backgroundColor: "#EFE7C5",
-    textAlign: "left",
-    marginTop: normalize(20),
-    width: "100%",
-    paddingVertical: normalize(20),
-    minHeight: normalize(200),
   },
 });
+
+

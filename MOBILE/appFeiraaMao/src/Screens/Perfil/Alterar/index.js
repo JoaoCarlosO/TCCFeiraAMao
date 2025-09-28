@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,33 +8,98 @@ import {
   ScrollView,
   SafeAreaView,
   TextInput,
+  ImageBackground,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { launchImageLibrary } from "react-native-image-picker";
-import { Ionicons } from '@expo/vector-icons';
-import { ImageBackground } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const SERVER_URL = "http://10.239.20.142/BDTCC";
 
 const Alterar = () => {
   const navigation = useNavigation();
 
-  // Estados unificados para os campos
+  // Adicionando 'id' ao estado inicial para ter a propriedade
   const [formData, setFormData] = useState({
+    id: null, // CORREÇÃO: Adicionando a propriedade 'id'
     nome: "",
     telefone: "",
     email: "",
-    endereco: "",
     senha: "",
     novaSenha: "",
     cpf: "",
     datanasc: "",
   });
 
-  const [fotoPerfil, setFotoPerfil] = useState(
-    require("../../../../assets/img/Ftperfil.jpg")
-  );
+  const [fotoPerfil, setFotoPerfil] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Função genérica para atualizar campos
+  useEffect(() => {
+    (async () => {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permissão",
+          "A permissão para acessar a galeria é necessária."
+        );
+      }
+    })();
+
+    const carregarDados = async () => {
+      try {
+        const usuarioStr = await AsyncStorage.getItem("usuario");
+        if (!usuarioStr) {
+          throw new Error("Usuário não encontrado no armazenamento local.");
+        }
+        const usuario = JSON.parse(usuarioStr);
+        const idDoUsuario = usuario.id;
+
+        if (!idDoUsuario) {
+          throw new Error("ID do usuário não encontrado.");
+        }
+
+        const res = await fetch(
+          `${SERVER_URL}/getPerfil.php?IdCli=${idDoUsuario}`
+        );
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(
+            errorData.error || `Erro de requisição: ${res.status}`
+          );
+        }
+        const data = await res.json();
+
+        setFormData({
+          id: idDoUsuario, // CORREÇÃO: Salvando o ID no estado aqui
+          nome: data.NomeCLi || "",
+          telefone: data.Telefone || "",
+          email: data.Email || "",
+          senha: "",
+          novaSenha: "",
+          cpf: data.CPF || "",
+          datanasc: data.datanasc || "",
+        });
+
+        if (data.Imagem) {
+          setFotoPerfil({ uri: data.Imagem });
+        } else {
+          setFotoPerfil(null);
+        }
+      } catch (error) {
+        console.log("Erro ao carregar perfil:", error);
+        Alert.alert(
+          "Erro",
+          "Não foi possível carregar os dados do perfil: " + error.message
+        );
+      }
+    };
+    carregarDados();
+  }, []);
+
   const handleChange = (field, value) => {
     setFormData({
       ...formData,
@@ -42,7 +107,24 @@ const Alterar = () => {
     });
   };
 
-  // Validação dos campos obrigatórios
+  const escolherFoto = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!result.canceled) {
+        setFotoPerfil({ uri: result.assets[0].uri });
+      }
+    } catch (err) {
+      console.log("Erro ao escolher foto:", err);
+      Alert.alert("Erro", "Não foi possível selecionar a imagem.");
+    }
+  };
+
   const validarCampos = () => {
     if (!formData.nome.trim()) {
       alert("Por favor, informe seu nome completo");
@@ -59,38 +141,59 @@ const Alterar = () => {
     return true;
   };
 
-  // Função para salvar os dados
   const handleSalvar = async () => {
     if (!validarCampos()) return;
 
+    // Adicione um console.log para verificar o valor do ID antes de enviar
+    console.log("ID sendo enviado:", formData.id); 
+
     setIsLoading(true);
-    
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      alert("Seus dados foram atualizados com sucesso!");
-      navigation.goBack();
+      const form = new FormData();
+
+      // Enviando o ID e a senha, agora com o valor correto
+      form.append("id", formData.id);
+      form.append("senha", formData.senha);
+      
+      // O restante dos campos
+      form.append("nome", formData.nome);
+      form.append("telefone", formData.telefone);
+      form.append("email", formData.email);
+      form.append("novaSenha", formData.novaSenha);
+      form.append("cpf", formData.cpf);
+      form.append("datanasc", formData.datanasc);
+
+      if (
+        fotoPerfil &&
+        fotoPerfil.uri &&
+        !/^https?:\/\//i.test(fotoPerfil.uri)
+      ) {
+        const localUri = fotoPerfil.uri;
+        const filename = localUri.split("/").pop();
+        const match = /\.(\w+)$/.exec(filename);
+        const type = match ? `image/${match[1]}` : `image`;
+        form.append("foto", { uri: localUri, name: filename, type });
+      }
+
+      const res = await fetch(`${SERVER_URL}/updatePerfil.php`, {
+        method: "POST",
+        body: form,
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        Alert.alert("Sucesso", "Perfil atualizado com sucesso!");
+        navigation.goBack();
+      } else {
+        Alert.alert("Erro", data.message || "Erro ao atualizar perfil");
+      }
     } catch (error) {
-      alert("Ocorreu um problema ao salvar as alterações");
+      console.log(error);
+      Alert.alert("Erro", "Ocorreu um problema ao salvar as alterações");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Função para escolher foto da galeria
-  const escolherFoto = () => {
-    const options = {
-      mediaType: "photo",
-      quality: 1,
-    };
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log("Usuário cancelou a seleção de imagem");
-      } else if (response.errorCode) {
-        console.log("Erro:", response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        setFotoPerfil({ uri: response.assets[0].uri });
-      }
-    });
   };
 
   return (
@@ -99,15 +202,31 @@ const Alterar = () => {
       style={{ width: "100%", height: "100%", flex: 1 }}
     >
       <SafeAreaView style={styles.container}>
-        {/* Imagem do perfil */}
         <View style={styles.profileImage}>
-          <Image source={fotoPerfil} style={styles.image} resizeMode="cover" />
-          <TouchableOpacity style={styles.sideIconContainer} onPress={escolherFoto}>
+          {fotoPerfil ? (
+            <Image
+              source={fotoPerfil}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          ) : (
+            <View
+              style={[
+                styles.image,
+                { justifyContent: "center", alignItems: "center" },
+              ]}
+            >
+              <Text>+</Text>
+            </View>
+          )}
+          <TouchableOpacity
+            style={styles.sideIconContainer}
+            onPress={escolherFoto}
+          >
             <Ionicons name="camera-outline" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
-        {/* Formulário COMPLETO */}
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
@@ -164,15 +283,6 @@ const Alterar = () => {
               autoCapitalize="none"
             />
 
-            <Text style={styles.textForm}>Endereço</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.endereco}
-              onChangeText={(text) => handleChange("endereco", text)}
-              placeholder="Digite seu endereço completo"
-              placeholderTextColor="#999"
-            />
-
             <Text style={styles.textForm}>Senha atual *</Text>
             <TextInput
               style={styles.input}
@@ -196,10 +306,9 @@ const Alterar = () => {
             />
           </View>
 
-          {/* Botões de ação */}
           <View style={styles.buttonsContainer}>
-            <TouchableOpacity 
-              style={[styles.button, styles.saveButton]} 
+            <TouchableOpacity
+              style={[styles.button, styles.saveButton]}
               onPress={handleSalvar}
               disabled={isLoading}
             >
@@ -208,12 +317,14 @@ const Alterar = () => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={[styles.button, styles.cancelButton]} 
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
               onPress={() => navigation.goBack()}
               disabled={isLoading}
             >
-              <Text style={[styles.buttonText, styles.cancelText]}>Cancelar</Text>
+              <Text style={[styles.buttonText, styles.cancelText]}>
+                Cancelar
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -232,7 +343,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 20,
     paddingHorizontal: 20,
-    height: 320,
   },
   profileImage: {
     width: 150,
@@ -244,7 +354,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 20,
     position: "relative",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   image: {
     width: "100%",
@@ -297,12 +407,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   saveButton: {
-    backgroundColor: '#425010',
+    backgroundColor: "#425010",
   },
   cancelButton: {
     backgroundColor: "#fff",
     borderWidth: 2,
-    borderColor: '#425010',
+    borderColor: "#425010",
   },
   buttonText: {
     fontWeight: "bold",

@@ -100,6 +100,13 @@ export default function PedidosCliente() {
           <Text style={styles.textoCancelar}>Cancelar pedido</Text>
         </TouchableOpacity>
       )}
+
+      <TouchableOpacity
+        style={styles.botaoCancelar}
+        onPress={() => navigation.navigate("Mapa")}
+      >
+        <Text style={styles.textoCancelar}>Rastrear Produto</Text>
+      </TouchableOpacity>
     </View>
   );
 
