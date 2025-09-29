@@ -31,7 +31,6 @@ class Vendedor(db.Model):
     Telefone = db.Column(db.String(20))
     Documento = db.Column(db.String(500))
     Senha = db.Column(db.String(255), nullable=False)
-    vendedor_descricao = db.Column(db.String(255))
     
     # Relacionamentos
     produtos = db.relationship('Produtos', backref='vendedor', lazy=True)
