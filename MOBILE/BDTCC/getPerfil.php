@@ -32,7 +32,7 @@ try {
 
     // Garante que o caminho da imagem está correto.
     if (isset($user['Imagem']) && !empty($user['Imagem'])) {
-        $user['Imagem'] = 'http://10.239.20.142/BDTCC/uploads/imagens/' . $user['Imagem'];
+        $user['Imagem'] = 'http://10.239.0.165/BDTCC/uploads/imagens/' . $user['Imagem'];
     } else {
         $user['Imagem'] = null;
     }

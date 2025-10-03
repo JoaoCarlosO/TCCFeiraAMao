@@ -24,7 +24,7 @@ export default function AreaUsuario({ route }) {
   // Configure the server URL
   const baseUrl =
     Platform.OS === "android"
-      ? "http://10.239.20.142" // Android emulator
+      ? "http://10.239.0.165" // Android emulator
       : "http://localhost"; // iOS emulator
 
   useEffect(() => {
