@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
+  <title>Cadastro</title>
+  <link rel="icon" type="image/png" href="static/imgs/logo.png">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}" />
   <style>
     @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
@@ -14,6 +15,25 @@
 </head>
 
 <body>
+
+    <!-- Container para mensagens flash -->
+  <div class="flash-messages">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message flash-{{ category }}">
+            <div class="flash-content">
+              <span>{{ message }}</span>
+              <button class="flash-close-btn" onclick="this.closest('.flash-message').remove()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+  
   <div class="container">
     <!-- Lado esquerdo -->
     <div class="image-side">
@@ -42,7 +62,7 @@
           <input type="tel" name="telefone" placeholder="Telefone"/>
           <input type="email" name="email" placeholder="Email"/>
           <input type="text" name="endereco" placeholder="Endereço"/>
-          <input type="date" name="nascimento" placeholder="Data de nascimento"/>
+          <input placeholder="Data de nascimento" name="nascimento"/>
           <input type="text" name="cpf" placeholder="CPF"/>
           <input type="password" name="senha" placeholder="Senha"/>
           <button type="submit">Cadastrar</button>

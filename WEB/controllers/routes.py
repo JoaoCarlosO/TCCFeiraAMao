@@ -8,30 +8,32 @@ def init_app(app):
     def home():
         return render_template('home.html')
 
+# CORRETO - sem indentação antes do @app.route
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         if request.method == 'POST':
-            email = request.form['username']
+            email = request.form['username'] 
             senha = request.form['password']
             
-            # Tentar login como cliente
+            # Primeiro tenta login como CLIENTE (todo usuário é cliente)
             cliente = Clientes.query.filter_by(Email=email).first()
             if cliente and check_password_hash(cliente.Senha, senha):
                 session['user_id'] = cliente.IdCli
                 session['user_type'] = 'cliente'
                 session['user_name'] = cliente.NomeCli
-                flash('Login realizado com sucesso!', 'success')
-                return redirect(url_for('homeCli'))
-            
-            # Tentar login como vendedor
-            vendedor = Vendedor.query.filter_by(Email=email).first()
-            if vendedor and check_password_hash(vendedor.Senha, senha):
-                session['user_id'] = vendedor.IdVend
-                session['user_type'] = 'vendedor'
-                session['user_name'] = vendedor.Nome
-                flash('Login como vendedor realizado!', 'success')
-                return redirect(url_for('homeVend'))
-            
+                
+                # Verifica se este cliente também é vendedor
+                vendedor = Vendedor.query.filter_by(Email=email).first()
+                if vendedor:
+                    session['user_type'] = 'vendedor'
+                    session['vendedor_id'] = vendedor.IdVend
+                    flash('Login como vendedor realizado!', 'success')
+                    return redirect(url_for('homeVend'))
+                else:
+                    flash('Login realizado com sucesso!', 'success')
+                    return redirect(url_for('homeCli'))
+                
+            # Se não encontrou como cliente, retorna erro
             flash('Email ou senha incorretos.', 'error')
             return redirect(url_for('login'))
 
@@ -64,8 +66,9 @@ def init_app(app):
                 return render_template('cadastro.html')
 
             try:
+                from datetime import datetime
                 nascimento_date = datetime.strptime(nascimento, '%Y-%m-%d').date()
-            except:
+            except ValueError:
                 flash('Formato de data inválido. Use YYYY-MM-DD', 'error')
                 return render_template('cadastro.html')
 
@@ -90,52 +93,55 @@ def init_app(app):
 
         return render_template('cadastro.html')
 
-    # @app.route('/cadastroVend', methods=['GET', 'POST'])
-    # def cadastroVend():
-    #     if request.method == 'POST':
-    #         nome = request.form.get('nome')
-    #         telefone = request.form.get('telefone')
-    #         email = request.form.get('email')
-    #         cpf_cnpj = request.form.get('cpf_cnpj')
-    #         senha = request.form.get('senha')
-            
-    #         # Verificar se email já existe
-    #         if Vendedor.query.filter_by(Email=email).first():
-    #             flash('Email já cadastrado!', 'error')
-    #             return render_template('homeVend.html')
-            
-    #         if Vendedor.query.filter_by(CPFCNPJ=cpf_cnpj).first():
-    #             flash('CPF/CNPJ já cadastrado!', 'error')
-    #             return render_template('homeVend.html')
-
-    #         novo_vendedor = Vendedor(
-    #             Nome=nome,
-    #             Telefone=telefone,
-    #             Email=email,
-    #             CPFCNPJ=cpf_cnpj,
-    #             Senha=generate_password_hash(senha),
-    #         )
-
-    #         try:
-    #             db.session.add(novo_vendedor)
-    #             db.session.commit()
-                
-    #             # AUTOMATICAMENTE FAZ LOGIN DO VENDEDOR APÓS CADASTRO
-    #             session['user_id'] = novo_vendedor
-    #             session['user_type'] = 'vendedor'
-    #             session['user_name'] = novo_vendedor
-                
-    #             flash('Cadastro de vendedor realizado com sucesso!', 'success')
-    #             return redirect(url_for('homeVend'))  # REDIRECIONA PARA HOME VENDEDOR
-                
-    #         except Exception as e:
-    #             db.session.rollback()
-    #             flash(f'Erro no cadastro: {str(e)}', 'error')
-
-    #     return render_template('cadastroVend.html')
-    
     @app.route('/cadastroVend', methods=['GET', 'POST'])
     def cadastroVend():
+        # Verifica se o usuário está logado como cliente
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            flash('Faça login como cliente primeiro para se tornar vendedor.', 'error')
+            return redirect(url_for('login'))
+        
+        if request.method == 'POST':
+            # Pega os dados do formulário de vendedor
+            barraca = request.form.get('barraca')
+            cpf_cnpj = request.form.get('cpf_cnpj')
+            documento = request.form.get('documento')
+            descricao = request.form.get('descricao')
+            
+            # Busca o cliente logado
+            cliente = Clientes.query.get(session['user_id'])
+            
+            # Verifica se já é vendedor
+            vendedor_existente = Vendedor.query.filter_by(Email=cliente.Email).first()
+            if vendedor_existente:
+                flash('Você já é um vendedor cadastrado!', 'info')
+                return redirect(url_for('homeVend'))
+            
+            # Cria novo vendedor
+            novo_vendedor = Vendedor(
+                Nome=cliente.NomeCli,
+                Barraca=barraca,
+                Email=cliente.Email,
+                CPFCNPJ=cpf_cnpj,
+                Telefone=cliente.Telefone,
+                Documento=documento,
+                Senha=cliente.Senha,  # Usa a mesma senha do cliente
+                vendedor_descricao=descricao
+            )
+            
+            try:
+                db.session.add(novo_vendedor)
+                db.session.commit()
+                
+                # Atualiza a sessão para vendedor
+                session['user_type'] = 'vendedor'
+                session['vendedor_id'] = novo_vendedor.IdVend
+                
+                flash('Cadastro como vendedor realizado com sucesso!', 'success')
+                return redirect(url_for('homeVend'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro no cadastro: {str(e)}', 'error')
+        
         return render_template('cadastroVend.html')
 
     @app.route('/perfilCli', methods=['GET', 'POST'])
