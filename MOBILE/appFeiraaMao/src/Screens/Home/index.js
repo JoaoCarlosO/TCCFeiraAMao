@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
   },
   cardOferta: {
     flexDirection: "row",
-    backgroundColor: "#425010",
+    backgroundColor: "#c5d882ff",
     borderRadius: 20,
     padding: normalize(15),
     alignItems: "center",
@@ -491,7 +491,7 @@ const styles = StyleSheet.create({
   },
   tituloOferta: {
     color: "#F7F0CE",
-    fontSize: normalize(30),
+    fontSize: normalize(40),
     fontFamily: "MouseMemoirs",
     marginBottom: normalize(5),
   },
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
     marginBottom: normalize(5),
   },
   precoOferta: {
-    color: "#F2C844",
+    color: "#ffeaa6ff",
     fontSize: normalize(22),
     fontWeight: "bold",
     marginVertical: normalize(5),

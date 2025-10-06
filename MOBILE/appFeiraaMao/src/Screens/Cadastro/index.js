@@ -19,7 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // 👉 se for rodar no CELULAR FÍSICO, troque pelo IP da sua máquina (ex: http://192.168.1.10)
 const baseUrl =
   Platform.OS === "android"
-    ? "http://10.239.20.142" // emulador Android Studio
+    ? "http://10.239.0.165" // emulador Android Studio
     : "http://localhost"; // emulador iOS
 
 const Cadastro = () => {

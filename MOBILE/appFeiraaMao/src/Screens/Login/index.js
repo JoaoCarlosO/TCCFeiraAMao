@@ -19,7 +19,7 @@ export default function Login({ navigation }) {
 
   async function validaLogin() {
     try {
-      const response = await fetch("http://10.239.20.142/BDTCC/Login.php", {
+      const response = await fetch("http://10.239.0.165/BDTCC/Login.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,24 +60,26 @@ export default function Login({ navigation }) {
   }
 
   return (
+
     <ImageBackground
       source={require("../../../assets/img/fundo1.png")}
       style={styles.imgBg}
     >
-      <KeyboardAvoidingView
-        style={styles.background}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
       >
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
+        <KeyboardAvoidingView
+          style={styles.background}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
+
           <View style={{ marginRight: 10, marginBottom: 45 }}>
             <Text style={styles.Titulo}>Bem-vindo de volta!</Text>
             <Text style={styles.subTitulo}>Faça seu login ou cadastre-se</Text>
           </View>
           <View style={styles.areaForm}>
-            <Text style={styles.textForm}>Digite o seu email</Text>
+            <Text style={[styles.textForm, { marginTop: 80 }]}>Digite o seu email</Text>
             <TextInput
               style={styles.input}
               placeholder="manoel.ferreira31@gmail.com"
@@ -99,9 +101,11 @@ export default function Login({ navigation }) {
               <Text style={styles.link}>Não possui conta? Cadastre-se</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+
+        </KeyboardAvoidingView>
+      </ScrollView>
     </ImageBackground>
+
   );
 }
 
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    height: "auto",
+    height: "100%",
   },
 
   container: {
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
   },
 
   areaForm: {
-    backgroundColor: "#425010",
+    backgroundColor: "#425010ff",
     width: 309,
     height: 450,
     borderRadius: 19,
@@ -148,8 +152,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: "MontserratAlternates-Regular",
     color: "#f5f5f5",
-    textAlign: "right",
-    marginTop: 50,
   },
 
   formulario: {
@@ -170,6 +172,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     opacity: 0.7,
     color: "#000",
+    marginBottom: 20
   },
 
   viewBotao: {
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     padding: 10,
     alignItems: "center",
-    marginTop: 75,
+    marginTop: 50,
     opacity: 0.7,
   },
   textoBotao: {
@@ -204,6 +207,6 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratAlternates-Regular",
     color: "#f5f5f5",
     textAlign: "right",
-    marginTop: 90,
+    marginTop: 20,
   },
 });
