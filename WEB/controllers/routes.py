@@ -67,9 +67,9 @@ def init_app(app):
 
             try:
                 from datetime import datetime
-                nascimento_date = datetime.strptime(nascimento, '%Y-%m-%d').date()
+                nascimento_date = datetime.strptime(nascimento, '%d/%m/%Y').date()
             except ValueError:
-                flash('Formato de data inválido. Use YYYY-MM-DD', 'error')
+                flash('Formato de data inválido. Use DD/MM/YYYY', 'error')
                 return render_template('cadastro.html')
 
             novo_cliente = Clientes(

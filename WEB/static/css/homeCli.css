@@ -119,7 +119,7 @@ header nav a:hover {
 }
 
 .oferta-card {
-  background-color: #4f6420;
+  background-color: #C8D69B;
   border-radius: 20px;
   padding: 40px 30px;
   color: #fff;
@@ -151,6 +151,7 @@ header nav a:hover {
   margin-bottom: 10px;
   letter-spacing: 3px;
   line-height: 1;
+  color: #425010;
 }
 
 .oferta-desc {
@@ -158,17 +159,18 @@ header nav a:hover {
   margin-bottom: 15px;
   font-family: 'PT Sans', sans-serif;
   opacity: 0.9;
+  color: #425010;
 }
 
 .oferta-preco {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 20px;
-  color: #f6c63f;
+  color: #412d00;
 }
 
 .btn-comprar {
-  background-color: #f6c63f;
+  background-color: #f5be29;
   border: none;
   padding: 12px 30px;
   border-radius: 25px;
@@ -182,7 +184,7 @@ header nav a:hover {
 }
 
 .btn-comprar:hover {
-  background-color: #ffd95a;
+  background-color: #ffd54c;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(246, 198, 63, 0.3);
 }
@@ -206,7 +208,7 @@ header nav a:hover {
 }
 
 .nome-vendedor {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #4f6420;
 }
@@ -272,7 +274,7 @@ header nav a:hover {
 }
 
 .produto-nome {
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 8px 0;
   color: #333;
@@ -280,7 +282,7 @@ header nav a:hover {
 }
 
 .produto-preco {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: #4f6420;
   margin: 0 0 12px 0;
@@ -294,8 +296,7 @@ header nav a:hover {
 
 .produto-acoes span {
   cursor: pointer;
-  font-size: 1.3rem;
-  padding: 5px;
+  font-size: 1.7rem;
   transition: all 0.2s ease;
   border-radius: 50%;
 }
