@@ -290,13 +290,12 @@ header nav a:hover {
 
 .produto-acoes {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-left: 70%;
 }
 
 .produto-acoes span {
   cursor: pointer;
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   transition: all 0.2s ease;
   border-radius: 50%;
 }

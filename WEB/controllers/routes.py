@@ -4,18 +4,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 def init_app(app):
+    # ========== ROTAS PÚBLICAS ==========
     @app.route('/')
     def home():
         return render_template('home.html')
 
-# CORRETO - sem indentação antes do @app.route
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         if request.method == 'POST':
             email = request.form['username'] 
             senha = request.form['password']
             
-            # Primeiro tenta login como CLIENTE (todo usuário é cliente)
+            # Primeiro tenta login como CLIENTE
             cliente = Clientes.query.filter_by(Email=email).first()
             if cliente and check_password_hash(cliente.Senha, senha):
                 session['user_id'] = cliente.IdCli
@@ -33,7 +33,6 @@ def init_app(app):
                     flash('Login realizado com sucesso!', 'success')
                     return redirect(url_for('homeCli'))
                 
-            # Se não encontrou como cliente, retorna erro
             flash('Email ou senha incorretos.', 'error')
             return redirect(url_for('login'))
 
@@ -66,7 +65,6 @@ def init_app(app):
                 return render_template('cadastro.html')
 
             try:
-                from datetime import datetime
                 nascimento_date = datetime.strptime(nascimento, '%d/%m/%Y').date()
             except ValueError:
                 flash('Formato de data inválido. Use DD/MM/YYYY', 'error')
@@ -85,76 +83,67 @@ def init_app(app):
             try:
                 db.session.add(novo_cliente)
                 db.session.commit()
-                flash('Cadastro realizado com sucesso! Faça login.', 'success')
-                return redirect(url_for('login'))
+                flash('Cadastro realizado com sucesso!', 'success')
+                return redirect(url_for('homeCli'))
             except Exception as e:
                 db.session.rollback()
                 flash(f'Erro no cadastro: {str(e)}', 'error')
 
         return render_template('cadastro.html')
 
-    @app.route('/cadastroVend', methods=['GET', 'POST'])
-    def cadastroVend():
-        # Verifica se o usuário está logado como cliente
+    @app.route('/sobre')
+    def sobre():
+        return render_template('sobre.html')
+
+    @app.route('/suporte', methods=['GET', 'POST'])
+    def suporte():
+        if request.method == 'POST':
+            nome = request.form.get('nome')
+            email = request.form.get('email')
+            mensagem = request.form.get('mensagem')
+
+            if not nome or not email or not mensagem:
+                flash('Por favor, preencha todos os campos.', 'danger')
+            else:
+                nova_msg = MensagemSuporte(
+                    nome=nome, 
+                    email=email, 
+                    mensagem=mensagem
+                )
+                try:
+                    db.session.add(nova_msg)
+                    db.session.commit()
+                    flash('Mensagem enviada com sucesso! Obrigado pelo contato.', 'success')
+                    return redirect(url_for('suporte'))
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f'Erro ao enviar mensagem: {str(e)}', 'error')
+
+        return render_template('suporte.html')
+
+    # ========== ROTAS DO CLIENTE ==========
+    @app.route('/homeCli')
+    def homeCli():
         if 'user_id' not in session or session['user_type'] != 'cliente':
-            flash('Faça login como cliente primeiro para se tornar vendedor.', 'error')
             return redirect(url_for('login'))
         
-        if request.method == 'POST':
-            # Pega os dados do formulário de vendedor
-            barraca = request.form.get('barraca')
-            cpf_cnpj = request.form.get('cpf_cnpj')
-            documento = request.form.get('documento')
-            descricao = request.form.get('descricao')
-            
-            # Busca o cliente logado
-            cliente = Clientes.query.get(session['user_id'])
-            
-            # Verifica se já é vendedor
-            vendedor_existente = Vendedor.query.filter_by(Email=cliente.Email).first()
-            if vendedor_existente:
-                flash('Você já é um vendedor cadastrado!', 'info')
-                return redirect(url_for('homeVend'))
-            
-            # Cria novo vendedor
-            novo_vendedor = Vendedor(
-                Nome=cliente.NomeCli,
-                Barraca=barraca,
-                Email=cliente.Email,
-                CPFCNPJ=cpf_cnpj,
-                Telefone=cliente.Telefone,
-                Documento=documento,
-                Senha=cliente.Senha,  # Usa a mesma senha do cliente
-                vendedor_descricao=descricao
-            )
-            
-            try:
-                db.session.add(novo_vendedor)
-                db.session.commit()
-                
-                # Atualiza a sessão para vendedor
-                session['user_type'] = 'vendedor'
-                session['vendedor_id'] = novo_vendedor.IdVend
-                
-                flash('Cadastro como vendedor realizado com sucesso!', 'success')
-                return redirect(url_for('homeVend'))
-            except Exception as e:
-                db.session.rollback()
-                flash(f'Erro no cadastro: {str(e)}', 'error')
+        # Buscar produtos e vendedores do banco
+        produtos = Produtos.query.limit(8).all()
+        vendedores = Vendedor.query.limit(6).all()
         
-        return render_template('cadastroVend.html')
+        return render_template("homeCli.html", produtos=produtos, vendedores=vendedores)
 
     @app.route('/perfilCli', methods=['GET', 'POST'])
     def perfilCli():
         if 'user_id' not in session or session['user_type'] != 'cliente':
             flash('Faça login para acessar esta página.', 'error')
-            return redirect(url_for('homeVend'))
+            return redirect(url_for('login'))
         
         cliente = Clientes.query.get(session['user_id'])
         
         if not cliente:
             flash('Cliente não encontrado.', 'error')
-            return redirect(url_for('homeVend'))
+            return redirect(url_for('login'))
 
         if request.method == 'POST':
             cliente.NomeCli = request.form.get('nome', cliente.NomeCli)
@@ -163,11 +152,10 @@ def init_app(app):
             cliente.Email = request.form.get('email', cliente.Email)
             cliente.Telefone = request.form.get('telefone', cliente.Telefone)
             
-            # Atualizar data de nascimento se fornecida
             nascimento = request.form.get('nascimento')
             if nascimento:
                 try:
-                    cliente.datanasc = datetime.strptime(nascimento, '%Y-%m-%d').date()
+                    cliente.datanasc = datetime.strptime(nascimento, '%d-%m-%Y').date()
                 except:
                     flash('Formato de data inválido.', 'error')
             
@@ -185,13 +173,241 @@ def init_app(app):
 
         return render_template('perfilCli.html', cliente=cliente)
 
+    @app.route('/cadastroVend', methods=['GET', 'POST'])
+    def cadastroVend():
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            flash('Faça login como cliente primeiro para se tornar vendedor.', 'error')
+            return redirect(url_for('login'))
+        
+        if request.method == 'POST':
+            barraca = request.form.get('barraca')
+            cpf_cnpj = request.form.get('cpf_cnpj')
+            documento = request.form.get('documento')
+            descricao = request.form.get('descricao')
+            
+            cliente = Clientes.query.get(session['user_id'])
+            
+            vendedor_existente = Vendedor.query.filter_by(Email=cliente.Email).first()
+            if vendedor_existente:
+                flash('Você já é um vendedor cadastrado!', 'info')
+                return redirect(url_for('homeVend'))
+            
+            novo_vendedor = Vendedor(
+                Nome=cliente.NomeCli,
+                Barraca=barraca,
+                Email=cliente.Email,
+                CPFCNPJ=cpf_cnpj,
+                Telefone=cliente.Telefone,
+                Documento=documento,
+                Senha=cliente.Senha,
+                vendedor_descricao=descricao
+            )
+            
+            try:
+                db.session.add(novo_vendedor)
+                db.session.commit()
+                
+                session['user_type'] = 'vendedor'
+                session['vendedor_id'] = novo_vendedor.IdVend
+                
+                flash('Cadastro como vendedor realizado com sucesso!', 'success')
+                return redirect(url_for('homeVend'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro no cadastro: {str(e)}', 'error')
+        
+        return render_template('cadastroVend.html')
+
+    @app.route('/vendedor/<int:vendedor_id>')
+    def vendedor(vendedor_id):  # MUDAR O NOME DA FUNÇÃO
+            try:
+                vendedor = Vendedor.query.get_or_404(vendedor_id)
+                produtos = Produtos.query.filter_by(IdVend=vendedor_id).all()
+                return render_template('vendedor.html', vendedor=vendedor, produtos=produtos)
+            except Exception as e:
+                flash(f'Erro ao carregar perfil do vendedor: {str(e)}', 'error')
+                return redirect(url_for('homeCli'))
+
+    @app.route('/produto/<int:produto_id>')
+    def detalhes_produto(produto_id):
+        try:
+            produto = Produtos.query.get_or_404(produto_id)
+            vendedor = Vendedor.query.get(produto.IdVend)
+            return render_template('produto.html', produto=produto, vendedor=vendedor)
+        except Exception as e:
+            flash(f'Erro ao carregar produto: {str(e)}', 'error')
+            return redirect(url_for('homeCli'))
+
+    @app.route('/adicionar_carrinho/<int:produto_id>', methods=['POST'])
+    def adicionar_carrinho(produto_id):
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            flash('Faça login para adicionar produtos ao carrinho.', 'error')
+            return redirect(url_for('login'))
+        
+        quantidade = int(request.form.get('quantidade', 1))
+        produto = Produtos.query.get_or_404(produto_id)
+        
+        if produto.Estoque and produto.Estoque < quantidade:
+            flash('Quantidade indisponível em estoque.', 'error')
+            return redirect(url_for('detalhes_produto', produto_id=produto_id))
+        
+        item_carrinho = Carrinho.query.filter_by(IdCli=session['user_id'], IdPro=produto_id).first()
+        
+        if item_carrinho:
+            item_carrinho.Quantidade += quantidade
+        else:
+            novo_item = Carrinho(
+                IdCli=session['user_id'],
+                IdPro=produto_id,
+                Quantidade=quantidade
+            )
+            db.session.add(novo_item)
+        
+        try:
+            db.session.commit()
+            flash('Produto adicionado ao carrinho!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao adicionar ao carrinho: {str(e)}', 'error')
+        
+        return redirect(url_for('detalhes_produto', produto_id=produto_id))
+
+    @app.route("/carrinhoCli")
+    def carrinhoCli():
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            return redirect(url_for('login'))
+        
+        itens_carrinho = Carrinho.query.filter_by(IdCli=session['user_id']).all()
+        carrinho_data = []
+        total = 0
+        
+        for item in itens_carrinho:
+            produto = Produtos.query.get(item.IdPro)
+            if produto:
+                subtotal = float(produto.Preco) * item.Quantidade
+                total += subtotal
+                carrinho_data.append({
+                    "id": item.IdCarrinho,
+                    "produto_id": produto.IdPro,
+                    "nome": produto.Nome,
+                    "preco": float(produto.Preco),
+                    "quantidade": item.Quantidade,
+                    "img": produto.Imagem or 'imgs/produto1.png',
+                    "subtotal": subtotal
+                })
+        
+        return render_template("carrinhoCli.html", carrinhoCli=carrinho_data, total=total)
+
+    @app.route('/atualizar_carrinho/<int:item_id>', methods=['POST'])
+    def atualizar_carrinho(item_id):
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            return redirect(url_for('login'))
+        
+        item = Carrinho.query.get_or_404(item_id)
+        
+        if item.IdCli != session['user_id']:
+            flash('Acesso negado.', 'error')
+            return redirect(url_for('carrinhoCli'))
+        
+        nova_quantidade = int(request.form.get('quantidade', 1))
+        produto = Produtos.query.get(item.IdPro)
+        
+        if produto.Estoque and produto.Estoque < nova_quantidade:
+            flash('Quantidade indisponível em estoque.', 'error')
+            return redirect(url_for('carrinhoCli'))
+        
+        item.Quantidade = nova_quantidade
+        
+        try:
+            db.session.commit()
+            flash('Carrinho atualizado!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao atualizar carrinho: {str(e)}', 'error')
+        
+        return redirect(url_for('carrinhoCli'))
+
+    @app.route('/remover_carrinho/<int:item_id>', methods=['POST'])
+    def remover_carrinho(item_id):
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            return redirect(url_for('login'))
+        
+        item = Carrinho.query.get_or_404(item_id)
+        
+        if item.IdCli != session['user_id']:
+            flash('Acesso negado.', 'error')
+            return redirect(url_for('carrinhoCli'))
+        
+        try:
+            db.session.delete(item)
+            db.session.commit()
+            flash('Produto removido do carrinho!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao remover produto: {str(e)}', 'error')
+        
+        return redirect(url_for('carrinhoCli'))
+
+    @app.route("/notificacoesCli")
+    def notificacoesCli():
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            return redirect(url_for('login'))
+        
+        notificacoes = Notificacao.query.filter_by(IdCli=session['user_id']).order_by(Notificacao.DataEnvio.desc()).all()
+        return render_template("notificacoesCli.html", notificacoesCli=notificacoes)
+
+    @app.route("/encomendasCli")
+    def encomendasCli():
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            return redirect(url_for('login'))
+        
+        encomendas_ativas = Encomendas.query.filter_by(IdCli=session['user_id']).filter(Encomendas.Status.in_(['pendente', 'processando'])).all()
+        encomendas_finalizadas = Encomendas.query.filter_by(IdCli=session['user_id']).filter(Encomendas.Status.in_(['entregue', 'cancelado'])).all()
+        
+        return render_template("encomendasCli.html", 
+                             encomendas_ativas=encomendas_ativas, 
+                             encomendas_finalizadas=encomendas_finalizadas)
+
+    @app.route('/sobreCli')
+    def sobreCli():
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            return redirect(url_for('login'))
+        return render_template('sobreCli.html')
+
+    # ========== ROTAS DO VENDEDOR ==========
+    @app.route('/homeVend', methods=['GET', 'POST'])
+    def homeVend():
+        if 'user_id' not in session or session['user_type'] != 'vendedor':
+            return redirect(url_for('login'))
+
+        search_query = request.form.get('search', '').strip()
+        vendedor = Vendedor.query.get(session['vendedor_id'])
+
+        if search_query:
+            produtos = Produtos.query.filter(
+                Produtos.Nome.ilike(f"%{search_query}%"),
+                Produtos.IdVend == session['vendedor_id']
+            ).all()
+        else:
+            produtos = Produtos.query.filter_by(IdVend=session['vendedor_id']).all()
+
+        total_produtos = len(produtos)
+        produtos_estoque_baixo = [p for p in produtos if p.Estoque and p.Estoque < 10]
+
+        return render_template('homeVend.html',
+                            vendedor=vendedor,
+                            produtos=produtos,
+                            total_produtos=total_produtos,
+                            estoque_baixo=len(produtos_estoque_baixo),
+                            search_query=search_query)
+
     @app.route('/perfilVend', methods=['GET', 'POST'])
     def perfilVend():
         if 'user_id' not in session or session['user_type'] != 'vendedor':
             flash('Faça login como vendedor para acessar esta página.', 'error')
             return redirect(url_for('login'))
         
-        vendedor = Vendedor.query.get(session['user_id'])
+        vendedor = Vendedor.query.get(session['vendedor_id'])
         
         if not vendedor:
             flash('Vendedor não encontrado.', 'error')
@@ -220,262 +436,184 @@ def init_app(app):
 
         return render_template('perfilVend.html', vendedor=vendedor)
 
-    @app.route('/homeCli')
-    def homeCli():
-        if 'user_id' not in session or session['user_type'] != 'cliente':
-            return redirect(url_for('login'))
-        
-         # Dados de exemplo para testar o carrossel
-        ofertas = [
-            {'img': 'imgs/boloderoda.png', 'nome': 'Produto Oferta 1', 'preco': '29,90'},
-            {'img': 'imgs/produto2.jpg', 'nome': 'Produto Oferta 2', 'preco': '39,90'},
-            {'img': 'imgs/produto3.jpg', 'nome': 'Produto Oferta 3', 'preco': '19,90'}
-        ]
-        
-        # Buscar produtos em destaque
-        produtos = Produtos.query.limit(8).all()
-        
-        # Buscar vendedores
-        vendedores = Vendedor.query.limit(6).all()
-        
-        return render_template("homeCli.html", produtos=produtos, vendedores=vendedores)
-
-    @app.route('/homeVend', methods=['GET', 'POST'])
-    def homeVend():
-        if 'user_id' not in session or session['user_type'] != 'vendedor':
-            return redirect(url_for('login'))
-
-        search_query = request.form.get('search', '').strip()
-
-        vendedor = Vendedor.query.get(session['user_id'])
-
-        if search_query:
-            produtos = Produtos.query.filter(
-                Produtos.Nome.ilike(f"%{search_query}%"),
-                Produtos.IdVend == session['user_id']
-            ).all()
-        else:
-            produtos = Produtos.query.filter_by(IdVend=session['user_id']).all()
-
-        total_produtos = len(produtos)
-        produtos_estoque_baixo = [p for p in produtos if p.Estoque and p.Estoque < 10]
-
-        return render_template('homeVend.html',
-                            vendedor=vendedor,
-                            produtos=produtos,
-                            total_produtos=total_produtos,
-                            estoque_baixo=len(produtos_estoque_baixo),
-                            search_query=search_query)
-
-    @app.route('/vendedor/<int:vendedor_id>')
-    def detalhes_vendedor(vendedor_id):
-        try:
-            vendedor = Vendedor.query.get_or_404(vendedor_id)
-            produtos = Produtos.query.filter_by(IdVend=vendedor_id).all()
-            return render_template('vendedor.html', vendedor=vendedor, produtos=produtos)
-        except Exception as e:
-            flash(f'Erro ao carregar perfil do vendedor: {str(e)}', 'error')
-            return redirect(url_for('homeCli'))
-
-    @app.route('/produto/<int:produto_id>')
-    def detalhes_produto(produto_id):
-        try:
-            produto = Produtos.query.get_or_404(produto_id)
-            vendedor = Vendedor.query.get(produto.IdVend)
-            return render_template('produto.html', produto=produto, vendedor=vendedor)
-        except Exception as e:
-            flash(f'Erro ao carregar produto: {str(e)}', 'error')
-            return redirect(url_for('homeCli'))
-
-    @app.route('/adicionar_carrinho/<int:produto_id>', methods=['POST'])
-    def adicionar_carrinho(produto_id):
-        if 'user_id' not in session or session['user_type'] != 'cliente':
-            flash('Faça login para adicionar produtos ao carrinho.', 'error')
-            return redirect(url_for('login'))
-        
-        quantidade = int(request.form.get('quantidade', 1))
-        produto = Produtos.query.get_or_404(produto_id)
-        
-        # Verificar estoque
-        if produto.Estoque and produto.Estoque < quantidade:
-            flash('Quantidade indisponível em estoque.', 'error')
-            return redirect(url_for('detalhes_produto', produto_id=produto_id))
-        
-        # Verificar se produto já está no carrinho
-        item_carrinho = Carrinho.query.filter_by(IdCli=session['user_id'], IdPro=produto_id).first()
-        
-        if item_carrinho:
-            item_carrinho.Quantidade += quantidade
-        else:
-            novo_item = Carrinho(
-                IdCli=session['user_id'],
-                IdPro=produto_id,
-                Quantidade=quantidade
-            )
-            db.session.add(novo_item)
-        
-        try:
-            db.session.commit()
-            flash('Produto adicionado ao carrinho!', 'success')
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Erro ao adicionar ao carrinho: {str(e)}', 'error')
-        
-        return redirect(url_for('detalhes_produto', produto_id=produto_id))
-
-    @app.route("/carrinhoCli")
-    def carrinhoCli():
-        carrinhoCli = [
-            {"id": 1, "nome": "Bolo de Roda", "preco": 12.00, "quantidade": 1, "img": "imgs/produto1.png"},
-            {"id": 2, "nome": "Pão Caseiro", "preco": 10.00, "quantidade": 2, "img": "imgs/produto2.png"},
-        ]
-        total = sum(p["preco"] * p["quantidade"] for p in carrinhoCli)
-        return render_template("carrinhoCli.html", carrinhoCli=carrinhoCli, total=total)
-
-
-    @app.route('/remover_carrinho/<int:item_id>', methods=['POST'])
-    def remover_carrinho(item_id):
-        if 'user_id' not in session or session['user_type'] != 'cliente':
-            return redirect(url_for('login'))
-        
-        item = Carrinho.query.get_or_404(item_id)
-        
-        # Verificar se o item pertence ao usuário
-        if item.IdCli != session['user_id']:
-            flash('Acesso negado.', 'error')
-            return redirect(url_for('carrinhoCli'))
-        
-        try:
-            db.session.delete(item)
-            db.session.commit()
-            flash('Produto removido do carrinho!', 'success')
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Erro ao remover produto: {str(e)}', 'error')
-        
-        return redirect(url_for('carrinhoCli'))
-
     @app.route('/estoque')
     def estoque():
         if 'user_id' not in session or session['user_type'] != 'vendedor':
             return redirect(url_for('login'))
         
-        produtos = Produtos.query.filter_by(IdVend=session['user_id']).all()
+        produtos = Produtos.query.filter_by(IdVend=session['vendedor_id']).all()
         return render_template('estoque.html', produtos=produtos)
 
-    # ==============================
-    # ROTAS DE SUPORTE (APENAS UMA VEZ)
-    # ==============================
-    @app.route('/suporte', methods=['GET', 'POST'])
-    def suporte():
+    @app.route('/adicionar_produto', methods=['GET', 'POST'])
+    def adicionar_produto():
+        if 'user_id' not in session or session['user_type'] != 'vendedor':
+            return redirect(url_for('login'))
+        
         if request.method == 'POST':
             nome = request.form.get('nome')
-            email = request.form.get('email')
-            mensagem = request.form.get('mensagem')
+            preco = request.form.get('preco')
+            estoque = request.form.get('estoque')
+            categoria = request.form.get('categoria')
+            descricao = request.form.get('descricao')
+            peso_quant = request.form.get('peso_quant')
+            imagem = request.form.get('imagem')
 
-            if not nome or not email or not mensagem:
-                flash('Por favor, preencha todos os campos.', 'danger')
-            else:
-                nova_msg = MensagemSuporte(
-                    nome=nome, 
-                    email=email, 
-                    mensagem=mensagem
-                )
-                try:
-                    db.session.add(nova_msg)
-                    db.session.commit()
-                    flash('Mensagem enviada com sucesso! Obrigado pelo contato.', 'success')
-                    return redirect(url_for('suporte'))
-                except Exception as e:
-                    db.session.rollback()
-                    flash(f'Erro ao enviar mensagem: {str(e)}', 'error')
+            novo_produto = Produtos(
+                Nome=nome,
+                Preco=preco,
+                Estoque=estoque,
+                Cat=categoria,
+                Descricao=descricao,
+                PesoQuant=peso_quant,
+                Imagem=imagem,
+                IdVend=session['vendedor_id']
+            )
 
-        return render_template('suporte.html')
+            try:
+                db.session.add(novo_produto)
+                db.session.commit()
+                flash('Produto adicionado com sucesso!', 'success')
+                return redirect(url_for('estoque'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro ao adicionar produto: {str(e)}', 'error')
 
-    # ==============================
-    # ROTAS BÁSICAS (SEM DUPLICAÇÕES)
-    # ==============================
-    @app.route('/sobre')
-    def sobre():
-        return render_template('sobre.html')
+        return render_template('adicionar_produto.html')
 
-    @app.route('/sobreCli')
-    def sobreCli():
-        return render_template('sobreCli.html')
+    @app.route('/editar_produto/<int:produto_id>', methods=['GET', 'POST'])
+    def editar_produto(produto_id):
+        if 'user_id' not in session or session['user_type'] != 'vendedor':
+            return redirect(url_for('login'))
+        
+        produto = Produtos.query.get_or_404(produto_id)
+        
+        # Verificar se o produto pertence ao vendedor
+        if produto.IdVend != session['vendedor_id']:
+            flash('Acesso negado.', 'error')
+            return redirect(url_for('estoque'))
 
-    @app.route('/sobreVend')
-    def sobreVend():
-        return render_template('sobreVend.html')
+        if request.method == 'POST':
+            produto.Nome = request.form.get('nome', produto.Nome)
+            produto.Preco = request.form.get('preco', produto.Preco)
+            produto.Estoque = request.form.get('estoque', produto.Estoque)
+            produto.Cat = request.form.get('categoria', produto.Cat)
+            produto.Descricao = request.form.get('descricao', produto.Descricao)
+            produto.PesoQuant = request.form.get('peso_quant', produto.PesoQuant)
+            produto.Imagem = request.form.get('imagem', produto.Imagem)
 
-    @app.route("/notificacoesCli")
-    def notificacoesCli():
-        notificacoesCli = [
-            {"titulo": "Pedido confirmado", "mensagem": "Seu pedido foi confirmado com sucesso!", "data": "06/10/2025"},
-            {"titulo": "Pedido entregue", "mensagem": "Sua encomenda foi entregue. Obrigado!", "data": "05/10/2025"},
-        ]
-        return render_template("notificacoesCli.html", notificacoesCli=notificacoesCli)
+            try:
+                db.session.commit()
+                flash('Produto atualizado com sucesso!', 'success')
+                return redirect(url_for('estoque'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro ao atualizar produto: {str(e)}', 'error')
+
+        return render_template('editar_produto.html', produto=produto)
+
+    @app.route('/excluir_produto/<int:produto_id>', methods=['POST'])
+    def excluir_produto(produto_id):
+        if 'user_id' not in session or session['user_type'] != 'vendedor':
+            return redirect(url_for('login'))
+        
+        produto = Produtos.query.get_or_404(produto_id)
+        
+        # Verificar se o produto pertence ao vendedor
+        if produto.IdVend != session['vendedor_id']:
+            flash('Acesso negado.', 'error')
+            return redirect(url_for('estoque'))
+
+        try:
+            # Remover itens do carrinho associados a este produto
+            Carrinho.query.filter_by(IdPro=produto_id).delete()
+            
+            db.session.delete(produto)
+            db.session.commit()
+            flash('Produto excluído com sucesso!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao excluir produto: {str(e)}', 'error')
+        
+        return redirect(url_for('estoque'))
 
     @app.route('/notificacoesVend')
     def notificacoesVend():
         if 'user_id' not in session or session['user_type'] != 'vendedor':
             return redirect(url_for('login'))
         
-        notificacoes = Notificacao.query.filter_by(IdVend=session['user_id']).order_by(Notificacao.DataEnvio.desc()).all()
+        notificacoes = Notificacao.query.filter_by(IdVend=session['vendedor_id']).order_by(Notificacao.DataEnvio.desc()).all()
         return render_template('notificacoesVend.html', notificacoes=notificacoes)
-
-    @app.route("/encomendasCli")
-    def encomendasCli():
-        encomendas_ativas = [
-            {"produto": "Bolo de Roda", "quantidade": 1, "data": "06/10/2025"},
-        ]
-        encomendas_finalizadas = [
-            {"produto": "Tapioca", "quantidade": 3, "data": "03/10/2025"},
-        ]
-        return render_template("encomendasCli.html", encomendas_ativas=encomendas_ativas, encomendas_finalizadas=encomendas_finalizadas)
 
     @app.route('/encomendasVend')
     def encomendasVend():
         if 'user_id' not in session or session['user_type'] != 'vendedor':
             return redirect(url_for('login'))
         
-        encomendas = Encomendas.query.filter_by(IdVend=session['user_id']).all()
+        encomendas = Encomendas.query.filter_by(IdVend=session['vendedor_id']).all()
         return render_template('encomendasVend.html', encomendas=encomendas)
-    
-    @app.route('/vendedor/<int:vendedor_id>')
-    def vendedor(vendedor_id):
-        # Dados pré-estabelecidos dos vendedores
-        vendedores = {
-            1: {
-                'id': 1,
-                'nome': 'Dona Marta',
-                'foto': 'imgs/vendedor1.png',
-                'descricao': 'Vendedora de produtos caseiros há mais de 10 anos',
-                'avaliacao': 4.8,
-                'sobre': 'Especializada em bolos e doces caseiros. Todos os produtos feitos com ingredientes frescos e amor.',
-                'produtos': [
-                    {'nome': 'Bolo de Roda', 'img': 'imgs/boloderoda.png', 'preco': 12.00},
-                    {'nome': 'Pão Caseiro', 'img': 'imgs/paoCaseiro.png', 'preco': 10.00},
-                    {'nome': 'Bala de Banana', 'img': 'imgs/imgCarrossel1.png', 'preco': 12.00},
-                    {'nome': 'Bolo de Fubá', 'img': 'imgs/boloOferta.png', 'preco': 20.00}
-                ]
-            },
-            2: {
-                'id': 2,
-                'nome': 'João Gomes', 
-                'foto': 'imgs/vendedor2.png',
-                'descricao': 'Artesão especializado em palha e madeira',
-                'avaliacao': 4.5,
-                'sobre': 'Criando artesanato sustentável há 5 anos. Todos os produtos feitos manualmente.',
-                'produtos': [
-                    {'nome': 'Bolsa de Palha', 'img': 'imgs/bolsaPalha.png', 'preco': 20.00},
-                    {'nome': 'Coruja de Madeira', 'img': 'imgs/coruja.png', 'preco': 12.99},
-                    {'nome': 'Descanso de Panela', 'img': 'imgs/descansoPanela.png', 'preco': 9.99},
-                    {'nome': 'Bandeja de Sushi', 'img': 'imgs/sushi.png', 'preco': 14.99}
-                ]
-            }
-        }
+
+    @app.route('/sobreVend')
+    def sobreVend():
+        if 'user_id' not in session or session['user_type'] != 'vendedor':
+            return redirect(url_for('login'))
+        return render_template('sobreVend.html')
+
+    # ========== ROTAS DE PEDIDOS E PAGAMENTOS ==========
+    @app.route('/finalizar_pedido', methods=['POST'])
+    def finalizar_pedido():
+        if 'user_id' not in session or session['user_type'] != 'cliente':
+            return redirect(url_for('login'))
         
-        # Buscar o vendedor pelo ID
-        vendedor = vendedores.get(vendedor_id)
+        # Buscar itens do carrinho
+        itens_carrinho = Carrinho.query.filter_by(IdCli=session['user_id']).all()
         
-        return render_template('vendedor.html', vendedor=vendedor)
+        if not itens_carrinho:
+            flash('Carrinho vazio!', 'error')
+            return redirect(url_for('carrinhoCli'))
+        
+        try:
+            # Calcular subtotal
+            subtotal = 0
+            for item in itens_carrinho:
+                produto = Produtos.query.get(item.IdPro)
+                if produto:
+                    subtotal += float(produto.Preco) * item.Quantidade
+            
+            # Criar pedido
+            novo_pedido = Pedidos(
+                IdCli=session['user_id'],
+                DataPed=datetime.now().date(),
+                StatusCli='pendente',
+                Subtotal=subtotal
+            )
+            
+            db.session.add(novo_pedido)
+            db.session.flush()  # Para obter o ID do pedido
+            
+            # Criar pagamento
+            novo_pagamento = Pagamento(
+                IdPed=novo_pedido.IdPed,
+                Metodo=request.form.get('metodo_pagamento', 'cartao'),
+                Valor=subtotal,
+                StatusPag='pendente',
+                DataPag=datetime.now().date()
+            )
+            
+            db.session.add(novo_pagamento)
+            
+            # Limpar carrinho
+            Carrinho.query.filter_by(IdCli=session['user_id']).delete()
+            
+            db.session.commit()
+            flash('Pedido realizado com sucesso!', 'success')
+            return redirect(url_for('encomendasCli'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao finalizar pedido: {str(e)}', 'error')
+            return redirect(url_for('carrinhoCli'))
+
+    # ========== ROTA DE ERRO 404 ==========
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
