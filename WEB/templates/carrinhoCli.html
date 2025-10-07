@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/carrinhoCli.css') }}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <h1><img src="{{ url_for('static', filename='imgs/imgSacola.png') }}" alt="Carrinho" id="imgCarrinho">
+        Carrinho de Compras</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Product Card 1 -->
+        <section class="card card-flex">
+            <div class="card-info">
+                <h3 class="card-title">Bala de Banana 200g</h3>
+                <p class="card-price">R$ 12,00</p>
+                <div class="quantity-controls">
+                    <button class="quantity-btn">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1">
+                    <button class="quantity-btn">+</button>
+                </div>
+            </div>
+            <img src="{{ url_for('static', filename='imgs/produto12.png') }}" alt="Bala de Banana 200g" class="card-image">
+            <button class="btn btn-remove">Remover</button>
+        </section>
+
+        <!-- Product Card 2 -->
+        <section class="card card-flex">
+            <div class="card-info">
+                <h3 class="card-title">Bolsa de Palha</h3>
+                <p class="card-price">R$ 35,00</p>
+                <div class="quantity-controls">
+                    <button class="quantity-btn">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1">
+                    <button class="quantity-btn">+</button>
+                </div>
+            </div>
+            <img src="{{ url_for('static', filename='imgs/bolsaPalha.png') }}" alt="Bolsa de Palha" class="card-image">
+            <button class="btn btn-remove">Remover</button>
+        </section>
+
+        <!-- Product Card 3 -->
+        <section class="card card-flex">
+            <div class="card-info">
+                <h3 class="card-title">Pão Caseiro 1kg</h3>
+                <p class="card-price">R$ 10,00</p>
+                <div class="quantity-controls">
+                    <button class="quantity-btn">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1">
+                    <button class="quantity-btn">+</button>
+                </div>
+            </div>
+            <img src="{{ url_for('static', filename='imgs/paoCaseiro.png') }}" alt="Pão Caseiro 1kg" class="card-image">
+            <button class="btn btn-remove">Remover</button>
+        </section>
+
+        <!-- Total and Finalize Purchase -->
+        <div class="total-container">
+            <p class="total-text">Total: R$ <span id="total">57,00</span></p>
+            <button class="btn btn-primary" id="btn-buy">Comprar</button>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>&copy; 2025 Seu Site | Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // JavaScript to handle quantity change and total calculation
+        const quantityButtons = document.querySelectorAll('.quantity-btn');
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        const totalElement = document.getElementById('total');
+        const prices = [12, 35, 10]; // Prices for the products
+
+        // Function to update total based on quantities
+        function updateTotal() {
+            let total = 0;
+            quantityInputs.forEach((input, index) => {
+                total += parseInt(input.value) * prices[index];
+            });
+            totalElement.textContent = total.toFixed(2);
+        }
+
+        // Event listeners for quantity buttons
+        quantityButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                const input = button.parentNode.querySelector('.quantity-input');
+                let quantity = parseInt(input.value);
+
+                if (button.textContent === '+') {
+                    quantity++;
+                } else if (button.textContent === '-' && quantity > 1) {
+                    quantity--;
+                }
+
+                input.value = quantity;
+                updateTotal();
+            });
+        });
+
+        // Initial total calculation
+        updateTotal();
+    </script>
+</body>
+</html>

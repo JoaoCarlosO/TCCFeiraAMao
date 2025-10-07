@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notificações</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/notificacoesCli.css') }}">
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header class="header">
+    <h1><img src="{{url_for('static', filename='imgs/imgSino.png')}}" id="imgSino">Notificações</h1>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="container">
+
+    <!-- Notificação 1 -->
+    <section class="card notificacao">
+      <div class="notificacao-info">
+        <h3>Nova mensagem do vendedor</h3>
+        <p>O vendedor João postou uma nova oferta.</p>
+      </div>
+      <button class="btn">Ver</button>
+    </section>
+
+    <!-- Notificação 2 -->
+    <section class="card notificacao">
+      <div class="notificacao-info">
+        <h3>Encomenda enviada</h3>
+        <p>Sua encomenda <strong>#12345</strong> foi enviada.</p>
+      </div>
+      <button class="btn">Detalhes</button>
+    </section>
+
+    <!-- Notificação 3 -->
+    <section class="card notificacao">
+      <div class="notificacao-info">
+        <h3>Promoção disponível</h3>
+        <p>Desconto de <strong>20%</strong> em produtos selecionados.</p>
+      </div>
+      <button class="btn">Aproveitar</button>
+    </section>
+
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <p>&copy; 2025 Seu Site | Todos os direitos reservados</p>
+  </footer>
+
+</body>
+</html>

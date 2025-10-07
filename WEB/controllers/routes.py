@@ -323,18 +323,15 @@ def init_app(app):
         
         return redirect(url_for('detalhes_produto', produto_id=produto_id))
 
-    @app.route('/carrinhoCli')
+    @app.route("/carrinhoCli")
     def carrinhoCli():
-        if 'user_id' not in session or session['user_type'] != 'cliente':
-            return redirect(url_for('login'))
-        
-        itens_carrinho = Carrinho.query.filter_by(IdCli=session['user_id']).all()
-        total = 0
-        for item in itens_carrinho:
-            if item.produto:
-                total += float(item.produto.Preco) * item.Quantidade
-        
-        return render_template('carrinhoCli.html', itens=itens_carrinho, total=total)
+        carrinhoCli = [
+            {"id": 1, "nome": "Bolo de Roda", "preco": 12.00, "quantidade": 1, "img": "imgs/produto1.png"},
+            {"id": 2, "nome": "Pão Caseiro", "preco": 10.00, "quantidade": 2, "img": "imgs/produto2.png"},
+        ]
+        total = sum(p["preco"] * p["quantidade"] for p in carrinhoCli)
+        return render_template("carrinhoCli.html", carrinhoCli=carrinhoCli, total=total)
+
 
     @app.route('/remover_carrinho/<int:item_id>', methods=['POST'])
     def remover_carrinho(item_id):
@@ -410,13 +407,13 @@ def init_app(app):
     def sobreVend():
         return render_template('sobreVend.html')
 
-    @app.route('/notificacoesCli')
+    @app.route("/notificacoesCli")
     def notificacoesCli():
-        if 'user_id' not in session or session['user_type'] != 'cliente':
-            return redirect(url_for('login'))
-        
-        notificacoes = Notificacao.query.filter_by(IdCli=session['user_id']).order_by(Notificacao.DataEnvio.desc()).all()
-        return render_template('notificacoesCli.html', notificacoes=notificacoes)
+        notificacoesCli = [
+            {"titulo": "Pedido confirmado", "mensagem": "Seu pedido foi confirmado com sucesso!", "data": "06/10/2025"},
+            {"titulo": "Pedido entregue", "mensagem": "Sua encomenda foi entregue. Obrigado!", "data": "05/10/2025"},
+        ]
+        return render_template("notificacoesCli.html", notificacoesCli=notificacoesCli)
 
     @app.route('/notificacoesVend')
     def notificacoesVend():
@@ -426,13 +423,15 @@ def init_app(app):
         notificacoes = Notificacao.query.filter_by(IdVend=session['user_id']).order_by(Notificacao.DataEnvio.desc()).all()
         return render_template('notificacoesVend.html', notificacoes=notificacoes)
 
-    @app.route('/encomendasCli')
+    @app.route("/encomendasCli")
     def encomendasCli():
-        if 'user_id' not in session or session['user_type'] != 'cliente':
-            return redirect(url_for('login'))
-        
-        encomendas = Encomendas.query.filter_by(IdCli=session['user_id']).all()
-        return render_template('encomendasCli.html', encomendas=encomendas)
+        encomendas_ativas = [
+            {"produto": "Bolo de Roda", "quantidade": 1, "data": "06/10/2025"},
+        ]
+        encomendas_finalizadas = [
+            {"produto": "Tapioca", "quantidade": 3, "data": "03/10/2025"},
+        ]
+        return render_template("encomendasCli.html", encomendas_ativas=encomendas_ativas, encomendas_finalizadas=encomendas_finalizadas)
 
     @app.route('/encomendasVend')
     def encomendasVend():
