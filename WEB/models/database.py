@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -19,6 +20,13 @@ class Clientes(db.Model):
     pedidos = db.relationship('Pedidos', backref='cliente', lazy=True)
     carrinho = db.relationship('Carrinho', backref='cliente', lazy=True)
     notificacoes = db.relationship('Notificacao', backref='cliente', lazy=True)
+    encomendas = db.relationship('Encomendas', backref='cliente', lazy=True)
+
+    def set_password(self, password):
+        self.Senha = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.Senha, password)
 
 class Vendedor(db.Model):
     __tablename__ = 'vendedor'
@@ -38,19 +46,25 @@ class Vendedor(db.Model):
     encomendas = db.relationship('Encomendas', backref='vendedor', lazy=True)
     notificacoes = db.relationship('Notificacao', backref='vendedor', lazy=True)
 
+    def set_password(self, password):
+        self.Senha = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.Senha, password)
+
 class Produtos(db.Model):
     __tablename__ = 'produtos'
     
     IdPro = db.Column(db.Integer, primary_key=True)
     Nome = db.Column(db.String(255), nullable=False)
-    Preco = db.Column(db.Numeric(10, 2))
+    Preco = db.Column(db.Numeric(10, 2), nullable=False)
     Quant = db.Column(db.Integer)
     Cat = db.Column(db.String(260))
-    Estoque = db.Column(db.Integer)
+    Estoque = db.Column(db.Integer, default=0)
     Descricao = db.Column(db.Text)
     PesoQuant = db.Column(db.String(50))
-    IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'))
-    Imagem = db.Column(db.String(500))
+    IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'), nullable=False)
+    Imagem = db.Column(db.String(500), default='imgs/produto-padrao.png')
     
     carrinho_itens = db.relationship('Carrinho', backref='produto', lazy=True)
 
@@ -58,19 +72,19 @@ class Carrinho(db.Model):
     __tablename__ = 'carrinho'
     
     IdCarrinho = db.Column(db.Integer, primary_key=True)
-    IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'))
-    IdPro = db.Column(db.Integer, db.ForeignKey('produtos.IdPro'))
+    IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'), nullable=False)
+    IdPro = db.Column(db.Integer, db.ForeignKey('produtos.IdPro'), nullable=False)
     Quantidade = db.Column(db.Integer, default=1)
 
 class Pedidos(db.Model):
     __tablename__ = 'pedidos'
     
     IdPed = db.Column(db.Integer, primary_key=True)
-    IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'))
-    IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'))
-    DataPed = db.Column(db.Date)
-    StatusCli = db.Column(db.String(200))
-    Subtotal = db.Column(db.Float)
+    IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'), nullable=False)
+    IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'), nullable=False)
+    DataPed = db.Column(db.Date, default=datetime.utcnow)
+    StatusCli = db.Column(db.String(200), default='pendente')
+    Subtotal = db.Column(db.Float, nullable=False)
     
     pagamentos = db.relationship('Pagamento', backref='pedido', lazy=True)
 
@@ -78,20 +92,20 @@ class Pagamento(db.Model):
     __tablename__ = 'pagamento'
     
     IdPag = db.Column(db.Integer, primary_key=True)
-    IdPed = db.Column(db.Integer, db.ForeignKey('pedidos.IdPed'))
-    Metodo = db.Column(db.String(250))
-    Valor = db.Column(db.Float)
-    StatusPag = db.Column(db.String(250))
-    DataPag = db.Column(db.Date)
+    IdPed = db.Column(db.Integer, db.ForeignKey('pedidos.IdPed'), nullable=False)
+    Metodo = db.Column(db.String(250), nullable=False)
+    Valor = db.Column(db.Float, nullable=False)
+    StatusPag = db.Column(db.String(250), default='pendente')
+    DataPag = db.Column(db.Date, default=datetime.utcnow)
 
 class Encomendas(db.Model):
     __tablename__ = 'encomendas'
     
     IdEnc = db.Column(db.Integer, primary_key=True)
     NomeCliente = db.Column(db.String(150), nullable=False)
-    Status = db.Column(db.String(100))
-    IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'))
-    IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'))
+    Status = db.Column(db.String(100), default='pendente')
+    IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'), nullable=False)
+    IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'), nullable=False)
 
 class Notificacao(db.Model):
     __tablename__ = 'notificacao'
@@ -99,8 +113,8 @@ class Notificacao(db.Model):
     IdNot = db.Column(db.Integer, primary_key=True)
     IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'))
     IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'))
-    Mensagem = db.Column(db.Text)
-    Status = db.Column(db.String(100))
+    Mensagem = db.Column(db.Text, nullable=False)
+    Status = db.Column(db.String(100), default='nao_lida')
     DataEnvio = db.Column(db.DateTime, default=datetime.utcnow)
 
 class MensagemSuporte(db.Model):

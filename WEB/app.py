@@ -2,13 +2,13 @@ from flask import Flask
 import pymysql
 from models.database import db
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
 # Configurações
 DB_NAME = 'feiraamao'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://root:@localhost/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'sua-chave-secreta-aqui'  # Nome mais padrão
+app.config['SECRET_KEY'] = 'sua-chave-secreta-feira-na-mao-2024'
 
 # Inicializar o banco primeiro
 db.init_app(app)
@@ -56,8 +56,8 @@ def create_tables():
 def init_routes():
     """Inicializa as rotas do aplicativo"""
     try:
-        from controllers import routes
-        routes.init_app(app)
+        from controllers.routes import init_app
+        init_app(app)
         print("✅ Rotas inicializadas com sucesso!")
     except Exception as e:
         print(f"❌ Erro ao inicializar rotas: {e}")
