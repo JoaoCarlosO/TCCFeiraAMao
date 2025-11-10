@@ -44,7 +44,7 @@
       <img src="{{ url_for('static', filename='imgs/ImgLoginFundo.png') }}" alt="Imagem de frutas"
         class="background-img">
       <div class="curve-shape">
-        <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
+        <a href="{{ url_for('cadastrar_feiras') }}">Cadastre-se</a>
       </div>
       <div class="curve-shape2">
         <a href="{{ url_for('login') }}">Login</a>
@@ -58,8 +58,8 @@
         <form class="login-form" method="POST" action="/login">
           <h2>Bem-Vindo de volta!</h2>
           <p>Faça seu Login</p>
-          <input type="text" name="username" placeholder="Email" required>
-          <input type="password" name="password" placeholder="Senha" required>
+          <input type="email" name="Email" placeholder="Email" required>
+          <input type="password" name="Senha" placeholder="Senha" required>
           <button type="submit">Entrar</button>
         </form>
       </div>

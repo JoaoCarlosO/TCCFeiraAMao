@@ -24,33 +24,22 @@
       opacity: 0.3;
       z-index: -1;
     }
-
-    .success {
-      color: green;
-      font-weight: bold;
-    }
-
-    .error, .danger {
-      color: red;
-      font-weight: bold;
-    }
   </style>
 </head>
 
 <body>
   <!-- NAVBAR -->
-      <div class="navbar-container">
-        <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
-        <nav class="d-flex gap-4 align-items-center">
-        <a href="{{ url_for('sobre') }}" class="text-decoration-none">Sobre</a>
-        <a href="{{ url_for('suporte') }}" class="text-decoration-none">Ajuda</a>
-        <a href="{{ url_for('perfilCli')}}" class="text-decoration-none">Perfil</a>
-        </nav>
-        <a href="{{ url_for('homeCli') }}" class="btn_voltar-navbar">
-        <img src="{{ url_for('static', filename='imgs/botaoVoltar.png') }}" alt="botão voltar" />
-         </a>
-    </div>
-
+  <div class="navbar-container">
+    <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
+    <nav class="d-flex gap-4 align-items-center">
+      <a href="{{ url_for('sobre') }}" class="text-decoration-none">Sobre</a>
+      <a href="{{ url_for('suporte') }}" class="text-decoration-none">Suporte</a>
+      <a href="{{ url_for('login') }}" class="text-decoration-none">Login</a>
+    </nav>
+    <a href="{{ url_for('home') }}" class="btn_voltar-navbar">
+      <img src="{{ url_for('static', filename='imgs/botaoVoltar.png') }}" alt="botão voltar" />
+    </a>
+  </div>
 
   <!-- CONTEÚDO FLEXÍVEL -->
   <div class="d-flex flex-column min-vh-100">
@@ -60,10 +49,13 @@
       <div class="container py-5">
         <h2 class="text-center mb-4">Envie sua sugestão ou reclamação</h2>
 
+        <!-- Mensagens Flash com Bootstrap -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
-              <p class="{{ category }} text-center">{{ message }}</p>
+              <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} text-center">
+                {{ message }}
+              </div>
             {% endfor %}
           {% endif %}
         {% endwith %}
@@ -103,7 +95,8 @@
             <p class="icon"><img src="{{ url_for('static', filename='imgs/email_icone.png') }}" id="imgsFooter" />Email: feiraamao239@email.com</p>
             <p class="icon"><img src="{{ url_for('static', filename='imgs/instagram_icone.png') }}" id="imgsFooter" />Instagram: @feiraamao</p>
             <p class="icon"><img src="{{ url_for('static', filename='imgs/tel_icone.png') }}" id="imgsFooter" />Telefone: (13) 99754-9008</p>
-              <a href="{{ url_for('suporte') }}">Suporte</a> 
+            <p>
+              <a href="{{ url_for('suporte') }}">Suporte</a> | 
               <a href="{{ url_for('sobre') }}">Sobre nós</a>
             </p>
           </div>

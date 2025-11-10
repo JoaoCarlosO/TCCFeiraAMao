@@ -4,17 +4,14 @@ from models.database import db
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
-# Configurações
 DB_NAME = 'feiraamao'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://root:@localhost/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'sua-chave-secreta-feira-na-mao-2024'
 
-# Inicializar o banco primeiro
 db.init_app(app)
 
 def create_database():
-    """Cria o banco de dados se não existir"""
     try:
         connection = pymysql.connect(
             host='localhost',
@@ -38,14 +35,9 @@ def create_database():
     return True
 
 def create_tables():
-    """Cria todas as tabelas no banco de dados"""
     try:
         with app.app_context():
-            # Importar todos os modelos para garantir que sejam criados
-            from models.database import (
-                Clientes, Vendedor, Produtos, Carrinho, 
-                Pedidos, Pagamento, Encomendas, Notificacao, MensagemSuporte
-            )
+            from models.database import Vendedor, Feiras, MensagemSuporte
             db.create_all()
             print("✅ Tabelas criadas/verificadas com sucesso!")
     except Exception as e:
@@ -54,7 +46,6 @@ def create_tables():
     return True
 
 def init_routes():
-    """Inicializa as rotas do aplicativo"""
     try:
         from controllers.routes import init_app
         init_app(app)
@@ -65,17 +56,14 @@ def init_routes():
 if __name__ == '__main__':
     print("🚀 Iniciando aplicação Feira na Mão...")
     
-    # 1. Criar banco de dados
     if not create_database():
         print("❌ Falha ao criar banco de dados. Verifique o MySQL.")
         exit(1)
     
-    # 2. Criar tabelas
     if not create_tables():
         print("❌ Falha ao criar tabelas.")
         exit(1)
     
-    # 3. Inicializar rotas
     init_routes()
     
     print("🌈 Aplicação iniciada com sucesso!")

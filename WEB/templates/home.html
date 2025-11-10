@@ -34,10 +34,6 @@
     }
   </style>
 
-
-
-
-
   <header class="py-3">
     <div class="container d-flex align-items-center justify-content-between">
       <!-- Logo -->
@@ -48,10 +44,9 @@
         <a href="{{ url_for('sobre')}}" class="text-dark text-decoration-none">Sobre</a>
         <a href="#containerFooter" class="text-dark text-decoration-none">Ajuda</a>
         <a href="{{ url_for('login')}}" class="text-dark text-decoration-none">Login</a>
-        <a href="{{ url_for('cadastro')}}" class="text-dark text-decoration-none">Cadastro</a>
+        <a href="{{ url_for('cadastrar_feiras')}}" class="text-dark text-decoration-none">Cadastrar Feiras</a>
       </nav>
     </div>
-
   </header>
 
   <main>
@@ -164,7 +159,8 @@
             <p class="icon"><img src="{{ url_for('static', filename='imgs/email_icone.png') }}" id="imgsFooter" />Email: feiraamao239@email.com</p>
             <p class="icon"><img src="{{ url_for('static', filename='imgs/instagram_icone.png') }}" id="imgsFooter" />Instagram: @feiraamao</p>
             <p class="icon"><img src="{{ url_for('static', filename='imgs/tel_icone.png') }}" id="imgsFooter" />Telefone: (13) 99754-9008</p>
-              <a href="{{ url_for('login') }}">Suporte</a> 
+            <p>
+              <a href="{{ url_for('suporte') }}">Suporte</a> | 
               <a href="{{ url_for('sobre') }}">Sobre nós</a>
             </p>
           </div>
