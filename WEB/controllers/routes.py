@@ -65,35 +65,42 @@ def init_app(app):
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        """Página de login"""
-        if request.method == 'POST':
-            Email = request.form.get('Email', '').strip()
-            Senha = request.form.get('Senha', '').strip()
-            
-            print(f"🔍 TENTANDO LOGIN: {Email} / {Senha}")
-            
-            vendedor = Vendedor.query.filter_by(Email=Email).first()
-            if vendedor:
-                print(f"✅ VENDEDOR ENCONTRADO: {vendedor.Nome}")
-                print(f"🔐 SENHA NO BANCO: {vendedor.Senha}")
-                
-                if check_password_hash(vendedor.Senha, Senha):
-                    print("🎯 SENHA CORRETA!")
-                    # Login bem sucedido
-                    session['user_id'] = vendedor.IdVend
-                    session['user_type'] = 'vendedor'
-                    session['user_name'] = vendedor.Nome
-                    session['vendedor_id'] = vendedor.IdVend
-                    flash(f'Bem-vindo, {vendedor.Nome}!', 'success')
-                    return redirect(url_for('homeVend'))
-                else:
-                    print("❌ SENHA INCORRETA!")
-                    flash('Senha incorreta.', 'error')
-            else:
-                print("❌ VENDEDOR NÃO ENCONTRADO!")
-                flash('Vendedor não encontrado.', 'error')
-        
-        return render_template('login.html')
+            if request.method == 'POST':
+                Email = request.form.get('Email', '').strip()
+                Senha = request.form.get('Senha', '').strip()
+
+                vendedor = Vendedor.query.filter_by(Email=Email).first()
+
+                if not vendedor:
+                    flash("Vendedor não encontrado.", "error")
+                    return render_template("login.html")
+
+                senha_hash = vendedor.Senha.strip()
+
+                print("🔐 HASH ENCONTRADO:", senha_hash)
+
+                # Verificação para evitar o erro "Invalid hash method ''"
+                if not senha_hash or senha_hash.count("$") < 2:
+                    flash("A senha do usuário está inválida ou corrompida. Peça uma redefinição.", "error")
+                    return render_template("login.html")
+
+                try:
+                    if check_password_hash(senha_hash, Senha):
+                        session['user_id'] = vendedor.IdVend
+                        session['user_name'] = vendedor.Nome
+                        session['user_type'] = 'vendedor'
+                        flash(f"Bem-vindo, {vendedor.Nome}!", "success")
+                        return redirect(url_for('homeVend'))
+                    else:
+                        flash("Senha incorreta.", "error")
+
+                except ValueError as e:
+                    # Captura exatamente o erro que você mostrou no print
+                    print("❌ ERRO DE VALIDAÇÃO DE HASH:", str(e))
+                    flash("O hash da senha está inválido. É necessário redefinir a senha.", "error")
+                    return render_template("login.html")
+
+            return render_template("login.html")
 
     @app.route('/logout')
     def logout():
