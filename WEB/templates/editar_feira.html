@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Feira - Feira na Mão</title>
+    <title>Editar Feira - Feira na Mão</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastrar_feiras.css') }}">
 </head>
 <body>
-    <!-- Navbar Estilizada -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-cadastro">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('homeVend') }}">
@@ -17,22 +16,19 @@
             </a>
             <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
                 <span class="navbar-text">Olá, {{ session.user_name }}</span>
-                <a class="nav-link" href="{{ url_for('homeVend') }}">Voltar</a>
+                <a class="nav-link" href="{{ url_for('minhas_feiras') }}">Voltar</a>
                 <a class="nav-link" href="{{ url_for('logout') }}">Sair</a>
             </div>
         </div>
     </nav>
 
-    <!-- Container Principal -->
     <div class="cadastro-container">
-        <!-- Cabeçalho -->
         <div class="cadastro-header">
             <h1 class="cadastro-title">FEIRA</h1>
             <h2 class="cadastro-subtitle">à mão</h2>
-            <p class="cadastro-descricao">Cadastrar Nova Feira</p>
+            <p class="cadastro-descricao">Editar Feira</p>
         </div>
 
-        <!-- Mensagens Flash -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -43,48 +39,44 @@
             {% endif %}
         {% endwith %}
 
-        <!-- Card do Formulário -->
         <div class="form-card">
             <form method="POST" class="formulario-feira">
-                <!-- Nome da Feira -->
                 <div class="form-group">
                     <label for="nome_feira" class="form-label">Nome da Feira</label>
                     <input type="text" class="form-control" id="nome_feira" name="nome_feira" 
-                           placeholder="Digite o nome da sua feira" required>
+                           value="{{ feira.NomeFeira }}" required>
                 </div>
 
-                <!-- Localização -->
                 <div class="form-group">
                     <label for="localizacao" class="form-label">Localização</label>
                     <textarea class="form-control" id="localizacao" name="localizacao" 
-                              rows="3" placeholder="Informe o endereço completo da feira" required></textarea>
+                              rows="3" required>{{ feira.Localizacao }}</textarea>
                 </div>
 
-                <!-- Dias de Funcionamento -->
                 <div class="form-group">
                     <label for="dias_funcionamento" class="form-label optional">Dias de Funcionamento</label>
                     <input type="text" class="form-control" id="dias_funcionamento" name="dias_funcionamento" 
+                           value="{{ feira.DiasFuncionamento or '' }}"
                            placeholder="Ex: Segunda a Sábado">
                     <div class="exemplo-texto">Ex: Segunda a Sábado | Terça e Sexta | Todos os dias</div>
                 </div>
 
-                <!-- Horário de Funcionamento -->
                 <div class="form-group">
                     <label for="horario_funcionamento" class="form-label optional">Horário de Funcionamento</label>
                     <input type="text" class="form-control" id="horario_funcionamento" name="horario_funcionamento" 
+                           value="{{ feira.HorarioFuncionamento or '' }}"
                            placeholder="Ex: 06:00 - 14:00">
                     <div class="exemplo-texto">Ex: 06:00 - 14:00 | 07:00 - 13:00 | 24 horas</div>
                 </div>
 
-                <!-- Informação de campos obrigatórios -->
                 <div class="required-info">
                     <small>Campos marcados com <span class="required-asterisk">*</span> são obrigatórios</small>
                 </div>
 
-                <!-- Botão de Cadastrar -->
-                <button type="submit" class="btn-cadastrar">
-                    📍 Cadastrar Feira
-                </button>
+                <div class="d-flex gap-3 mt-4">
+                    <a href="{{ url_for('minhas_feiras') }}" class="btn btn-secondary flex-fill">Cancelar</a>
+                    <button type="submit" class="btn-cadastrar flex-fill">💾 Salvar Alterações</button>
+                </div>
             </form>
         </div>
     </div>

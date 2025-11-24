@@ -1,0 +1,409 @@
+/* localizacao_feiras.css */
+@import url('https://fonts.googleapis.com/css2?family=Bacasime+Antique&family=Hurricane&family=League+Spartan:wght@100..900&display=swap');
+
+/* ======== RESET E BASE ======== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "League Spartan", sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ======== CONTAINER PRINCIPAL ======== */
+.localizacao-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* ======== SIDEBAR ======== */
+.sidebar-localizacao {
+    width: 400px;
+    background: #F7F0CE;
+    padding: 30px 25px;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    z-index: 1000;
+    border-right: 3px solid #425010;
+}
+
+.header-localizacao {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 25px;
+    border-bottom: 3px solid #C8D69B;
+}
+
+.titulo-localizacao {
+    font-family: "Bacasime Antique", serif;
+    font-size: 2.5rem;
+    color: #425010;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.subtitulo-localizacao {
+    font-family: "Hurricane", cursive;
+    font-size: 2.2rem;
+    color: #425010;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+.descricao-localizacao {
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* ======== FILTROS ======== */
+.filtros-localizacao {
+    background: #C8D69B;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    border: 2px solid #425010;
+}
+
+.grupo-filtro {
+    margin-bottom: 20px;
+}
+
+.label-filtro {
+    display: block;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #425010;
+    margin-bottom: 8px;
+}
+
+.select-filtro {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #425010;
+    border-radius: 12px;
+    background: #F7F0CE;
+    font-family: "League Spartan", sans-serif;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.select-filtro:focus {
+    outline: none;
+    border-color: #f6c63f;
+    box-shadow: 0 0 0 3px rgba(246, 198, 63, 0.3);
+}
+
+/* ======== LISTA DE FEIRAS ======== */
+.lista-feiras {
+    margin-top: 25px;
+}
+
+.item-feira {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border: 2px solid #C8D69B;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.item-feira:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-color: #425010;
+}
+
+.item-feira.ativo {
+    border-color: #425010;
+    background: linear-gradient(135deg, #F7F0CE, #e8e4c7);
+    box-shadow: 0 5px 15px rgba(66, 80, 16, 0.2);
+}
+
+.nome-feira {
+    font-family: "Bacasime Antique", serif;
+    font-size: 1.4rem;
+    color: #425010;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.local-feira {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.horario-feira {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.dias-feira {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.status-feira {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-aberta {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    border: 2px solid #28a745;
+}
+
+.status-fechada {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    border: 2px solid #dc3545;
+}
+
+/* ======== MAPA ======== */
+.mapa-container {
+    flex: 1;
+    position: relative;
+    background: #e9ecef;
+}
+
+#mapa-feiras {
+    height: 100%;
+    width: 100%;
+}
+
+/* ======== LEGENDA ======== */
+.legenda-mapa {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    background: #F7F0CE;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border: 2px solid #425010;
+}
+
+.titulo-legenda {
+    font-family: "Bacasime Antique", serif;
+    font-size: 1.3rem;
+    color: #425010;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.item-legenda {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+}
+
+.cor-legenda {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cor-aberta { 
+    background: linear-gradient(135deg, #28a745, #20c997); 
+}
+
+.cor-fechada { 
+    background: linear-gradient(135deg, #dc3545, #e83e8c); 
+}
+
+/* ======== LOADING E ESTADOS VAZIOS ======== */
+.carregando {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.sem-feiras {
+    text-align: center;
+    padding: 50px 20px;
+    color: #666;
+    background: #e8eed0;
+    border-radius: 15px;
+    border: 2px dashed #C8D69B;
+}
+
+.sem-feiras h3 {
+    font-family: "Bacasime Antique", serif;
+    color: #425010;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+/* ======== BOTÃO VOLTAR ======== */
+.btn-voltar {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    z-index: 1000;
+    background: #F7F0CE;
+    border: 2px solid #425010;
+    padding: 12px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    color: #425010;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.btn-voltar:hover {
+    background: #425010;
+    color: #F7F0CE;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-decoration: none;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 1024px) {
+    .sidebar-localizacao {
+        width: 350px;
+        padding: 25px 20px;
+    }
+    
+    .titulo-localizacao {
+        font-size: 2.2rem;
+    }
+    
+    .subtitulo-localizacao {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .localizacao-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .sidebar-localizacao {
+        width: 100%;
+        height: 45vh;
+        border-right: none;
+        border-bottom: 3px solid #425010;
+    }
+    
+    .mapa-container {
+        height: 55vh;
+    }
+    
+    .legenda-mapa {
+        bottom: 15px;
+        right: 15px;
+        padding: 15px;
+    }
+    
+    .btn-voltar {
+        top: 15px;
+        left: 15px;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar-localizacao {
+        padding: 20px 15px;
+        height: 50vh;
+    }
+    
+    .titulo-localizacao {
+        font-size: 2rem;
+    }
+    
+    .subtitulo-localizacao {
+        font-size: 1.8rem;
+    }
+    
+    .filtros-localizacao {
+        padding: 15px;
+    }
+    
+    .item-feira {
+        padding: 15px;
+    }
+    
+    .nome-feira {
+        font-size: 1.2rem;
+    }
+    
+    .legenda-mapa {
+        bottom: 10px;
+        right: 10px;
+        padding: 12px;
+    }
+    
+    .titulo-legenda {
+        font-size: 1.1rem;
+    }
+}
+
+/* ======== ANIMAÇÕES ======== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.item-feira {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ======== SCROLLBAR PERSONALIZADA ======== */
+.sidebar-localizacao::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-localizacao::-webkit-scrollbar-track {
+    background: #F7F0CE;
+}
+
+.sidebar-localizacao::-webkit-scrollbar-thumb {
+    background: #C8D69B;
+    border-radius: 4px;
+}
+
+.sidebar-localizacao::-webkit-scrollbar-thumb:hover {
+    background: #425010;
+}

@@ -31,11 +31,6 @@
   <!-- NAVBAR -->
   <div class="navbar-container">
     <img src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo da Feira à Mão" id="imgLogo" />
-    <nav class="d-flex gap-4 align-items-center">
-      <a href="{{ url_for('sobre') }}" class="text-decoration-none">Sobre</a>
-      <a href="{{ url_for('suporte') }}" class="text-decoration-none">Suporte</a>
-      <a href="{{ url_for('login') }}" class="text-decoration-none">Login</a>
-    </nav>
     <a href="{{ url_for('home') }}" class="btn_voltar-navbar">
       <img src="{{ url_for('static', filename='imgs/botaoVoltar.png') }}" alt="botão voltar" />
     </a>

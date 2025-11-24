@@ -1,0 +1,290 @@
+/* homeVend.css - VERSÃO CORRIGIDA */
+@import url('https://fonts.googleapis.com/css2?family=Bacasime+Antique&family=Hurricane&family=League+Spartan:wght@100..900&display=swap');
+
+/* ======== NAVBAR VENDEDOR ======== */
+.navbar-vendedor {
+    background-color: #425010 !important;
+    padding: 1rem 0;
+}
+
+.navbar-vendedor .navbar-brand {
+    font-family: "Bacasime Antique", serif;
+    font-size: 1.5rem;
+    color: #F7F0CE !important;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-vendedor .navbar-brand img {
+    margin-right: 10px;
+}
+
+.navbar-vendedor .navbar-text {
+    font-family: "League Spartan", sans-serif;
+    color: #F7F0CE !important;
+    font-size: 1.1rem;
+    margin-right: 20px;
+}
+
+.navbar-vendedor .nav-link {
+    font-family: "League Spartan", sans-serif;
+    color: #F7F0CE !important;
+    font-weight: 500;
+    margin-left: 15px;
+    transition: color 0.3s ease;
+}
+
+.navbar-vendedor .nav-link:hover {
+    color: #f6c63f !important;
+}
+
+/* ======== CONTAINER PRINCIPAL ======== */
+.vendedor-container {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #F7F0CE;
+    border-radius: 45px;
+    padding: 50px 40px;
+    margin: 30px auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1;
+}
+
+/* ======== SEÇÃO DE BOAS-VINDAS ======== */
+.welcome-section {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 20px 0;
+}
+
+.welcome-title {
+    font-family: "Bacasime Antique", serif;
+    font-size: 4rem;
+    color: #425010;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.welcome-subtitle {
+    font-family: "Hurricane", cursive;
+    font-size: 3.5rem;
+    color: #425010;
+    margin-top: -20px;
+    margin-bottom: 30px;
+}
+
+.welcome-message {
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.3rem;
+    color: #333;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.welcome-message strong {
+    color: #425010;
+    font-weight: 600;
+}
+
+/* ======== TÍTULO DAS FEIRAS ======== */
+.feiras-title {
+    font-family: "Bacasime Antique", serif;
+    font-size: 2.5rem;
+    color: #425010;
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #C8D69B;
+}
+
+/* ======== GRID DE FEIRAS ======== */
+.feiras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.feira-card {
+    background: linear-gradient(135deg, #C8D69B, #b5c588);
+    border-radius: 20px;
+    padding: 30px 25px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 3px solid #425010;
+    position: relative;
+    overflow: hidden;
+}
+
+.feira-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: #425010;
+}
+
+.feira-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.feira-titulo {
+    font-family: "Bacasime Antique", serif;
+    font-size: 1.8rem;
+    color: #425010;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.feira-info {
+    text-align: left;
+    font-family: "League Spartan", sans-serif;
+    color: #2d2d2d;
+}
+
+.feira-info p {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+}
+
+.feira-info strong {
+    color: #425010;
+    font-weight: 600;
+    min-width: 80px;
+    display: inline-block;
+}
+
+/* ======== ESTADO VAZIO ======== */
+.empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    color: #666;
+    background: #e8eed0;
+    border-radius: 20px;
+    margin: 30px 0;
+}
+
+.empty-state h3 {
+    font-family: "Bacasime Antique", serif;
+    color: #425010;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.empty-state p {
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* ======== BOTÃO NOVA FEIRA ======== */
+.btn-nova-feira-container {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #C8D69B;
+}
+
+.btn-nova-feira {
+    background: linear-gradient(135deg, #425010, #5a6d15);
+    color: #F7F0CE;
+    padding: 15px 40px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(66, 80, 16, 0.3);
+}
+
+.btn-nova-feira:hover {
+    background: linear-gradient(135deg, #5a6d15, #6b8220);
+    color: #F7F0CE;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(66, 80, 16, 0.4);
+    text-decoration: none;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 768px) {
+    .vendedor-container {
+        width: 95%;
+        padding: 30px 20px;
+        margin: 20px auto;
+        border-radius: 25px;
+    }
+    
+    .welcome-title {
+        font-size: 3rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 2.5rem;
+        margin-top: -15px;
+    }
+    
+    .welcome-message {
+        font-size: 1.1rem;
+        padding: 0 10px;
+    }
+    
+    .feiras-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .feira-card {
+        padding: 25px 20px;
+    }
+    
+    .feira-titulo {
+        font-size: 1.5rem;
+    }
+    
+    .feiras-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-vendedor .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .navbar-vendedor .navbar-text {
+        font-size: 1rem;
+        margin-right: 10px;
+    }
+    
+    .vendedor-container {
+        padding: 20px 15px;
+    }
+    
+    .welcome-title {
+        font-size: 2.5rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 2rem;
+    }
+    
+    .btn-nova-feira {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+    }
+}

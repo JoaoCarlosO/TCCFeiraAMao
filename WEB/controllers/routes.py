@@ -1,6 +1,6 @@
 # controllers/routes.py
 from flask import render_template, request, redirect, url_for, flash, session, jsonify
-from models.database import db, Vendedor, Feiras, MensagemSuporte
+from models.database import db, Vendedor, Feiras, MensagemSuporte, Clientes, Produtos, Pedidos, Pagamento, Encomendas, Notificacao, Carrinho, BarracaVend
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 import logging
@@ -9,11 +9,12 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 def init_app(app):
     # Rotas públicas que não exigem login
     public_routes = [
-        'home', 'login', 'sobre', 'suporte', 'static', 
-        'logout', 'cadastrar_vendedor', 'criar_vendedor_teste', 
+        'home', 'login', 'sobre', 'suporte', 'static',
+        'logout', 'cadastrar_vendedor', 'criar_vendedor_teste',
         'debug_routes', 'api_register'
     ]
 
@@ -26,7 +27,7 @@ def init_app(app):
                 return redirect(url_for('login'))
 
     # ========== ROTAS PÚBLICAS ==========
-    
+
     @app.route('/')
     def home():
         """Página inicial pública"""
@@ -63,10 +64,11 @@ def init_app(app):
                 )
                 db.session.add(nova_msg)
                 db.session.commit()
-                
-                flash('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success')
+
+                flash(
+                    'Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success')
                 return redirect(url_for('suporte'))
-                
+
             except Exception as e:
                 db.session.rollback()
                 logger.error(f"Erro no suporte: {e}")
@@ -103,79 +105,17 @@ def init_app(app):
                     session['user_id'] = vendedor.IdVend
                     session['user_name'] = vendedor.Nome
                     session['user_type'] = 'vendedor'
-                    
+
                     flash(f'Bem-vindo(a), {vendedor.Nome}!', 'success')
                     return redirect(url_for('homeVend'))
                 else:
                     flash('Senha incorreta.', 'error')
-                    
+
             except Exception as e:
                 logger.error(f"Erro no login: {e}")
                 flash('Erro ao fazer login. Tente novamente.', 'error')
 
         return render_template('login.html')
-
-    @app.route('/cadastrar-vendedor', methods=['GET', 'POST'])
-    def cadastrar_vendedor():
-        """Cadastro de novo vendedor"""
-        if request.method == 'POST':
-            try:
-                # Coleta dados do formulário
-                Nome = request.form.get('Nome', '').strip()
-                Barraca = request.form.get('Barraca', '').strip()
-                Email = request.form.get('Email', '').strip().lower()
-                CPFCNPJ = request.form.get('CPFCNPJ', '').strip()
-                Telefone = request.form.get('Telefone', '').strip()
-                Senha = request.form.get('Senha', '').strip()
-                ConfirmarSenha = request.form.get('ConfirmarSenha', '').strip()
-                IdCli = request.form.get('IdCli', '').strip()
-
-                # Validações
-                if not all([Nome, Email, CPFCNPJ, Senha]):
-                    flash('Por favor, preencha todos os campos obrigatórios.', 'error')
-                    return render_template('cadastrar_vendedor.html')
-
-                if Senha != ConfirmarSenha:
-                    flash('As senhas não coincidem.', 'error')
-                    return render_template('cadastrar_vendedor.html')
-
-                if len(Senha) < 6:
-                    flash('A senha deve ter pelo menos 6 caracteres.', 'error')
-                    return render_template('cadastrar_vendedor.html')
-
-                # Verifica se email já existe
-                if Vendedor.query.filter_by(Email=Email).first():
-                    flash('Este email já está cadastrado.', 'error')
-                    return render_template('cadastrar_vendedor.html')
-
-                # Verifica se CPF/CNPJ já existe
-                if Vendedor.query.filter_by(CPFCNPJ=CPFCNPJ).first():
-                    flash('Este CPF/CNPJ já está cadastrado.', 'error')
-                    return render_template('cadastrar_vendedor.html')
-
-                # Cria novo vendedor
-                novo_vendedor = Vendedor(
-                    Nome=Nome,
-                    Barraca=Barraca,
-                    Email=Email,
-                    CPFCNPJ=CPFCNPJ,
-                    Telefone=Telefone,
-                    IdCli=int(IdCli) if IdCli and IdCli.isdigit() else None
-                )
-                novo_vendedor.set_password(Senha)
-                
-                db.session.add(novo_vendedor)
-                db.session.commit()
-                
-                flash('Cadastro realizado com sucesso! Faça login para continuar.', 'success')
-                return redirect(url_for('login'))
-                
-            except Exception as e:
-                db.session.rollback()
-                logger.error(f"Erro no cadastro: {e}")
-                flash(f'Erro ao cadastrar: {str(e)}', 'error')
-
-        return render_template('cadastrar_vendedor.html')
 
     @app.route('/logout')
     def logout():
@@ -192,9 +132,9 @@ def init_app(app):
         try:
             vendedor = Vendedor.query.get(session['user_id'])
             feiras = Feiras.query.filter_by(IdVend=session['user_id']).all()
-            
-            return render_template('homeVend.html', 
-                                 vendedor=vendedor, 
+
+            return render_template('homeVend.html',
+                                 vendedor=vendedor,
                                  feiras=feiras,
                                  feiras_count=len(feiras))
         except Exception as e:
@@ -225,13 +165,13 @@ def init_app(app):
                     HorarioFuncionamento=horario,
                     IdVend=session['user_id']
                 )
-                
+
                 db.session.add(nova_feira)
                 db.session.commit()
-                
+
                 flash('Feira cadastrada com sucesso!', 'success')
                 return redirect(url_for('homeVend'))
-                
+
             except Exception as e:
                 db.session.rollback()
                 logger.error(f"Erro ao cadastrar feira: {e}")
@@ -243,7 +183,8 @@ def init_app(app):
     def minhas_feiras():
         """Lista de feiras do vendedor"""
         try:
-            feiras = Feiras.query.filter_by(IdVend=session['user_id']).order_by(Feiras.NomeFeira).all()
+            feiras = Feiras.query.filter_by(
+                IdVend=session['user_id']).order_by(Feiras.NomeFeira).all()
             return render_template('minhas_feiras.html', feiras=feiras)
         except Exception as e:
             logger.error(f"Erro ao carregar feiras: {e}")
@@ -254,24 +195,28 @@ def init_app(app):
     def editar_feira(id):
         """Edição de feira existente"""
         try:
-            feira = Feiras.query.filter_by(IdFeira=id, IdVend=session['user_id']).first()
-            
+            feira = Feiras.query.filter_by(
+                IdFeira=id, IdVend=session['user_id']).first()
+
             if not feira:
-                flash('Feira não encontrada ou você não tem permissão para editá-la.', 'error')
+                flash(
+                    'Feira não encontrada ou você não tem permissão para editá-la.', 'error')
                 return redirect(url_for('minhas_feiras'))
 
             if request.method == 'POST':
                 feira.NomeFeira = request.form.get('nome_feira', '').strip()
                 feira.Localizacao = request.form.get('localizacao', '').strip()
-                feira.DiasFuncionamento = request.form.get('dias_funcionamento', '').strip()
-                feira.HorarioFuncionamento = request.form.get('horario_funcionamento', '').strip()
-                
+                feira.DiasFuncionamento = request.form.get(
+                    'dias_funcionamento', '').strip()
+                feira.HorarioFuncionamento = request.form.get(
+                    'horario_funcionamento', '').strip()
+
                 db.session.commit()
                 flash('Feira atualizada com sucesso!', 'success')
                 return redirect(url_for('minhas_feiras'))
 
             return render_template('editar_feira.html', feira=feira)
-            
+
         except Exception as e:
             db.session.rollback()
             logger.error(f"Erro ao editar feira: {e}")
@@ -282,20 +227,21 @@ def init_app(app):
     def excluir_feira(id):
         """Exclusão de feira"""
         try:
-            feira = Feiras.query.filter_by(IdFeira=id, IdVend=session['user_id']).first()
-            
+            feira = Feiras.query.filter_by(
+                IdFeira=id, IdVend=session['user_id']).first()
+
             if feira:
                 db.session.delete(feira)
                 db.session.commit()
                 flash('Feira excluída com sucesso!', 'success')
             else:
                 flash('Feira não encontrada.', 'error')
-                
+
         except Exception as e:
             db.session.rollback()
             logger.error(f"Erro ao excluir feira: {e}")
             flash('Erro ao excluir feira.', 'error')
-            
+
         return redirect(url_for('minhas_feiras'))
 
     @app.route('/perfil')
@@ -314,31 +260,31 @@ def init_app(app):
         """Edição do perfil do vendedor"""
         try:
             vendedor = Vendedor.query.get(session['user_id'])
-            
+
             if request.method == 'POST':
                 vendedor.Nome = request.form.get('Nome', '').strip()
                 vendedor.Barraca = request.form.get('Barraca', '').strip()
                 vendedor.Email = request.form.get('Email', '').strip().lower()
                 vendedor.CPFCNPJ = request.form.get('CPFCNPJ', '').strip()
                 vendedor.Telefone = request.form.get('Telefone', '').strip()
-                
+
                 # Verifica se o novo email já existe (para outro usuário)
                 email_existente = Vendedor.query.filter(
                     Vendedor.Email == vendedor.Email,
                     Vendedor.IdVend != session['user_id']
                 ).first()
-                
+
                 if email_existente:
                     flash('Este email já está sendo usado por outro vendedor.', 'error')
                     return render_template('editar_perfil.html', vendedor=vendedor)
-                
+
                 db.session.commit()
                 session['user_name'] = vendedor.Nome
                 flash('Perfil atualizado com sucesso!', 'success')
                 return redirect(url_for('perfil'))
-                
+
             return render_template('editar_perfil.html', vendedor=vendedor)
-            
+
         except Exception as e:
             db.session.rollback()
             logger.error(f"Erro ao editar perfil: {e}")
@@ -352,11 +298,11 @@ def init_app(app):
         """Rota para criar vendedor de teste (apenas desenvolvimento)"""
         try:
             with app.app_context():
-                if not Vendedor.query.filter_by(Email="test@email.com").first():
+                if not Vendedor.query.filter_by(Email="luiz@email.com").first():
                     vendedor = Vendedor(
-                        Nome="Vendedor Teste",
-                        Barraca="Barraca Teste",
-                        Email="test@email.com",
+                        Nome="Luiz da Silva",
+                        Barraca="Barraca do Luiz",
+                        Email="luiz@email.com",
                         CPFCNPJ="12345678900",
                         Telefone="11999999999",
                         IdCli=None
@@ -364,7 +310,7 @@ def init_app(app):
                     vendedor.set_password("12345")
                     db.session.add(vendedor)
                     db.session.commit()
-                    return "✅ Vendedor teste criado: test@email.com / 12345"
+                    return "✅ Vendedor teste criado: luiz@email.com / 12345"
                 else:
                     return "ℹ️ Vendedor já existe."
         except Exception as e:
@@ -376,40 +322,46 @@ def init_app(app):
         routes = []
         for rule in app.url_map.iter_rules():
             if 'static' not in rule.endpoint:
-                routes.append(f"{rule.endpoint}: {rule.rule} - {list(rule.methods)}")
+                routes.append(
+                    f"{rule.endpoint}: {rule.rule} - {list(rule.methods)}")
         return '<br>'.join(routes)
 
-    @app.route('/api/register', methods=['POST'])
-    def api_register():
-        """API para registro de vendedores"""
+    @app.route('/api/feiras-mapa')
+    def api_feiras_mapa():
+        """API para fornecer dados das feiras para o mapa"""
+        if 'user_id' not in session or session.get('user_type') != 'vendedor':
+            return jsonify({'error': 'Não autorizado'}), 401
+        
         try:
-            data = request.get_json()
+            # Busca as feiras do vendedor logado
+            feiras = Feiras.query.filter_by(IdVend=session['user_id']).all()
             
-            novo_vendedor = Vendedor(
-                Nome=data.get('Nome'),
-                Barraca=data.get('Barraca'),
-                Email=data.get('Email'),
-                CPFCNPJ=data.get('CPFCNPJ'),
-                Telefone=data.get('Telefone'),
-                IdCli=data.get('IdCli')
-            )
-            novo_vendedor.set_password(data.get('Senha'))
+            feiras_data = []
+            for feira in feiras:
+                feiras_data.append({
+                    'id': feira.IdFeira,
+                    'nome': feira.NomeFeira,
+                    'localizacao': feira.Localizacao,
+                    'dias': feira.DiasFuncionamento or 'Não informado',
+                    'horario': feira.HorarioFuncionamento or 'Não informado',
+                    'lat': -23.55052,  # Coordenadas fixas por enquanto
+                    'lng': -46.633308  # Coordenadas fixas por enquanto
+                })
             
-            db.session.add(novo_vendedor)
-            db.session.commit()
-            
-            return jsonify({
-                'success': True,
-                'message': 'Vendedor cadastrado com sucesso',
-                'id': novo_vendedor.IdVend
-            }), 201
+            return jsonify(feiras_data)
             
         except Exception as e:
-            db.session.rollback()
-            return jsonify({
-                'success': False,
-                'message': f'Erro no cadastro: {str(e)}'
-            }), 400
+            logger.error(f"Erro na API de feiras: {e}")
+            return jsonify({'error': 'Erro interno do servidor'}), 500
+        
+    @app.route('/localizacao-feiras')
+    def localizacao_feiras():
+        """Página de localização das feiras no mapa"""
+        if 'user_id' not in session or session.get('user_type') != 'vendedor':
+            flash('Por favor, faça login para acessar esta página.', 'error')
+            return redirect(url_for('login'))
+        
+        return render_template('localizacao_feiras.html')
 
     # ========== HANDLERS DE ERRO ==========
 

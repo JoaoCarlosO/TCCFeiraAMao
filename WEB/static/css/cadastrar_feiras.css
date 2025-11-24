@@ -1,0 +1,321 @@
+/* cadastrar_feiras.css */
+@import url('https://fonts.googleapis.com/css2?family=Bacasime+Antique&family=Hurricane&family=League+Spartan:wght@100..900&display=swap');
+
+/* ======== NAVBAR ======== */
+.navbar-cadastro {
+    background-color: #425010 !important;
+    padding: 1rem 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.navbar-cadastro .navbar-brand {
+    font-family: "Bacasime Antique", serif;
+    font-size: 1.5rem;
+    color: #F7F0CE !important;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-cadastro .navbar-brand img {
+    margin-right: 10px;
+}
+
+.navbar-cadastro .navbar-text {
+    font-family: "League Spartan", sans-serif;
+    color: #F7F0CE !important;
+    font-size: 1.1rem;
+    margin-right: 20px;
+}
+
+.navbar-cadastro .nav-link {
+    font-family: "League Spartan", sans-serif;
+    color: #F7F0CE !important;
+    font-weight: 500;
+    margin-left: 15px;
+    transition: color 0.3s ease;
+}
+
+.navbar-cadastro .nav-link:hover {
+    color: #f6c63f !important;
+}
+
+/* ======== CONTAINER PRINCIPAL ======== */
+.cadastro-container {
+    width: 90%;
+    max-width: 800px;
+    background-color: #F7F0CE;
+    border-radius: 45px;
+    padding: 50px 40px;
+    margin: 30px auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1;
+}
+
+/* ======== CABEÇALHO ======== */
+.cadastro-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #C8D69B;
+}
+
+.cadastro-title {
+    font-family: "Bacasime Antique", serif;
+    font-size: 3rem;
+    color: #425010;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.cadastro-subtitle {
+    font-family: "Hurricane", cursive;
+    font-size: 2.5rem;
+    color: #425010;
+    margin-top: -15px;
+    margin-bottom: 10px;
+}
+
+.cadastro-descricao {
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.2rem;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* ======== CARD DO FORMULÁRIO ======== */
+.form-card {
+    background: linear-gradient(135deg, #C8D69B, #b5c588);
+    border-radius: 25px;
+    padding: 40px 35px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border: 3px solid #425010;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: #425010;
+}
+
+/* ======== FORMULÁRIO ======== */
+.formulario-feira {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.form-label {
+    font-family: "League Spartan", sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #425010;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.form-label::after {
+    content: " *";
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.form-label.optional::after {
+    content: "";
+}
+
+.form-control {
+    font-family: "League Spartan", sans-serif;
+    font-size: 1rem;
+    padding: 12px 15px;
+    border: 2px solid #425010;
+    border-radius: 15px;
+    background-color: #F7F0CE;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-control:focus {
+    border-color: #f6c63f;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(246, 198, 63, 0.3);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: #888;
+    font-style: italic;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ======== EXEMPLOS ======== */
+.exemplo-texto {
+    font-family: "League Spartan", sans-serif;
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+/* ======== BOTÃO ======== */
+.btn-cadastrar {
+    background: linear-gradient(135deg, #425010, #5a6d15);
+    color: #F7F0CE;
+    padding: 15px 40px;
+    border-radius: 30px;
+    border: none;
+    font-family: "League Spartan", sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(66, 80, 16, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-cadastrar:hover {
+    background: linear-gradient(135deg, #5a6d15, #6b8220);
+    color: #F7F0CE;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(66, 80, 16, 0.4);
+}
+
+.btn-cadastrar:active {
+    transform: translateY(-1px);
+}
+
+/* ======== MENSAGENS FLASH ======== */
+.alert-custom {
+    font-family: "League Spartan", sans-serif;
+    font-size: 1rem;
+    padding: 15px 20px;
+    border-radius: 15px;
+    border: none;
+    margin-bottom: 25px;
+}
+
+.alert-success-custom {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    border-left: 5px solid #28a745;
+}
+
+.alert-danger-custom {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    border-left: 5px solid #dc3545;
+}
+
+/* ======== REQUIRED INDICATOR ======== */
+.required-info {
+    font-family: "League Spartan", sans-serif;
+    font-size: 0.9rem;
+    color: #666;
+    text-align: right;
+    margin-top: 10px;
+    margin-bottom: -10px;
+}
+
+.required-asterisk {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 768px) {
+    .cadastro-container {
+        width: 95%;
+        padding: 30px 25px;
+        margin: 20px auto;
+        border-radius: 25px;
+    }
+    
+    .cadastro-title {
+        font-size: 2.5rem;
+    }
+    
+    .cadastro-subtitle {
+        font-size: 2rem;
+        margin-top: -10px;
+    }
+    
+    .cadastro-descricao {
+        font-size: 1.1rem;
+    }
+    
+    .form-card {
+        padding: 30px 25px;
+        border-radius: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .btn-cadastrar {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-cadastro .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .cadastro-container {
+        padding: 20px 15px;
+    }
+    
+    .cadastro-title {
+        font-size: 2rem;
+    }
+    
+    .cadastro-subtitle {
+        font-size: 1.8rem;
+    }
+    
+    .form-card {
+        padding: 25px 20px;
+    }
+    
+    .form-label {
+        font-size: 1rem;
+    }
+    
+    .form-control {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+}
+
+/* ======== BACKGROUND ======== */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../imgs/fundoBg.png");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    z-index: -1;
+}
