@@ -136,7 +136,7 @@ def init_app(app):
                     return render_template('login.html')
 
                 # Verifica a senha
-                if vendedor.check_password(Senha):
+                if vendedor and check_password_hash(vendedor.Senha, Senha):
                     session['user_id'] = vendedor.IdVend
                     session['user_name'] = vendedor.Nome
                     session['user_type'] = 'vendedor'
