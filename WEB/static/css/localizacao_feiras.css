@@ -407,3 +407,65 @@ body {
 .sidebar-localizacao::-webkit-scrollbar-thumb:hover {
     background: #425010;
 }
+
+/* Estilos para os marcadores do mapa */
+.custom-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.feira-info {
+    padding: 10px;
+    min-width: 200px;
+}
+
+.feira-info h4 {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.feira-info p {
+    margin: 4px 0;
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+/* Estilos da lista lateral */
+.item-feira {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.item-feira:hover {
+    background-color: #f8f9fa;
+    border-color: #007bff;
+}
+
+.status-aberta {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.status-fechada {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.erro-carregamento {
+    color: #dc3545;
+    text-align: center;
+    padding: 20px;
+}
+
+.nenhuma-feira {
+    text-align: center;
+    color: #6c757d;
+    padding: 20px;
+}

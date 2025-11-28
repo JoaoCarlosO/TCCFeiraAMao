@@ -1,0 +1,502 @@
+/* ===== VARIÁVEIS E CONFIGURAÇÕES GLOBAIS ===== */
+:root {
+    --primary-color: #5a6e2a;
+    --secondary-color: #d4e0a8;
+    --accent-color: #8da242;
+    --light-color: #f8f9f5;
+    --text-color: #4a4a4a;
+    --text-light: #6c757d;
+    --white: #ffffff;
+    --gray-light: #f1f3e6;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    color: var(--text-color);
+    line-height: 1.7;
+    overflow-x: hidden;
+    background-color: var(--light-color);
+    font-weight: 300;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(212, 224, 168, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(141, 162, 66, 0.05) 0%, transparent 50%),
+        linear-gradient(135deg, #f8f9f5 0%, #f1f3e6 100%);
+    z-index: -1;
+}
+
+/* ===== NAVBAR ===== */
+.navbar-container {
+    background-color: rgba(90, 110, 42, 0.95);
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-container img#imgLogo {
+    width: 70px;
+    transition: var(--transition);
+    opacity: 0.9;
+}
+
+.navbar-container img#imgLogo:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+.btn_voltar-navbar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 6px;
+    transition: var(--transition);
+    opacity: 0.8;
+}
+
+.btn_voltar-navbar img:hover {
+    transform: scale(1.05);
+    opacity: 1;
+    background-color: var(--white);
+}
+
+/* ===== SEÇÃO HERO ===== */
+.hero-section {
+    background: 
+        linear-gradient(135deg, rgba(90, 110, 42, 0.15) 0%, rgba(141, 162, 66, 0.1) 100%),
+        url("../imgs/fundoBg.png");
+    background-size: cover;
+    background-position: center;
+    color: var(--text-color);
+    padding: 100px 0 80px;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    border-bottom: 1px solid rgba(90, 110, 42, 0.1);
+}
+
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, 
+        rgba(248, 249, 245, 0.9) 0%,
+        rgba(248, 249, 245, 0.7) 100%);
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section h1 {
+    font-size: 2.8rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+.hero-section p {
+    font-size: 1.3rem;
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--text-light);
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+.sobre {
+    font-family: "Poppins", sans-serif;
+    color: var(--text-color);
+    background-color: transparent;
+    padding: 0 20px 60px;
+    margin-top: 0;
+    line-height: 1.8;
+    position: relative;
+}
+
+.content-section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 50px;
+    box-shadow: var(--shadow);
+    margin-bottom: 40px;
+    border: 1px solid rgba(90, 110, 42, 0.08);
+    transition: var(--transition);
+}
+
+.content-section:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.sobre h4 {
+    font-weight: 400;
+    color: var(--primary-color);
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
+    letter-spacing: -0.3px;
+}
+
+.sobre h4::before {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--accent-color);
+    border-radius: 1px;
+}
+
+.sobre p {
+    font-size: 1.1rem;
+    text-align: justify;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    font-weight: 300;
+    line-height: 1.8;
+}
+
+.sobre strong {
+    color: var(--primary-color);
+    font-weight: 400;
+}
+
+/* ===== SERVIÇOS ===== */
+.servicos {
+    background: linear-gradient(135deg, 
+        rgba(90, 110, 42, 0.03) 0%, 
+        rgba(141, 162, 66, 0.06) 100%);
+    padding: 50px;
+    border-radius: 16px;
+    color: var(--text-color);
+    margin: 40px 0;
+    border: 1px solid rgba(90, 110, 42, 0.1);
+    position: relative;
+}
+
+.servicos::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(141, 162, 66, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(90, 110, 42, 0.02) 0%, transparent 50%);
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.servicos h4 {
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 1.7rem;
+    margin-bottom: 30px;
+}
+
+.servicos p {
+    color: var(--text-color);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== IMAGENS ===== */
+.img-bloco {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.img-bloco:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+}
+
+.img-featured {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+/* ===== EQUIPE ===== */
+.equipe-section {
+    margin-top: 60px;
+    padding-top: 50px;
+    border-top: 1px solid rgba(90, 110, 42, 0.1);
+}
+
+.equipe-section h4 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 50px;
+    color: var(--primary-color);
+    font-weight: 400;
+}
+
+.equipe-img {
+    text-align: center;
+    transition: var(--transition);
+    padding: 20px;
+}
+
+.equipe-img:hover {
+    transform: translateY(-5px);
+}
+
+.img-wrapper {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin: 0 auto 20px;
+    border: 3px solid rgba(212, 224, 168, 0.5);
+    transition: var(--transition);
+}
+
+.equipe-img:hover .img-wrapper {
+    border-color: var(--accent-color);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+}
+
+.img-equipe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+    filter: grayscale(0.2);
+}
+
+.equipe-img:hover .img-equipe {
+    transform: scale(1.05);
+    filter: grayscale(0);
+}
+
+.equipe-img p {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+    color: var(--text-color);
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 400;
+}
+
+/* ===== RODAPÉ ===== */
+footer {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    border-top: 1px solid rgba(90, 110, 42, 0.1);
+    background: linear-gradient(135deg, 
+        rgba(212, 224, 168, 0.3) 0%, 
+        rgba(184, 200, 138, 0.2) 100%);
+    margin-top: 80px;
+    width: 100%;
+    padding: 50px 0 30px;
+}
+
+footer .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+footer img#imgLogoFooter {
+    width: 60px;
+    margin-bottom: 15px;
+    transition: var(--transition);
+    opacity: 0.8;
+}
+
+footer img#imgLogoFooter:hover {
+    transform: rotate(3deg);
+    opacity: 1;
+}
+
+footer h5 {
+    color: var(--primary-color);
+    font-weight: 400;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+footer p {
+    margin-bottom: 10px;
+    text-align: center;
+    color: var(--text-light);
+}
+
+#imgsFooter {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    padding: 3px;
+    margin-right: 8px;
+    background-color: rgba(90, 110, 42, 0.1);
+    transition: var(--transition);
+}
+
+.icon {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+}
+
+.icon:hover {
+    color: var(--primary-color);
+}
+
+.icon:hover #imgsFooter {
+    transform: scale(1.1);
+    background-color: var(--accent-color);
+}
+
+footer a {
+    color: var(--text-light);
+    text-decoration: none;
+    margin: 0 8px;
+    transition: var(--transition);
+    font-weight: 300;
+}
+
+footer a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* ===== ANIMAÇÕES SUAVES ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.delay-3 {
+    animation-delay: 0.3s;
+}
+
+/* ===== ÍCONES ===== */
+.icon-feature {
+    font-size: 1.2rem;
+    margin-right: 10px;
+    opacity: 0.7;
+    color: var(--accent-color);
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 80px 0 60px;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero-section p {
+        font-size: 1.1rem;
+    }
+    
+    .content-section {
+        padding: 30px 25px;
+    }
+    
+    .sobre h4 {
+        font-size: 1.4rem;
+    }
+    
+    .servicos {
+        padding: 30px 25px;
+    }
+    
+    .img-wrapper {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .navbar-container {
+        padding: 15px 20px;
+    }
+    
+    .text-md-start {
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section h1 {
+        font-size: 1.9rem;
+    }
+    
+    .sobre h4 {
+        font-size: 1.3rem;
+    }
+    
+    .equipe-img {
+        margin-bottom: 30px;
+    }
+    
+    footer .container {
+        height: auto;
+    }
+    
+    .content-section {
+        padding: 25px 20px;
+        margin-bottom: 30px;
+    }
+}

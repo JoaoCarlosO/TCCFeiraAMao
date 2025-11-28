@@ -4,6 +4,9 @@ from models.database import db, Vendedor, Feiras, MensagemSuporte, Clientes, Pro
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 import logging
+from geopy.geocoders import Nominatim
+import time
+import json
 
 # Configuração de logging
 logging.basicConfig(level=logging.DEBUG)
@@ -17,6 +20,33 @@ def init_app(app):
         'logout', 'cadastrar_vendedor', 'criar_vendedor_teste',
         'debug_routes', 'api_register'
     ]
+    
+    def obter_coordenadas(endereco):
+        """Converte endereço em coordenadas usando Nominatim (gratuito)"""
+        try:
+            geolocator = Nominatim(user_agent="feira_na_mao_app")
+            
+            # Tenta geocoding com timeout
+            location = geolocator.geocode(f"{endereco}, São Paulo, Brasil", timeout=10)
+            
+            if location:
+                logger.info(f"Coordenadas encontradas para '{endereco}': {location.latitude}, {location.longitude}")
+                return location.latitude, location.longitude
+            else:
+                logger.warning(f"Coordenadas NÃO encontradas para: {endereco}")
+                # Fallback para coordenadas aleatórias em SP para teste
+                import random
+                lat = -23.5505 + random.uniform(-0.1, 0.1)
+                lng = -46.6333 + random.uniform(-0.1, 0.1)
+                return lat, lng
+                
+        except Exception as e:
+            logger.error(f"Erro no geocoding para '{endereco}': {e}")
+            # Fallback para coordenadas aleatórias em SP
+            import random
+            lat = -23.5505 + random.uniform(-0.1, 0.1)
+            lng = -46.6333 + random.uniform(-0.1, 0.1)
+            return lat, lng
 
     @app.before_request
     def before_request():
@@ -37,6 +67,11 @@ def init_app(app):
     def sobre():
         """Página sobre o projeto"""
         return render_template('sobre.html')
+    
+    @app.route('/sobreVend')
+    def sobreVend():
+        """Página sobre o projeto"""
+        return render_template('sobreVend.html')
 
     @app.route('/suporte', methods=['GET', 'POST'])
     def suporte():
@@ -141,10 +176,10 @@ def init_app(app):
             logger.error(f"Erro no homeVend: {e}")
             flash('Erro ao carregar página.', 'error')
             return redirect(url_for('login'))
-
+        
     @app.route('/cadastrar-feiras', methods=['GET', 'POST'])
     def cadastrar_feiras():
-        """Cadastro de novas feiras"""
+        """Cadastro de novas feiras com geocoding automático"""
         if request.method == 'POST':
             try:
                 nome_feira = request.form.get('nome_feira', '').strip()
@@ -152,10 +187,14 @@ def init_app(app):
                 dias = request.form.get('dias_funcionamento', '').strip()
                 horario = request.form.get('horario_funcionamento', '').strip()
 
-                # Validações
                 if not all([nome_feira, localizacao]):
                     flash('Nome da feira e localização são obrigatórios.', 'error')
                     return render_template('cadastrar_feiras.html')
+
+                # Obter coordenadas automaticamente
+                lat, lng = obter_coordenadas(localizacao)
+                
+                logger.info(f"📍 Coordenadas obtidas para '{localizacao}': {lat}, {lng}")
 
                 # Cria nova feira
                 nova_feira = Feiras(
@@ -163,13 +202,15 @@ def init_app(app):
                     Localizacao=localizacao,
                     DiasFuncionamento=dias,
                     HorarioFuncionamento=horario,
-                    IdVend=session['user_id']
+                    IdVend=session['user_id'],
+                    Latitude=lat,
+                    Longitude=lng
                 )
 
                 db.session.add(nova_feira)
                 db.session.commit()
 
-                flash('Feira cadastrada com sucesso!', 'success')
+                flash(f'Feira cadastrada com sucesso! Coordenadas: {lat}, {lng}', 'success')
                 return redirect(url_for('homeVend'))
 
             except Exception as e:
@@ -179,6 +220,7 @@ def init_app(app):
 
         return render_template('cadastrar_feiras.html')
 
+    
     @app.route('/minhas-feiras')
     def minhas_feiras():
         """Lista de feiras do vendedor"""
@@ -344,8 +386,8 @@ def init_app(app):
                     'localizacao': feira.Localizacao,
                     'dias': feira.DiasFuncionamento or 'Não informado',
                     'horario': feira.HorarioFuncionamento or 'Não informado',
-                    'lat': -23.55052,  # Coordenadas fixas por enquanto
-                    'lng': -46.633308  # Coordenadas fixas por enquanto
+                    'lat': feira.Latitude,  # ⬅️ MUDEI AQUI - use o campo do banco
+                    'lng': feira.Longitude  # ⬅️ MUDEI AQUI - use o campo do banco
                 })
             
             return jsonify(feiras_data)
@@ -380,3 +422,21 @@ def init_app(app):
     def forbidden(e):
         """Acesso proibido"""
         return render_template('403.html'), 403
+    
+    @app.route('/debug-coordenadas')
+    def debug_coordenadas():
+        """Debug: mostra todas as feiras com coordenadas"""
+        if 'user_id' not in session:
+            return "Não logado"
+        
+        feiras = Feiras.query.filter_by(IdVend=session['user_id']).all()
+        resultado = []
+        for feira in feiras:
+            resultado.append({
+                'nome': feira.NomeFeira,
+                'localizacao': feira.Localizacao,
+                'lat': feira.Latitude,
+                'lng': feira.Longitude
+            })
+        
+        return jsonify(resultado)

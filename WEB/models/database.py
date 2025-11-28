@@ -38,14 +38,16 @@ class Vendedor(db.Model):
 class Feiras(db.Model):
     __tablename__ = 'feiras'
     
-    IdFeira = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    NomeFeira = db.Column(db.String(200), nullable=False)
-    Localizacao = db.Column(db.String(500), nullable=False)
-    DiasFuncionamento = db.Column(db.String(100), nullable=True)
-    HorarioFuncionamento = db.Column(db.String(100), nullable=True)
+    IdFeira = db.Column(db.Integer, primary_key=True)
+    NomeFeira = db.Column(db.String(100), nullable=False)
+    Localizacao = db.Column(db.Text, nullable=False)
+    DiasFuncionamento = db.Column(db.String(50))
+    HorarioFuncionamento = db.Column(db.String(50))
     IdVend = db.Column(db.Integer, db.ForeignKey('vendedor.IdVend'), nullable=False)
-    DataCadastro = db.Column(db.DateTime, default=datetime.utcnow)
-
+    # ADICIONE ESTES DOIS CAMPOS:
+    Latitude = db.Column(db.Float, default=-23.5505)
+    Longitude = db.Column(db.Float, default=-46.6333)
+    
     def __repr__(self):
         return f'<Feira {self.NomeFeira}>'
 

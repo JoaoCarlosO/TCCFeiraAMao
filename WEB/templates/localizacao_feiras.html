@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +42,7 @@
 
             <!-- Lista de Feiras -->
             <div class="lista-feiras" id="listaFeiras">
-                <div class="carregando">🔄 Carregando feiras cadastradas...</div>
+                <div id="loadingFeiras" class="carregando">🔄 Carregando feiras cadastradas...</div>
             </div>
         </div>
 
@@ -74,226 +73,227 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Dados vazios - serão carregados da API
-        let feirasCadastradas = [];
-        const marcadores = [];
-        let feiraSelecionada = null;
-        let feirasFiltradas = [];
+        let map;
+        let markers = [];
+        let feirasData = [];
 
-        // Inicialização do Mapa
-        const mapa = L.map('mapa-feiras').setView([-23.55052, -46.633308], 13);
-
-        // Camada do mapa
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap | Feira na Mão'
-        }).addTo(mapa);
-
-        // Carregar feiras da API
-        async function carregarFeiras() {
-            try {
-                const response = await fetch('/api/feiras-mapa');
-
-                if (!response.ok) {
-                    throw new Error('Erro ao carregar feiras');
-                }
-
-                const feiras = await response.json();
-                feirasCadastradas = feiras;
-                aplicarFiltros();
-
-            } catch (error) {
-                console.error('Erro:', error);
-                document.getElementById('listaFeiras').innerHTML = `
-                <div class="sem-feiras">
-                    <h3>Erro ao carregar feiras</h3>
-                    <p>Não foi possível carregar as feiras do servidor.</p>
-                </div>
-            `;
-            }
-        }
-
-        // Função para verificar status da feira
-        function verificarStatusFeira(feira) {
-            if (!feira.horario || feira.horario === 'Não informado') return 'fechada';
-
-            try {
-                const agora = new Date();
-                const horaAtual = agora.getHours() * 60 + agora.getMinutes();
-
-                const [inicioStr, fimStr] = feira.horario.split(' - ');
-                const [inicioHora, inicioMin] = inicioStr.split(':').map(Number);
-                const [fimHora, fimMin] = fimStr.split(':').map(Number);
-
-                const inicioMinutos = inicioHora * 60 + inicioMin;
-                const fimMinutos = fimHora * 60 + fimMin;
-
-                return (horaAtual >= inicioMinutos && horaAtual <= fimMinutos) ? 'aberta' : 'fechada';
-            } catch (error) {
-                return 'fechada';
-            }
-        }
-
-        // Adicionar marcadores ao mapa
-        function adicionarMarcadores(feiras) {
-            // Limpar marcadores anteriores
-            marcadores.forEach(marcador => mapa.removeLayer(marcador));
-            marcadores.length = 0;
-
-            feiras.forEach(feira => {
-                const status = verificarStatusFeira(feira);
-                const cor = status === 'aberta' ? '#28a745' : '#dc3545';
-
-                const iconePersonalizado = L.divIcon({
-                    html: `
-                    <div style="
-                        background: ${cor};
-                        width: 30px;
-                        height: 30px;
-                        border-radius: 50%;
-                        border: 4px solid white;
-                        box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-weight: bold;
-                        color: white;
-                        font-size: 14px;
-                    ">${feira.id}</div>
-                `,
-                    className: 'marcador-feira',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 15]
-                });
-
-                const marcador = L.marker([feira.lat, feira.lng], {
-                    icon: iconePersonalizado
-                }).addTo(mapa);
-
-                // Popup informativo
-                marcador.bindPopup(`
-                <div style="min-width: 250px; font-family: 'League Spartan', sans-serif;">
-                    <h3 style="color: #425010; margin-bottom: 10px; border-bottom: 2px solid #C8D69B; padding-bottom: 5px;">
-                        ${feira.nome}
-                    </h3>
-                    <p style="margin: 6px 0;"><strong>📍 Local:</strong> ${feira.localizacao}</p>
-                    <p style="margin: 6px 0;"><strong>📅 Dias:</strong> ${feira.dias}</p>
-                    <p style="margin: 6px 0;"><strong>⏰ Horário:</strong> ${feira.horario}</p>
-                    <p style="margin: 6px 0;">
-                        <strong>Status:</strong> 
-                        <span style="color: ${status === 'aberta' ? '#28a745' : '#dc3545'}; font-weight: bold;">
-                            ${status === 'aberta' ? '🟢 ABERTA AGORA' : '🔴 FECHADA'}
-                        </span>
-                    </p>
-                </div>
-            `);
-
-                marcador.feiraId = feira.id;
-                marcadores.push(marcador);
-
-                // Evento de clique no marcador
-                marcador.on('click', function () {
-                    selecionarFeira(feira.id);
-                });
-            });
-
-            // Ajustar visualização do mapa
-            if (feiras.length > 0) {
-                const grupo = new L.featureGroup(marcadores);
-                mapa.fitBounds(grupo.getBounds().pad(0.1));
-            }
-        }
-
-        // Renderizar lista de feiras
-        function renderizarListaFeiras(feiras) {
-            const container = document.getElementById('listaFeiras');
-
-            if (feiras.length === 0) {
-                container.innerHTML = `
-                <div class="sem-feiras">
-                    <h3>Nenhuma feira encontrada</h3>
-                    <p>Não há feiras correspondentes aos filtros selecionados.</p>
-                </div>
-            `;
+        // Inicializar mapa
+        function inicializarMapa() {
+            console.log('🗺️ Inicializando mapa...');
+            
+            // Verifica se o elemento existe
+            const mapaElement = document.getElementById('mapa-feiras');
+            if (!mapaElement) {
+                console.error('❌ Elemento mapa-feiras não encontrado!');
                 return;
             }
-
-            container.innerHTML = feiras.map(feira => {
-                const status = verificarStatusFeira(feira);
-                const classeStatus = status === 'aberta' ? 'status-aberta' : 'status-fechada';
-                const textoStatus = status === 'aberta' ? '🟢 ABERTA' : '🔴 FECHADA';
-                const classeAtivo = feiraSelecionada === feira.id ? 'ativo' : '';
-
-                return `
-                <div class="item-feira ${classeAtivo}" onclick="selecionarFeira(${feira.id})">
-                    <div class="nome-feira">${feira.nome}</div>
-                    <div class="local-feira">📍 ${feira.localizacao}</div>
-                    <div class="dias-feira">📅 ${feira.dias}</div>
-                    <div class="horario-feira">⏰ ${feira.horario}</div>
-                    <div class="status-feira ${classeStatus}">${textoStatus}</div>
-                </div>
-            `;
-            }).join('');
+            
+            map = L.map('mapa-feiras').setView([-23.5505, -46.6333], 12);
+            
+            // Mapa gratuito do OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            console.log('✅ Mapa inicializado, carregando feiras...');
+            // Carregar feiras
+            carregarFeiras();
         }
 
-        // Selecionar feira
-        function selecionarFeira(idFeira) {
-            feiraSelecionada = idFeira;
-
-            // Atualizar lista
-            renderizarListaFeiras(feirasFiltradas);
-
-            // Encontrar e focar no marcador
-            const marcador = marcadores.find(m => m.feiraId === idFeira);
-            if (marcador) {
-                mapa.setView(marcador.getLatLng(), 16);
-                marcador.openPopup();
+        // Função segura para mostrar/ocultar loading
+        function setLoading(show, message = '🔄 Carregando feiras...') {
+            const loadingElement = document.getElementById('loadingFeiras');
+            const listaElement = document.getElementById('listaFeiras');
+            
+            if (loadingElement) {
+                if (show) {
+                    loadingElement.style.display = 'block';
+                    loadingElement.textContent = message;
+                    listaElement.innerHTML = '';
+                    listaElement.appendChild(loadingElement);
+                } else {
+                    loadingElement.style.display = 'none';
+                }
             }
         }
 
-        // Aplicar filtros
-        function aplicarFiltros() {
-            const filtroStatus = document.getElementById('filtroStatus').value;
-            const filtroOrdenacao = document.getElementById('filtroOrdenacao').value;
-
-            // Filtrar por status
-            feirasFiltradas = feirasCadastradas.filter(feira => {
-                if (filtroStatus === 'todas') return true;
-                const status = verificarStatusFeira(feira);
-                return status === filtroStatus;
-            });
-
-            // Ordenar
-            feirasFiltradas.sort((a, b) => {
-                if (filtroOrdenacao === 'nome') {
-                    return a.nome.localeCompare(b.nome);
-                } else if (filtroOrdenacao === 'status') {
-                    const statusA = verificarStatusFeira(a);
-                    const statusB = verificarStatusFeira(b);
-                    return statusB.localeCompare(statusA); // Abertas primeiro
+        // Carregar feiras do backend
+        async function carregarFeiras() {
+            try {
+                setLoading(true, '🔄 Carregando feiras...');
+                
+                console.log('📡 Fazendo requisição para /api/feiras-mapa...');
+                const response = await fetch('/api/feiras-mapa');
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
                 }
-                return 0;
-            });
-
-            renderizarListaFeiras(feirasFiltradas);
-            adicionarMarcadores(feirasFiltradas);
+                
+                const feiras = await response.json();
+                console.log('✅ Feiras carregadas:', feiras);
+                
+                feirasData = feiras;
+                
+                // Atualizar lista lateral
+                atualizarListaFeiras(feiras);
+                
+                // Limpar marcadores antigos
+                markers.forEach(marker => {
+                    if (map && marker) {
+                        map.removeLayer(marker);
+                    }
+                });
+                markers = [];
+                
+                // Adicionar novos marcadores se houver feiras
+                if (feiras.length > 0) {
+                    console.log(`📍 Adicionando ${feiras.length} marcadores...`);
+                    
+                    feiras.forEach((feira, index) => {
+                        console.log(`  ${index + 1}. ${feira.nome} - ${feira.lat}, ${feira.lng}`);
+                        
+                        const estaAberta = verificarFeiraAberta(feira.horario);
+                        const iconColor = estaAberta ? '#28a745' : '#dc3545';
+                        
+                        const customIcon = L.divIcon({
+                            className: 'custom-marker',
+                            html: `<div style="background-color: ${iconColor}; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`,
+                            iconSize: [26, 26],
+                            iconAnchor: [13, 13]
+                        });
+                        
+                        // Verifica se as coordenadas são válidas
+                        if (feira.lat && feira.lng && !isNaN(parseFloat(feira.lat)) && !isNaN(parseFloat(feira.lng))) {
+                            const marker = L.marker([parseFloat(feira.lat), parseFloat(feira.lng)], { 
+                                icon: customIcon 
+                            }).addTo(map);
+                            
+                            marker.bindPopup(`
+                                <div class="feira-info">
+                                    <h4>${feira.nome}</h4>
+                                    <p><strong>Local:</strong> ${feira.localizacao}</p>
+                                    <p><strong>Dias:</strong> ${feira.dias}</p>
+                                    <p><strong>Horário:</strong> ${feira.horario}</p>
+                                    <p><strong>Status:</strong> <span style="color: ${iconColor}">${estaAberta ? '🟢 ABERTA' : '🔴 FECHADA'}</span></p>
+                                </div>
+                            `);
+                            
+                            markers.push(marker);
+                        } else {
+                            console.warn(`⚠️ Coordenadas inválidas para "${feira.nome}": ${feira.lat}, ${feira.lng}`);
+                        }
+                    });
+                    
+                    // Ajustar zoom para mostrar todas as feiras
+                    if (markers.length > 0) {
+                        const group = new L.featureGroup(markers);
+                        map.fitBounds(group.getBounds().pad(0.1));
+                        console.log('✅ Map ajustado para mostrar todas as feiras');
+                    } else {
+                        console.warn('⚠️ Nenhum marcador com coordenadas válidas foi adicionado');
+                    }
+                } else {
+                    console.log('ℹ️ Nenhuma feira cadastrada');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar feiras:', error);
+                
+                const listaElement = document.getElementById('listaFeiras');
+                if (listaElement) {
+                    listaElement.innerHTML = `
+                        <div class="erro-carregamento">
+                            ❌ Erro ao carregar feiras<br>
+                            <small>${error.message}</small>
+                        </div>
+                    `;
+                }
+            } finally {
+                setLoading(false);
+            }
         }
 
-        // Event Listeners
-        document.getElementById('filtroStatus').addEventListener('change', aplicarFiltros);
-        document.getElementById('filtroOrdenacao').addEventListener('change', aplicarFiltros);
+        // Verificar se a feira está aberta baseado no horário
+        function verificarFeiraAberta(horario) {
+            if (!horario || horario === 'Não informado') return false;
+            
+            try {
+                const agora = new Date();
+                const horaAtual = agora.getHours();
+                const minutoAtual = agora.getMinutes();
+                const tempoAtual = horaAtual * 60 + minutoAtual;
+                
+                // Tenta extrair horários (formato: HH:MM - HH:MM)
+                const horarios = horario.match(/(\d{1,2}):(\d{2})/g);
+                if (horarios && horarios.length >= 2) {
+                    const [horaAbertura, minutoAbertura] = horarios[0].split(':').map(Number);
+                    const [horaFechamento, minutoFechamento] = horarios[1].split(':').map(Number);
+                    
+                    const tempoAbertura = horaAbertura * 60 + minutoAbertura;
+                    const tempoFechamento = horaFechamento * 60 + minutoFechamento;
+                    
+                    return tempoAtual >= tempoAbertura && tempoAtual < tempoFechamento;
+                }
+            } catch (e) {
+                console.warn('Erro ao verificar horário:', e);
+            }
+            
+            return false;
+        }
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function () {
-            carregarFeiras();
+        // Atualizar lista lateral de feiras
+        function atualizarListaFeiras(feiras) {
+            const listaContainer = document.getElementById('listaFeiras');
+            if (!listaContainer) return;
+            
+            if (feiras.length === 0) {
+                listaContainer.innerHTML = '<div class="nenhuma-feira">Nenhuma feira cadastrada</div>';
+                return;
+            }
+            
+            const listaHTML = feiras.map(feira => {
+                const estaAberta = verificarFeiraAberta(feira.horario);
+                const statusClass = estaAberta ? 'status-aberta' : 'status-fechada';
+                const statusText = estaAberta ? '🟢 ABERTA' : '🔴 FECHADA';
+                
+                return `
+                    <div class="item-feira" onclick="focusOnFeira(${feira.lat}, ${feira.lng})">
+                        <div class="info-feira">
+                            <h4 class="nome-feira">${feira.nome}</h4>
+                            <p class="local-feira"><strong>Local:</strong> ${feira.localizacao}</p>
+                            <p class="horario-feira"><strong>Horário:</strong> ${feira.horario}</p>
+                        </div>
+                        <div class="${statusClass}">${statusText}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            listaContainer.innerHTML = listaHTML;
+        }
 
-            // Atualizar status a cada minuto
-            setInterval(aplicarFiltros, 60000);
+        // Focar no mapa quando clicar em uma feira na lista
+        function focusOnFeira(lat, lng) {
+            if (!map) return;
+            
+            map.setView([lat, lng], 15);
+            
+            // Abrir popup do marcador correspondente
+            markers.forEach(marker => {
+                const markerLatLng = marker.getLatLng();
+                if (markerLatLng.lat === lat && markerLatLng.lng === lng) {
+                    marker.openPopup();
+                }
+            });
+        }
+
+        // Iniciar quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página carregada, inicializando...');
+            inicializarMapa();
+            
+            // Atualizar a cada 30 segundos
+            setInterval(carregarFeiras, 30000);
         });
-
-        // Função global para seleção
-        window.selecionarFeira = selecionarFeira;
     </script>
 </body>
-
 </html>

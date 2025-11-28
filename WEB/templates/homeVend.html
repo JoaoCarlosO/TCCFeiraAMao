@@ -34,7 +34,7 @@
             </a>
             
             <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
-                <a class="nav-link" href="{{ url_for('sobre')}}">Sobre</a>
+                <a class="nav-link" href="{{ url_for('sobreVend')}}">Sobre</a>
                 <a class="nav-link" href="{{ url_for('suporte')}}">Ajuda</a>
                 <a class="nav-link" href="{{ url_for('minhas_feiras') }}">Minhas Feiras</a>
                 <a class="nav-link" href="{{ url_for('localizacao_feiras') }}">Localização das Feiras</a>
@@ -47,15 +47,6 @@
     <!-- Conteúdo Principal -->
     <main>
         <section class="vendedor-container">
-            <!-- Mensagem de Boas-vindas -->
-            <div class="welcome-section">
-                <h1 class="welcome-title">FEIRA</h1>
-                <h2 class="welcome-subtitle">à mão</h2>
-                <p class="welcome-message">
-                    Bem-vindo(a), <strong>{{ session.user_name }}</strong>! Aqui você pode gerenciar todas as suas feiras cadastradas.
-                </p>
-            </div>
-
             <!-- Mensagens Flash -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
