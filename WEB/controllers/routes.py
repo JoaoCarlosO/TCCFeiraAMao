@@ -128,20 +128,27 @@ def init_app(app):
                     flash('Por favor, preencha todos os campos.', 'error')
                     return render_template('login.html')
 
-                # Busca o vendedor
-                vendedor = Vendedor.query.filter_by(Email=Email).first()
+                # Busca o CLIENTE primeiro (onde estão email e senha)
+                cliente = Clientes.query.filter_by(Email=Email).first()
 
-                if not vendedor:
+                if not cliente:
                     flash('Email não cadastrado.', 'error')
                     return render_template('login.html')
 
-                # Verifica a senha
-                if vendedor and check_password_hash(vendedor.Senha, Senha):
+                # Verifica se o cliente é um vendedor
+                vendedor = Vendedor.query.filter_by(IdCli=cliente.IdCli).first()
+
+                if not vendedor:
+                    flash('Esta conta não é de vendedor.', 'error')
+                    return render_template('login.html')
+
+                # Verifica a senha do CLIENTE
+                if cliente and cliente.check_password(Senha):
                     session['user_id'] = vendedor.IdVend
-                    session['user_name'] = vendedor.Nome
+                    session['user_name'] = cliente.NomeCli  # Nome do cliente
                     session['user_type'] = 'vendedor'
 
-                    flash(f'Bem-vindo(a), {vendedor.Nome}!', 'success')
+                    flash(f'Bem-vindo(a), {cliente.NomeCli}!', 'success')
                     return redirect(url_for('homeVend'))
                 else:
                     flash('Senha incorreta.', 'error')

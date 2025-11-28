@@ -8,17 +8,14 @@ class Vendedor(db.Model):
     __tablename__ = 'vendedor'
     
     IdVend = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    IdCli = db.Column(db.Integer, nullable=True)
-    Nome = db.Column(db.String(150), nullable=False)
+    IdCli = db.Column(db.Integer, db.ForeignKey('clientes.IdCli'), nullable=False)  # Agora é foreign key
     Barraca = db.Column(db.String(175), nullable=True)
-    Email = db.Column(db.String(300), nullable=False, unique=True)
     CPFCNPJ = db.Column(db.String(20), nullable=False, unique=True)
-    Telefone = db.Column(db.String(20), nullable=True)
     Documento = db.Column(db.String(500), nullable=True)
-    Senha = db.Column(db.String(255), nullable=False)
-    vendedor_descricao = db.Column(db.String(255), nullable=True)
+    DescricaoVend = db.Column(db.Text, nullable=True)  # Mudei o nome para match com ALTER TABLE
     
     # Relacionamentos
+    cliente = db.relationship('Clientes', backref='vendedor', lazy=True)  # Relacionamento com Clientes
     feiras = db.relationship('Feiras', backref='vendedor', lazy=True, cascade="all, delete-orphan")
     produtos = db.relationship('Produtos', backref='vendedor', lazy=True, cascade="all, delete-orphan")
     pedidos = db.relationship('Pedidos', backref='vendedor', lazy=True, cascade="all, delete-orphan")
@@ -26,6 +23,21 @@ class Vendedor(db.Model):
     notificacoes = db.relationship('Notificacao', backref='vendedor', lazy=True, cascade="all, delete-orphan")
     barracas = db.relationship('BarracaVend', backref='vendedor', lazy=True, cascade="all, delete-orphan")
 
+    def __repr__(self):
+        return f'<Vendedor {self.IdVend}>'
+
+class Clientes(db.Model):
+    __tablename__ = 'cliente'
+    
+    IdCli = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    NomeCli = db.Column(db.String(150), nullable=False)
+    Telefone = db.Column(db.String(20), nullable=True)
+    datanasc = db.Column(db.Date, nullable=False)
+    Email = db.Column(db.String(300), nullable=False, unique=True)
+    CPF = db.Column(db.String(14), nullable=False, unique=True)
+    Senha = db.Column(db.String(255), nullable=False)
+    Imagem = db.Column(db.String(255), nullable=True)
+    
     def set_password(self, password):
         self.Senha = generate_password_hash(password)
 
@@ -33,7 +45,7 @@ class Vendedor(db.Model):
         return check_password_hash(self.Senha, password)
 
     def __repr__(self):
-        return f'<Vendedor {self.Nome}>'
+        return f'<Cliente {self.NomeCli}>'
 
 class Feiras(db.Model):
     __tablename__ = 'feiras'
